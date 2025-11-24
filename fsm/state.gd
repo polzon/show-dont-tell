@@ -1,19 +1,12 @@
 @abstract
 class_name State
 extends Node
-## Abstract base class for States.
-## [br]
-## @experimental: When the inspector plugin progresses, I plan on moving this
-## away from extending a node, and instead being a resource.
+## Abstract base class for State nodes.
 
 
 ## The [StateMachine] that is handling the [State].
 @onready var state_machine: StateMachine:
-	get():
-		if not is_instance_valid(state_machine):
-			state_machine = get_parent() as StateMachine
-		assert(state_machine, "Failed to get StateMachine!")
-		return state_machine
+	get = _get_state_machine
 
 
 ## Called from [StateMachine] when an action is passed to it,
@@ -21,12 +14,13 @@ extends Node
 func _handle_action(_action: Action) -> void:
 	pass
 
-@abstract
-func _on_state_start() -> void
+
+func _on_state_start() -> void:
+	return
 
 
-@abstract
-func _on_state_end() -> void
+func _on_state_end() -> void:
+	return
 
 
 ## Similar to [member _physics_update], but only runs when the state is
@@ -45,8 +39,7 @@ func _tick(_delta: float) -> void:
 func current_state() -> State:
 	if is_instance_valid(state_machine):
 		return state_machine.state
-	else:
-		return null
+	return null
 
 
 ## Returns a [bool] if this state is the current state being processed by the
@@ -62,3 +55,9 @@ func change_state(new_state: GDScript) -> void:
 	var state := state_machine.get_state(new_state)
 	if is_instance_valid(state):
 		state_machine.state = state
+
+
+func _get_state_machine() -> StateMachine:
+	if not is_instance_valid(state_machine):
+		state_machine = get_parent() as StateMachine
+	return state_machine

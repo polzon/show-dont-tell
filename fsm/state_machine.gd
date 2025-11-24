@@ -8,7 +8,6 @@ extends BehaviorControl
 ## Emits after [signal state_end] when the previous state
 ## is finished.
 signal state_start(started_state: State)
-
 ## Emits before [signal state_start] when the previous state
 ## is finished.
 signal state_end(end_state: State)
@@ -19,18 +18,16 @@ var _action_usec: int = 0
 
 ## Current [State] the actor is in.
 var state: State:
-	set(v):
-		if is_instance_valid(state):
-			state._on_state_end()
-			state_end.emit(state)
-		state = v
-		state._on_state_start()
-		state_start.emit(state)
+	set = _set_state
 ## The previous [Action] that was called through [method handle_action].
 var current_action: Action
 
 @export_group("Performance Warnings")
 
+## If enabled, each [State] tick is measured for it's elapsed run duration.
+## [member _physics_tick] and [member _tick] are measured seperately.
+## If elapsed duration lasts longer then the configured warning threshold,
+## a warning will be pushed. This can help detect performance issues early on.
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "")
 var performance_warning_enabled: bool = false:
 	get():
@@ -39,7 +36,7 @@ var performance_warning_enabled: bool = false:
 		return performance_warning_enabled
 ## The elapsed time threshold in micro-seconds that a function should take to
 ## run before triggering a warning.
-@export_range(1, 10000) var warning_threshold: int = 500
+@export_range(1, 10000) var performance_warning_threshold: int = 1000
 
 
 ## Finds the state as a [GDScript], assuming it's already a node that
@@ -57,27 +54,36 @@ func get_state(state_type: GDScript) -> State:
 	return null
 
 
+func _ready() -> void:
+	if not state:
+		push_warning("No inital state set!")
+
+
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		set_process(false)
-		return
 
-	if is_instance_valid(state):
-		_process_usec = Time.get_ticks_usec()
-		state._tick(delta)
-		_process_usec = Time.get_ticks_usec() - _process_usec
-		_measure_performance()
+	elif is_instance_valid(state):
+		if performance_warning_enabled:
+			_process_usec = Time.get_ticks_usec()
+			state._tick(delta)
+			_process_usec = Time.get_ticks_usec() - _process_usec
+			_measure_performance()
+		else:
+			state._tick(delta)
 
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		set_physics_process(false)
-		return
 
-	if is_instance_valid(state):
-		_physics_usec = Time.get_ticks_usec()
-		state._physics_tick(delta)
-		_physics_usec = Time.get_ticks_usec() - _physics_usec
+	elif is_instance_valid(state):
+		if performance_warning_enabled:
+			_physics_usec = Time.get_ticks_usec()
+			state._physics_tick(delta)
+			_physics_usec = Time.get_ticks_usec() - _physics_usec
+		else:
+			state._physics_tick(delta)
 
 
 ## Passes the [Action] to the current [State], as well as sets
@@ -92,24 +98,33 @@ func _measure_performance() -> void:
 	if not performance_warning_enabled or not current_action:
 		return
 
-	var current_script: Script = current_action.get_script()
-	var script_name := current_script.get_global_name()
+	var action_script: Script = current_action.get_script()
+	var script_name := action_script.get_global_name()
 	var actor_name: String = \
 			str(current_action.actor.name) \
 			if is_instance_valid(current_action.actor) \
 			else "<invalid>"
 
 	var warning_prefix := "%s/%s:" % [actor_name, script_name]
-	if _process_usec >= warning_threshold:
+	if _process_usec >= performance_warning_threshold:
 		push_warning("%s Process tick elapsed %s usecs." \
 				% [warning_prefix, _process_usec])
-	if _physics_usec >= warning_threshold:
+	if _physics_usec >= performance_warning_threshold:
 		push_warning("%s Physics tick elapsed %s usecs." \
 				% [warning_prefix, _physics_usec])
-	if _action_usec >= warning_threshold:
+	if _action_usec >= performance_warning_threshold:
 		push_warning("%s Action processed in %s usecs." \
 				% [warning_prefix, _action_usec])
 
+
+func _set_state(new_state: State) -> void:
+	if state and not Engine.is_editor_hint():
+		state._on_state_end()
+		state_end.emit(state)
+	state = new_state
+	if state and not Engine.is_editor_hint():
+		state._on_state_start()
+		state_start.emit(state)
 
 
 func handle_action(action: Action) -> void:
