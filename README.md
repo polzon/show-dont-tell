@@ -12,4 +12,4 @@ I'm also looking into [SHOP](https://www.cs.umd.edu/projects/shop/description.ht
 
 This is an actively developed library without a stable API and is mostly meant for my use-cases. Hopefully it can be used as reference for your own code.
 
-If you're looking for a more mature AI solution, I reccomend [LimboAI](https://github.com/etherealxx/limbo-godot) or [Beehave](https://github.com/bitbrain/beehave). Both are fantastic and very mature addons. I'm sure there are many more great AI tools out there as well, but these are just the ones I know of.
+If you're looking for a more mature AI solution, I reccomend [Beehave](https://github.com/bitbrain/beehave) or [LimboAI](https://github.com/limbonaut/limboai). Both are fantastic and very mature addons. I'm sure there are many more great AI tools out there as well, but these are just the ones I know of.
