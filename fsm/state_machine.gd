@@ -103,7 +103,7 @@ func _measure_performance() -> void:
 	var actor_name: String = \
 			str(current_action.actor.name) \
 			if is_instance_valid(current_action.actor) \
-			else "<invalid>"
+			else str(current_action.actor)
 
 	var warning_prefix := "%s/%s:" % [actor_name, script_name]
 	if _process_usec >= performance_warning_threshold:
