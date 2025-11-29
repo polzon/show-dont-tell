@@ -3,7 +3,6 @@ class_name State
 extends Node
 ## Abstract base class for State nodes.
 
-
 ## The [StateMachine] that is handling the [State].
 @onready var state_machine: StateMachine:
 	get = _get_state_machine
@@ -15,10 +14,13 @@ func _handle_action(_action: Action) -> void:
 	pass
 
 
+## Emitted when this [State] node is made active.
 func _on_state_start() -> void:
 	return
 
 
+## Emitted right before the current [State] is about to be replaced with
+## a new state. This will deactivate the [State] node, not free it.
 func _on_state_end() -> void:
 	return
 
@@ -52,9 +54,14 @@ func is_current_state() -> bool:
 ## takes a [GDScript] object, assuming it's a script that inherets [State],
 ## otherwise it returns an error.
 func change_state(new_state: GDScript) -> void:
-	var state := state_machine.get_state(new_state)
-	if is_instance_valid(state):
-		state_machine.state = state
+	if is_instance_valid(state_machine):
+		var state_node := state_machine.get_state(new_state)
+		change_state_node(state_node)
+
+
+func change_state_node(state_node: State) -> void:
+	if is_instance_valid(state_machine) and is_instance_valid(state_node):
+		state_machine.change_state_node(state_node)
 
 
 func _get_state_machine() -> StateMachine:

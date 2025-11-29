@@ -137,5 +137,9 @@ func handle_action(action: Action) -> void:
 ## If wanting to wait for the state to finish instead, use [method queue_state].
 func change_state(new_state: GDScript) -> void:
 	var state_node := get_state(new_state)
-	if state_node:
+	change_state_node(state_node)
+
+
+func change_state_node(state_node: State) -> void:
+	if is_instance_valid(state_node):
 		state = state_node
