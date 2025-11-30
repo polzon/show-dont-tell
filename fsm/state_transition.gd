@@ -29,7 +29,8 @@ func can_transition() -> void:
 		transition_allowed.emit(result)
 
 
-@abstract func _check_transition() -> bool
+@abstract
+func _check_transition() -> bool
 
 
 func is_current_state() -> bool:

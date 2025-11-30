@@ -16,12 +16,6 @@ func _init() -> void:
 	state_connected.connect(_setup_state)
 
 
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-	print(parent_state)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	for action: StringName in transition_actions:
 		assert(InputMap.has_action(action),

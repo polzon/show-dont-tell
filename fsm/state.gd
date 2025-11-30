@@ -39,7 +39,7 @@ func _tick(_delta: float) -> void:
 
 ## Returns the active [State] the [StateMachine] is processing.
 func current_state() -> State:
-	if is_instance_valid(state_machine):
+	if state_machine:
 		return state_machine.state
 	return null
 
@@ -54,17 +54,17 @@ func is_current_state() -> bool:
 ## takes a [GDScript] object, assuming it's a script that inherets [State],
 ## otherwise it returns an error.
 func change_state(new_state: GDScript) -> void:
-	if is_instance_valid(state_machine):
+	if state_machine:
 		var state_node := state_machine.get_state(new_state)
 		change_state_node(state_node)
 
 
 func change_state_node(state_node: State) -> void:
-	if is_instance_valid(state_machine) and is_instance_valid(state_node):
+	if state_machine and state_node:
 		state_machine.change_state_node(state_node)
 
 
 func _get_state_machine() -> StateMachine:
-	if not is_instance_valid(state_machine):
+	if not state_machine:
 		state_machine = get_parent() as StateMachine
 	return state_machine
