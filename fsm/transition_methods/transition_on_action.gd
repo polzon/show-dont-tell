@@ -18,12 +18,15 @@ func _init() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	for action: StringName in transition_actions:
-		assert(InputMap.has_action(action),
-				"Invalid action assigned! " + action)
+		assert(InputMap.has_action(action), str(
+				"Invalid action assigned: %s" % action))
+
 		if event.is_action(action) \
 				and is_current_state() \
-				and exit_node:
+				and exit_node \
+				and is_active_actor():
 			parent_state.change_state_node(exit_node)
+			set_input_as_handled()
 
 
 func _check_transition() -> bool:
@@ -43,3 +46,10 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 func _setup_state(_new_state: State) -> void:
 	pass
+
+
+func is_active_actor() -> bool:
+	var actor_state := parent_state as ActorState
+	if actor_state:
+		return actor_state.actor == Player.get_actor()
+	return false
