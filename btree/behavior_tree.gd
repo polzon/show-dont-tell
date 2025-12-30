@@ -4,7 +4,7 @@ extends BehaviorControl
 
 # TODO:
 # Look into expanding upon a simple "Failed" state. For example
-# how machine learning treats failure as a function.
+# how machine learning treats failure as a function?
 
 enum Status {
 	SUCCESS,

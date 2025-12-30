@@ -1,0 +1,4 @@
+class_name BT_FailerDecorator
+extends BT_DecoratorTask
+## A Failer node will always return a FAILURE status code, regardless of
+## the result of its child node.

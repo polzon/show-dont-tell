@@ -8,6 +8,8 @@ Currently it just supports basic [FSM](https://www.gdquest.com/tutorial/godot/de
 
 I'm also looking into [SHOP](https://www.cs.umd.edu/projects/shop/description.html) (_Simple Hierarchical Ordered Planning_), [POP](https://en.wikipedia.org/wiki/Partial-order_planning) (_Partial Ordered Planning_) and [Boids](https://people.ece.cornell.edu/land/courses/ece4760/labs/s2021/Boids/Boids.html).
 
+Inspired by [Beehave](https://bitbra.in/beehave/#/) addon from BitBrain.
+
 ## Stability
 
 This is an actively developed library without a stable API and is mostly meant for my use-cases. Hopefully it can be used as reference for your own code.
