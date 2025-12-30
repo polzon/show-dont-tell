@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/show_not_tell/icons/action.svg")
 class_name BT_ActionLeaf
 extends BT_LeafTask
 ## The ActionLeaf node is a key element in Behavior Trees, designed to

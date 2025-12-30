@@ -1,3 +1,4 @@
+@icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorTree
 extends BehaviorControl
 ## BehaviorTree behavior controller.

@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/show_not_tell/icons/condition.svg")
 class_name BT_ConditionLeaf
 extends BT_LeafTask
 ## A ConditionLeaf node is employed to facilitate decision-making behaviors

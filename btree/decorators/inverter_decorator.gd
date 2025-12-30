@@ -1,3 +1,4 @@
+@icon("res://addons/show_not_tell/icons/inverter.svg")
 class_name BT_InverterDecorator
 extends BT_DecoratorTask
 ## An Inverter node reverses the outcome of its child node. It returns

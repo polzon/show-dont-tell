@@ -1,3 +1,4 @@
+@icon("res://addons/show_not_tell/icons/simple_parallel.svg")
 class_name BT_ParallelComposite
 extends BT_CompositeTask
 ## The Simple Parallel node is a fundamental building block in Behavior Trees,

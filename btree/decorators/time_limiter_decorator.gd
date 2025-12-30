@@ -1,3 +1,4 @@
+@icon("res://addons/show_not_tell/icons/limiter.svg")
 class_name BT_TimeLimiterDecorator
 extends BT_DecoratorTask
 ## The TimeLimiter node only gives its RUNNING child a set amount of time

@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/show_not_tell/icons/category_bt.svg")
 class_name BT_BaseTask
 extends Node
 ## The core of a [BehaviorTree] task that everything is extended from.

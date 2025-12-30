@@ -1,3 +1,5 @@
+@abstract
+@icon("res://addons/show_not_tell/icons/sequence.svg")
 class_name BT_SequenceComposite
 extends BT_CompositeTask
 ## The Sequence node is a fundamental building block in Behavior Trees,
