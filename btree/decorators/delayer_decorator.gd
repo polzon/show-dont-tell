@@ -7,5 +7,5 @@ extends BT_DecoratorTask
 ## child returns either SUCCESS or FAILURE.
 
 
-func _tick() -> Status:
+func _process_tick(_delta: float) -> Status:
 	return Status.FAILED

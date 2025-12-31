@@ -3,5 +3,5 @@ class_name BT_RandomSequence
 extends BT_SequenceComposite
 
 
-func _tick() -> Status:
+func _process_tick(_delta: float) -> Status:
 	return Status.FAILED

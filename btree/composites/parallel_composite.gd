@@ -19,5 +19,5 @@ extends BT_CompositeTask
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/simple_parallel
 
 
-func _tick() -> Status:
+func _process_tick(_delta: float) -> Status:
 	return Status.FAILED
