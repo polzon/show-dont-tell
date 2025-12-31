@@ -7,3 +7,7 @@ extends BT_DecoratorTask
 ## When the maximum number of ticks is reached, it
 ## returns a FAILURE status code. The limiter resets its counter
 ## after its child returns either SUCCESS or FAILURE.
+
+
+func _tick() -> Status:
+	return Status.FAILED

@@ -5,3 +5,7 @@ extends BT_DecoratorTask
 ## and return RUNNING until the timer is complete, after which it will
 ## execute its child node. The delayer resets its time after its
 ## child returns either SUCCESS or FAILURE.
+
+
+func _tick() -> Status:
+	return Status.FAILED

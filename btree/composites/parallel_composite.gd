@@ -17,3 +17,7 @@ extends BT_CompositeTask
 ## secondary node to finish its action after the primary node terminates.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/simple_parallel
+
+
+func _tick() -> Status:
+	return Status.FAILED

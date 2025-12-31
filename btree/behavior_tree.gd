@@ -1,3 +1,4 @@
+@abstract
 @icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorTree
 extends BehaviorControl
@@ -12,6 +13,3 @@ enum Status {
 	FAILED,
 	RUNNING
 }
-
-func handle_action(_action: Action) -> void:
-	pass

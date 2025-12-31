@@ -4,3 +4,7 @@ extends BT_DecoratorTask
 ## The UntilFail node executes its child and returns RUNNING as long as it
 ## returns either RUNNING or SUCCESS. If its child returns FAILURE,
 ## it will instead return SUCCESS.
+
+
+func _tick() -> Status:
+	return Status.FAILED

@@ -7,3 +7,7 @@ extends BT_DecoratorTask
 ## When the time is up, it interrupts its child and returns
 ## a FAILURE status code. The time limiter resets its time after
 ## its child returns either SUCCESS or FAILURE.
+
+
+func _tick() -> Status:
+	return Status.FAILED

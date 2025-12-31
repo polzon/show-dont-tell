@@ -13,4 +13,5 @@ func _physics_process(_delta: float) -> void:
 	set_physics_process(false)
 
 
-@abstract func handle_action(action: Action) -> void
+@abstract
+func handle_action(action: Action) -> void

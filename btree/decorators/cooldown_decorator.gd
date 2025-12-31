@@ -5,3 +5,7 @@ extends BT_DecoratorTask
 ## or FAILURE, after which it will start an internal timer and return
 ## FAILURE until the timer is complete. The cooldown is then able
 ## to execute its child again.
+
+
+func _tick() -> Status:
+	return Status.FAILED
