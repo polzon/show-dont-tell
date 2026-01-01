@@ -44,10 +44,28 @@ func _physics_tick(_delta: float) -> Status:
 	return FAILED
 
 
+func _on_task_start() -> void:
+	pass
+
+
+func _on_task_end() -> void:
+	pass
+
+
 func set_behavior_tree(tree: BehaviorTree) -> void:
 	behavior_tree = tree
 	if is_instance_valid(behavior_tree):
 		_assign_behavior_tree()
+
+
+## Default task behavior. Processes the children and returning if a
+## child returns true.
+func _process_sequentual(delta: float) -> Status:
+	for task: BT_BaseTask in child_tasks:
+		var result := task._process_tick(delta)
+		if result != FAILED:
+			return result
+	return FAILED
 
 
 func _find_parent_task() -> BT_BaseTask:

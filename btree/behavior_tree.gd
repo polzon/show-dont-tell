@@ -44,7 +44,9 @@ func _assign_behavior_tree() -> void:
 
 func _set_current_task(new_task: BT_BaseTask) -> void:
 	if current_task:
+		current_task._on_task_end()
 		task_ended.emit(current_task)
 	current_task = new_task
+	current_task._on_task_start()
 	task_started.emit(current_task)
 	changed_task.emit(current_task)
