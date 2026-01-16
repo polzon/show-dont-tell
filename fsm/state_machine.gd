@@ -65,10 +65,6 @@ func _action_process(action: Action) -> void:
 func _on_enabled_toggled() -> void:
 	set_process(enabled)
 	set_physics_process(enabled)
-	process_mode = \
-			Node.PROCESS_MODE_INHERIT \
-			if enabled \
-			else Node.PROCESS_MODE_DISABLED
 
 
 func handle_action(action: Action) -> void:

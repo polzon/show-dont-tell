@@ -41,7 +41,9 @@ func _process_tick(delta: float) -> Status:
 				pass
 			Status.RUNNING:
 				pass
-		print("task %s result: %s" % [current_task, Status.find_key(result)])
+		if print_state_changes:
+			print("task %s result: %s"
+					% [current_task, Status.find_key(result)])
 	return Status.SUCCESS
 
 
