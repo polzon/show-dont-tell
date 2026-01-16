@@ -1,12 +1,15 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/category_bt.svg")
 class_name BT_BaseTask
-extends Node
+extends BaseState
 ## The core of a [BehaviorTree] task that everything is extended from.
 
 enum Status {
+	## The task has succeeded in its goal.
 	SUCCESS,
+	## The task has failed its goal.
 	FAILED,
+	## The task needs more time to run.
 	RUNNING
 }
 const SUCCESS = Status.SUCCESS

@@ -30,6 +30,10 @@ func get_state(state_type: GDScript) -> State:
 	return null
 
 
+func _init() -> void:
+	enabled_toggled.connect(_on_enabled_toggled)
+
+
 func _ready() -> void:
 	if not state:
 		push_warning("No inital state set!")
@@ -58,8 +62,18 @@ func _action_process(action: Action) -> void:
 		state._handle_action(action)
 
 
+func _on_enabled_toggled() -> void:
+	set_process(enabled)
+	set_physics_process(enabled)
+	process_mode = \
+			Node.PROCESS_MODE_INHERIT \
+			if enabled \
+			else Node.PROCESS_MODE_DISABLED
+
+
 func handle_action(action: Action) -> void:
-	_action_process(action)
+	if enabled:
+		_action_process(action)
 
 
 func _set_state(new_state: State) -> void:

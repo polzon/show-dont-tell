@@ -1,16 +1,19 @@
 @abstract
+@icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorControl
-extends Node
+extends BaseState
 ## Abstract control point that BehaviorTree and StateMachine are
 ## extended from.
 
+signal enabled_toggled
 
-func _process(_delta: float) -> void:
-	set_process(false)
+@export var enabled: bool = true:
+	set = set_enabled
 
 
-func _physics_process(_delta: float) -> void:
-	set_physics_process(false)
+func set_enabled(is_enabled: bool) -> void:
+	enabled = is_enabled
+	enabled_toggled.emit()
 
 
 @abstract
