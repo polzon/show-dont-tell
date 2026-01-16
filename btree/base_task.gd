@@ -35,10 +35,15 @@ func _exit_tree() -> void:
 	parent_task = null
 
 
+## Updates every tick by the [BehaviorTree].
+func _tick() -> void:
+	pass
+
+
 ## Base process tick function that is triggered every [BehaviorTree]
 ## process updates. This function updates every possible frame.
-@abstract
-func _process_tick(delta: float) -> Status
+func _process_tick(_delta: float) -> Status:
+	return FAILED
 
 
 ## Base physics tick function that is triggered every [BehaviorTree]
@@ -53,6 +58,10 @@ func _on_task_start() -> void:
 
 func _on_task_end() -> void:
 	pass
+
+
+func change_state(new_task: BT_BaseTask) -> void:
+	behavior_tree.current_task = new_task
 
 
 func set_behavior_tree(tree: BehaviorTree) -> void:

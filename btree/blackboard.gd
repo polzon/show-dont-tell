@@ -7,3 +7,14 @@ extends Node
 ## characters or objects.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/blackboard
+
+
+@onready var behavior_tree: BehaviorTree = _find_behavior_tree()
+
+
+func _find_behavior_tree(parent: Node = self) -> BehaviorTree:
+	if parent is BehaviorTree:
+		return parent
+	elif parent.get_parent():
+		return _find_behavior_tree(parent.get_parent())
+	return null
