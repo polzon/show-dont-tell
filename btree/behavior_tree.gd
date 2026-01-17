@@ -1,14 +1,12 @@
 @abstract
 class_name BehaviorTree
-extends BehaviorControl
+extends BT_BaseTask
 ## BehaviorTree behavior controller that processes various [BT_BaseTask]
 ## and [Action].
 
 signal changed_task(task: BT_BaseTask)
 signal task_ended(task: BT_BaseTask)
 signal task_started(task: BT_BaseTask)
-
-const Status = BT_BaseTask.Status
 
 var current_task: BT_BaseTask:
 	set = _set_current_task
@@ -32,19 +30,23 @@ func _process(delta: float) -> void:
 
 
 func _process_tick(delta: float) -> Status:
-	if is_instance_valid(current_task):
-		var result := current_task._process_tick(delta)
-		match current_task:
-			Status.SUCCESS:
-				pass
-			Status.FAILED:
-				pass
-			Status.RUNNING:
-				pass
-		if print_state_changes:
-			print("task %s result: %s"
-					% [current_task, Status.find_key(result)])
-	return Status.SUCCESS
+	if not current_task:
+		return FAILED
+
+	var result := current_task._process_tick(delta)
+	match result:
+		FAILED:
+			current_task = first_task()
+			return FAILED
+		RUNNING:
+			pass
+		SUCCESS, _:
+			current_task = next_task()
+			return SUCCESS
+	if print_state_changes:
+		print("task %s result: %s, iteration: %s"
+				% [current_task, Status.find_key(result), task_index])
+	return Status.RUNNING
 
 
 func _find_child_tasks() -> Array[BT_BaseTask]:
@@ -65,10 +67,10 @@ func _assign_behavior_tree() -> void:
 
 func _set_current_task(new_task: BT_BaseTask) -> void:
 	if current_task:
-		current_task._on_task_end()
+		current_task._state_ended()
 		task_ended.emit(current_task)
 	current_task = new_task
-	current_task._on_task_start()
+	current_task._state_started()
 	task_started.emit(current_task)
 	changed_task.emit(current_task)
 

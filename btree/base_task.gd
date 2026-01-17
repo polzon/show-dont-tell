@@ -4,6 +4,11 @@ class_name BT_BaseTask
 extends BaseState
 ## The core of a [BehaviorTree] task that everything is extended from.
 
+# TODO:
+# - I keep swapping the usage of State and Task interchangably. Maybe I should
+#   settles on renaming them all one or the other? (Probably would
+#   go with State.)
+
 enum Status {
 	## The task has succeeded in its goal.
 	SUCCESS,
@@ -21,6 +26,8 @@ var behavior_tree: BehaviorTree:
 
 @onready var parent_task: BT_BaseTask = _find_parent_task()
 @onready var child_tasks: Array[BT_BaseTask] = _find_child_tasks()
+var task_index: int = 0:
+	set = set_task_index
 
 
 func _enter_tree() -> void:
@@ -52,12 +59,27 @@ func _physics_tick(_delta: float) -> Status:
 	return FAILED
 
 
-func _on_task_start() -> void:
-	pass
+func get_task_by_index(index: int) -> BT_BaseTask:
+	return child_tasks[index]
 
 
-func _on_task_end() -> void:
-	pass
+func prev_task() -> BT_BaseTask:
+	task_index -= 1
+	return get_task_by_index(task_index)
+
+
+func next_task() -> BT_BaseTask:
+	task_index += 1
+	return get_task_by_index(task_index)
+
+
+func first_task() -> BT_BaseTask:
+	task_index = 0
+	return get_task_by_index(task_index)
+
+
+func set_task_index(index: int) -> void:
+	task_index = clampi(index, 0, child_tasks.size() - 1)
 
 
 func change_state(new_task: BT_BaseTask) -> void:
