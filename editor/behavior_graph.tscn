@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://6n7e8d62o8a6"]
 
+[ext_resource type="Script" uid="uid://dlfkmffpkcbsk" path="res://addons/show_not_tell/editor/behavior_graph_edit.gd" id="1_72loa"]
+
 [node name="BehaviorGridmap" type="Control" unique_id=50462008]
 layout_mode = 3
 anchors_preset = 15
@@ -43,24 +45,12 @@ placeholder_text = "Search"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BehaviorGraph" type="GraphEdit" parent="HSplitContainer" unique_id=1028277202]
+[node name="GraphEditor" type="GraphEdit" parent="HSplitContainer" unique_id=1998300143]
 layout_mode = 2
 size_flags_horizontal = 3
 grid_pattern = 1
 panning_scheme = 1
 right_disconnects = true
 show_zoom_label = true
-
-[node name="GraphNode" type="GraphNode" parent="HSplitContainer/BehaviorGraph" unique_id=714814754]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.271875
-anchor_top = 0.41875
-anchor_right = 0.73541665
-anchor_bottom = 0.5875
-offset_left = 135.9375
-offset_right = 219.93759
-offset_bottom = 66.0
-mouse_filter = 1
-position_offset = Vector2(261, 268)
-title = "Test"
+script = ExtResource("1_72loa")
+metadata/_custom_type_script = "uid://dlfkmffpkcbsk"
