@@ -3,16 +3,11 @@ extends Node
 ## The origin node that all behavior derrives from.
 
 
-## Function that is internally called whenever a [BaseState] is updated.
-func _tick() -> void:
+## Processed when the [BaseState] has been entered.
+func _entered_state() -> void:
 	pass
 
 
-## Processed when the [BaseState] has started.
-func _state_started() -> void:
-	pass
-
-
-## Processed when the [BaseState] has ended.
-func _state_ended() -> void:
+## Processed when the [BaseState] has exited.
+func _exited_state() -> void:
 	pass
