@@ -3,5 +3,5 @@ class_name BT_ReactiveSequence
 extends BT_SequenceComposite
 
 
-func _process_tick(_delta: float) -> Status:
+func _tick(_delta: float) -> Status:
 	return Status.FAILED

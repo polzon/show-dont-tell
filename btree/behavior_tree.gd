@@ -5,18 +5,29 @@ extends BT_BaseTask
 ## and [Action].
 
 signal changed_task(task: BT_BaseTask)
-signal task_ended(task: BT_BaseTask)
-signal task_started(task: BT_BaseTask)
 
+## The child task currently being executed.
 var current_task: BT_BaseTask:
 	set = set_current_task
 var process_chain: Array[BT_BaseTask] = []
+var running_task: BT_BaseTask
 
 @export_group("Debug")
 @export var print_task_chain: bool = false
 
 
 func _process(delta: float) -> void:
+	_update_tick(delta)
+	if running_task:
+		running_task._process_tick(delta)
+
+
+func _physics_process(delta: float) -> void:
+	if running_task:
+		running_task._physics_tick(delta)
+
+
+func _update_tick(delta: float) -> void:
 	process_chain.clear()
 	status = current_task.execute(delta)
 	if status != RUNNING:
@@ -35,10 +46,7 @@ func _find_child_tasks() -> Array[BT_BaseTask]:
 
 
 func set_current_task(new_task: BT_BaseTask) -> void:
-	if current_task:
-		task_ended.emit(current_task)
 	current_task = new_task
-	task_started.emit(current_task)
 	changed_task.emit(current_task)
 
 

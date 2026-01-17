@@ -9,6 +9,9 @@ extends BaseState
 #   settles on renaming them all one or the other? (Probably would
 #   go with State.)
 
+signal task_started
+signal task_ended
+
 enum Status {
 	## The task has succeeded in its goal.
 	SUCCESS = 0,
@@ -45,12 +48,22 @@ func _exit_tree() -> void:
 
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
+
 	behavior_tree.process_chain.push_back(self)
 	if status != RUNNING:
 		_entered_state()
-	status = _process_tick(delta)
+		task_started.emit()
+	status = _tick(delta)
+
 	if status != RUNNING:
 		_exited_state()
+		task_ended.emit()
+	elif not behavior_tree.running_task:
+		behavior_tree.running_task = self
+		task_ended.connect(
+			func() -> void: behavior_tree.running_task = null,
+			CONNECT_ONE_SHOT)
+		_process_tick(delta)
 
 	assert(status != Status.NULL,
 			"Error status: %s" % Status.find_key(status))
@@ -87,8 +100,16 @@ func set_behavior_tree(tree: BehaviorTree) -> void:
 
 ## Base process tick function that is triggered every [BehaviorTree]
 ## process updates. This function updates every possible frame.
-func _process_tick(_delta: float) -> Status:
-	return FAILED
+func _tick(_delta: float) -> Status:
+	return SUCCESS
+
+
+func _process_tick(_delta: float) -> void:
+	return
+
+
+func _physics_tick(_delta: float) -> void:
+	pass
 
 
 func _find_child_tasks() -> Array[BT_BaseTask]:
