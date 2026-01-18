@@ -1,4 +1,5 @@
 @abstract
+@icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorTree
 extends BT_BaseTask
 ## BehaviorTree behavior controller that processes various [BT_BaseTask]
