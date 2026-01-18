@@ -1,6 +1,11 @@
+@abstract
 class_name BaseState
 extends Node
 ## The origin node that all behavior derrives from.
+
+# [Dev Note]
+# This script is intended to be used as the base for both Behavior Tree and
+# the State Machine. Including the state machines and states themselves.
 
 ## Emitted when the [BaseState] has been entered/started.
 signal started
