@@ -18,13 +18,17 @@ func _init() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	for action: StringName in transition_actions:
-		assert(InputMap.has_action(action), str(
-				"Invalid action assigned: %s" % action))
+		assert(
+			InputMap.has_action(action),
+			str("Invalid action assigned: %s" % action)
+		)
 
-		if event.is_action(action) \
-				and is_current_state() \
-				and exit_node \
-				and is_active_actor():
+		if (
+			event.is_action(action)
+			and is_current_state()
+			and exit_node
+			and is_active_actor()
+		):
 			parent_state.change_state_node(exit_node)
 			set_input_as_handled()
 

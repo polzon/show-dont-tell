@@ -61,12 +61,11 @@ func execute(delta: float) -> Status:
 	elif not behavior_tree.running_task:
 		behavior_tree.running_task = self
 		task_ended.connect(
-			func() -> void: behavior_tree.running_task = null,
-			CONNECT_ONE_SHOT)
+			func() -> void: behavior_tree.running_task = null, CONNECT_ONE_SHOT
+		)
 		_process_tick(delta)
 
-	assert(status != Status.NULL,
-			"Error status: %s" % Status.find_key(status))
+	assert(status != Status.NULL, "Error status: %s" % Status.find_key(status))
 	return status
 
 

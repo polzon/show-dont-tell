@@ -8,7 +8,6 @@ extends Node
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/blackboard
 
-
 @onready var behavior_tree: BehaviorTree = _find_behavior_tree()
 
 

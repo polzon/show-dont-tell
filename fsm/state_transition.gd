@@ -1,5 +1,4 @@
-@abstract
-class_name StateTransition
+@abstract class_name StateTransition
 extends Node
 ## Defined transition to migrate to a new state.
 
@@ -28,8 +27,7 @@ func can_transition() -> void:
 		transition_allowed.emit(result)
 
 
-@abstract
-func _check_transition() -> bool
+@abstract func _check_transition() -> bool
 
 
 func is_current_state() -> bool:
@@ -39,9 +37,7 @@ func is_current_state() -> bool:
 
 
 func _get_state() -> State:
-	if not parent_state \
-			and not _checked_parent_state \
-			and get_parent() is State:
+	if not parent_state and not _checked_parent_state and get_parent() is State:
 		_checked_parent_state = true
 		parent_state = get_parent()
 	return parent_state
@@ -56,9 +52,7 @@ func _set_state(new_state: State) -> void:
 
 
 func _get_statemachine() -> StateMachine:
-	if not state_machine \
-			and parent_state \
-			and parent_state.state_machine:
+	if not state_machine and parent_state and parent_state.state_machine:
 		state_machine = parent_state.state_machine
 	return state_machine
 

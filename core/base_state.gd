@@ -1,5 +1,4 @@
-@abstract
-class_name BaseState
+@abstract class_name BaseState
 extends Node
 ## The origin node that all behavior derrives from.
 
@@ -67,8 +66,8 @@ func _setup_physics_signal(is_enabled: bool) -> void:
 ## Returns if *either* [method _process] or [method _physics_processing] are
 ## overwritten and enabled in the script.
 func _is_any_processing_enabled() -> bool:
-	var processing_enabled := \
-			has_method("_process") \
-			or has_method("_physics_process")
+	var processing_enabled := (
+		has_method("_process") or has_method("_physics_process")
+	)
 	set_process_on_active(processing_enabled)
 	return processing_enabled

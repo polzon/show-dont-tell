@@ -1,5 +1,4 @@
-@abstract
-class_name State
+@abstract class_name State
 extends Node
 ## Abstract base class for State nodes.
 
