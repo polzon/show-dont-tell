@@ -7,7 +7,8 @@ signal transition_allowed
 signal state_connected(new_state: State)
 signal state_disconnected(old_state: State)
 
-var _checked_parent_state: bool = false
+## The node this node will transition to if the requirements are met.
+@export var exit_node: State
 
 ## The state this transaction node is connected to.
 var parent_state: State:
@@ -17,8 +18,7 @@ var parent_state: State:
 var state_machine: StateMachine:
 	get = _get_statemachine
 
-## The node this node will transition to if the requirements are met.
-@export var exit_node: State
+var _checked_parent_state: bool = false
 
 
 func can_transition() -> void:

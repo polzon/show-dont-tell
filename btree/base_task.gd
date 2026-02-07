@@ -29,11 +29,11 @@ const RUNNING = Status.RUNNING
 var status := SUCCESS
 var behavior_tree: BehaviorTree:
 	set = set_behavior_tree
+var task_index: int = 0:
+	set = set_task_index
 
 @onready var parent_task := get_parent() as BT_BaseTask
 @onready var child_tasks: Array[BT_BaseTask] = _find_child_tasks()
-var task_index: int = 0:
-	set = set_task_index
 
 
 func _enter_tree() -> void:

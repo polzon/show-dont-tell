@@ -14,4 +14,5 @@ extends BT_LeafTask
 ## The ConditionLeaf returns a status code that indicates whether the
 ## condition is true or false.
 ##
-## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/condition_leaf
+## @tutorial(Beehave Reference):
+## https://bitbra.in/beehave/#/manual/condition_leaf

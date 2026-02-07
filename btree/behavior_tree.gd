@@ -7,14 +7,14 @@ extends BT_BaseTask
 
 signal changed_task(task: BT_BaseTask)
 
+@export_group("Debug")
+@export var print_task_chain: bool = false
+
 ## The child task currently being executed.
 var current_task: BT_BaseTask:
 	set = set_current_task
 var process_chain: Array[BT_BaseTask] = []
 var running_task: BT_BaseTask
-
-@export_group("Debug")
-@export var print_task_chain: bool = false
 
 
 func _process(delta: float) -> void:

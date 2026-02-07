@@ -14,6 +14,6 @@ extends Node
 func _find_behavior_tree(parent: Node = self) -> BehaviorTree:
 	if parent is BehaviorTree:
 		return parent
-	elif parent.get_parent():
+	if parent.get_parent():
 		return _find_behavior_tree(parent.get_parent())
 	return null

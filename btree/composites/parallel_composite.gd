@@ -16,7 +16,8 @@ extends BT_CompositeTask
 ## If this node is running under delay mode, it will wait for the
 ## secondary node to finish its action after the primary node terminates.
 ##
-## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/simple_parallel
+## @tutorial(Beehave Reference):
+## https://bitbra.in/beehave/#/manual/simple_parallel
 
 
 func _tick(_delta: float) -> Status:
