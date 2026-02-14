@@ -3,5 +3,26 @@ class_name BT_RandomSequence
 extends BT_SequenceComposite
 
 
-func _tick(_delta: float) -> Status:
-	return Status.FAILED
+func _entered_state() -> void:
+	_shuffle_and_reset()
+	super._entered_state()
+
+
+func _exited_state() -> void:
+	_clear_shuffle()
+	super._exited_state()
+
+
+func _tick(delta: float) -> Status:
+	while current_child_index < shuffled_children.size():
+		var child: BT_BaseTask = shuffled_children[current_child_index]
+		var child_status: Status = child.execute(delta)
+
+		if child_status == RUNNING:
+			return RUNNING
+		elif child_status == FAILED:
+			return FAILED
+
+		current_child_index += 1
+
+	return SUCCESS

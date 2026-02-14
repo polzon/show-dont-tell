@@ -19,6 +19,42 @@ extends BT_CompositeTask
 ## @tutorial(Beehave Reference):
 ## https://bitbra.in/beehave/#/manual/simple_parallel
 
+enum SuccessPolicy {
+	REQUIRE_ALL,
+	REQUIRE_ONE,
+}
 
-func _tick(_delta: float) -> Status:
-	return Status.FAILED
+@export var success_policy: SuccessPolicy = SuccessPolicy.REQUIRE_ONE
+@export var fail_on_any_failure: bool = false
+
+
+func _tick(delta: float) -> Status:
+	var success_count: int = 0
+	var failed_count: int = 0
+
+	for child in child_tasks:
+		var child_status: Status = child.execute(delta)
+		match child_status:
+			SUCCESS:
+				success_count += 1
+			FAILED:
+				failed_count += 1
+			RUNNING:
+				pass
+
+	if fail_on_any_failure and failed_count > 0:
+		return FAILED
+
+	match success_policy:
+		SuccessPolicy.REQUIRE_ALL:
+			if success_count == child_tasks.size():
+				return SUCCESS
+			elif failed_count > 0:
+				return FAILED
+		SuccessPolicy.REQUIRE_ONE:
+			if success_count > 0:
+				return SUCCESS
+			elif failed_count == child_tasks.size():
+				return FAILED
+
+	return RUNNING

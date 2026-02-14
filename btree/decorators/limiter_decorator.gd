@@ -8,6 +8,23 @@ extends BT_DecoratorTask
 ## returns a FAILURE status code. The limiter resets its counter
 ## after its child returns either SUCCESS or FAILURE.
 
+@export var max_executions: int = 3
 
-func _tick(_delta: float) -> Status:
-	return Status.FAILED
+var execution_count: int = 0
+
+
+func _entered_state() -> void:
+	execution_count = 0
+	super._entered_state()
+
+
+func _tick(delta: float) -> Status:
+	if execution_count >= max_executions:
+		return FAILED
+
+	var child_status: Status = _execute_child(delta)
+
+	if child_status != RUNNING:
+		execution_count += 1
+
+	return child_status

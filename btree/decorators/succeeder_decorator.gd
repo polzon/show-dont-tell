@@ -5,5 +5,6 @@ extends BT_DecoratorTask
 ## outcome of its child node.
 
 
-func _tick(_delta: float) -> Status:
-	return SUCCESS
+func _tick(delta: float) -> Status:
+	var child_status: Status = _execute_child(delta)
+	return SUCCESS if child_status != RUNNING else RUNNING

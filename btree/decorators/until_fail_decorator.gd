@@ -6,5 +6,11 @@ extends BT_DecoratorTask
 ## it will instead return SUCCESS.
 
 
-func _tick(_delta: float) -> Status:
-	return Status.FAILED
+func _tick(delta: float) -> Status:
+	var child_status: Status = _execute_child(delta)
+
+	match child_status:
+		FAILED:
+			return SUCCESS
+		SUCCESS, _:
+			return RUNNING

@@ -11,3 +11,21 @@ extends BT_BaseTask
 ## characters or objects.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/composites
+
+var current_child_index: int = 0
+var shuffled_children: Array[BT_BaseTask] = []
+
+
+func _reset_child_index() -> void:
+	current_child_index = 0
+
+
+func _shuffle_and_reset() -> void:
+	current_child_index = 0
+	shuffled_children = child_tasks.duplicate()
+	shuffled_children.shuffle()
+
+
+func _clear_shuffle() -> void:
+	current_child_index = 0
+	shuffled_children.clear()

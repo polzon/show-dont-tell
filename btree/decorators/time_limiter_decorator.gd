@@ -8,6 +8,32 @@ extends BT_DecoratorTask
 ## a FAILURE status code. The time limiter resets its time after
 ## its child returns either SUCCESS or FAILURE.
 
+@export var time_limit: float = 5.0
 
-func _tick(_delta: float) -> Status:
-	return Status.FAILED
+var elapsed_time: float = 0.0
+
+
+func _reset() -> void:
+	elapsed_time = 0.0
+
+
+func _entered_state() -> void:
+	_reset()
+	super._entered_state()
+
+
+func _exited_state() -> void:
+	_reset()
+	super._exited_state()
+
+
+func _tick(delta: float) -> Status:
+	if not _get_child_task():
+		return FAILED
+
+	elapsed_time += delta
+
+	if elapsed_time >= time_limit:
+		return FAILED
+
+	return _execute_child(delta)

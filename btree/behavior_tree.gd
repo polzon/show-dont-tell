@@ -51,6 +51,11 @@ func set_current_task(new_task: BT_BaseTask) -> void:
 	changed_task.emit(current_task)
 
 
+func handle_action(action: Action) -> void:
+	if running_task:
+		running_task._handle_action(action)
+
+
 #region DEBUG
 func _print_process_chain() -> void:
 	var chain_string: String = ""

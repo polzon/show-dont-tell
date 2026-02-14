@@ -26,6 +26,8 @@ const SUCCESS = Status.SUCCESS
 const FAILED = Status.FAILED
 const RUNNING = Status.RUNNING
 
+@export var warn_missing_child: bool = false
+
 var status := SUCCESS
 var behavior_tree: BehaviorTree:
 	set = set_behavior_tree
@@ -49,7 +51,7 @@ func _exit_tree() -> void:
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
 
-	behavior_tree.process_chain.push_back(self)
+	behavior_tree.process_chain.push_back(self )
 	if status != RUNNING:
 		_entered_state()
 		task_started.emit()
@@ -109,6 +111,25 @@ func _process_tick(_delta: float) -> void:
 
 func _physics_tick(_delta: float) -> void:
 	pass
+
+
+func _handle_action(_action: Action) -> void:
+	pass
+
+
+func _get_child_task() -> BT_BaseTask:
+	if child_tasks.is_empty():
+		if warn_missing_child:
+			push_warning("%s has no child task" % name)
+		return null
+	return child_tasks[0]
+
+
+func _execute_child(delta: float) -> Status:
+	var child := _get_child_task()
+	if not child:
+		return FAILED
+	return child.execute(delta)
 
 
 func _find_child_tasks() -> Array[BT_BaseTask]:
