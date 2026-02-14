@@ -8,7 +8,7 @@ extends BT_DecoratorTask
 
 @export var cooldown_duration: float = 1.0
 
-var last_execution_time: float = - INF
+var last_execution_time: float = -INF
 
 
 func _tick(delta: float) -> Status:
