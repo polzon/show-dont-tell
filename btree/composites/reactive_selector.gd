@@ -9,7 +9,7 @@ func _tick(delta: float) -> Status:
 
 		if child_status == SUCCESS:
 			return SUCCESS
-		elif child_status == RUNNING:
+		if child_status == RUNNING:
 			return RUNNING
 
 	return FAILED

@@ -32,7 +32,7 @@ func _tick(delta: float) -> Status:
 
 		if child_status == RUNNING:
 			return RUNNING
-		elif child_status == FAILED:
+		if child_status == FAILED:
 			return FAILED
 
 		current_child_index += 1

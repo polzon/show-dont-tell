@@ -49,12 +49,12 @@ func _tick(delta: float) -> Status:
 		SuccessPolicy.REQUIRE_ALL:
 			if success_count == child_tasks.size():
 				return SUCCESS
-			elif failed_count > 0:
+			if failed_count > 0:
 				return FAILED
 		SuccessPolicy.REQUIRE_ONE:
 			if success_count > 0:
 				return SUCCESS
-			elif failed_count == child_tasks.size():
+			if failed_count == child_tasks.size():
 				return FAILED
 
 	return RUNNING

@@ -20,7 +20,7 @@ func _tick(delta: float) -> Status:
 
 		if child_status == RUNNING:
 			return RUNNING
-		elif child_status == SUCCESS:
+		if child_status == SUCCESS:
 			return SUCCESS
 
 		current_child_index += 1
