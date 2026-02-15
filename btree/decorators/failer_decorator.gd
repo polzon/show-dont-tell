@@ -1,8 +1,8 @@
 @icon("res://addons/show_not_tell/icons/failer.svg")
 class_name BT_FailerDecorator
 extends BT_DecoratorTask
-## A Failer node will always return a FAILURE status code, regardless of
-## the result of its child node.
+## A Failer node converts SUCCESS to FAILURE. If the child returns
+## RUNNING or FAILURE, those statuses are passed through unchanged.
 
 
 func _tick(delta: float) -> Status:

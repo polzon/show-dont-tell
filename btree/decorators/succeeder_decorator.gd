@@ -1,8 +1,8 @@
 @icon("res://addons/show_not_tell/icons/succeeder.svg")
 class_name BT_SucceederDecorator
 extends BT_DecoratorTask
-## A Succeeder node will always return a SUCCESS status code, no matter the
-## outcome of its child node.
+## A Succeeder node converts FAILURE to SUCCESS. If the child returns
+## RUNNING or SUCCESS, those statuses are passed through unchanged.
 
 
 func _tick(delta: float) -> Status:

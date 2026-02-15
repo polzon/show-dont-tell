@@ -51,7 +51,7 @@ func _exit_tree() -> void:
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
 
-	behavior_tree.process_chain.push_back(self)
+	behavior_tree.process_chain.push_back(self )
 	if status != RUNNING:
 		_entered_state()
 		task_started.emit()
@@ -63,7 +63,7 @@ func execute(delta: float) -> Status:
 	elif not behavior_tree.running_task:
 		behavior_tree.running_task = self
 		task_ended.connect(
-			func() -> void: behavior_tree.running_task = null, CONNECT_ONE_SHOT
+			func() -> void: behavior_tree.running_task=null, CONNECT_ONE_SHOT
 		)
 		_process_tick(delta)
 
@@ -87,6 +87,13 @@ func next_task() -> BT_BaseTask:
 func first_task() -> BT_BaseTask:
 	task_index = 0
 	return child_tasks[task_index]
+
+
+func find_task(type: GDScript) -> BT_BaseTask:
+	var matching_tasks := child_tasks.filter(
+		func(task: BT_BaseTask) -> bool: return is_instance_of(task, type)
+	)
+	return matching_tasks.front()
 
 
 func set_task_index(index: int) -> void:
