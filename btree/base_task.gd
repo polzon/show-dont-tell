@@ -50,22 +50,24 @@ func _exit_tree() -> void:
 
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
+	behavior_tree.process_chain.push_back(self)
 
-	behavior_tree.process_chain.push_back(self )
 	if status != RUNNING:
 		_entered_state()
 		task_started.emit()
+
 	status = _tick(delta)
 
 	if status != RUNNING:
 		_exited_state()
 		task_ended.emit()
-	elif not behavior_tree.running_task:
+
+	elif status == RUNNING and self is BT_LeafTask:
 		behavior_tree.running_task = self
-		task_ended.connect(
-			func() -> void: behavior_tree.running_task=null, CONNECT_ONE_SHOT
-		)
-		_process_tick(delta)
+		if behavior_tree and behavior_tree.debug_running_task:
+			print(
+				"[BT_BaseTask.execute] Set running_task to leaf: %s" % self.name
+			)
 
 	assert(status != Status.NULL, "Error status: %s" % Status.find_key(status))
 	return status
