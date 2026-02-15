@@ -14,6 +14,7 @@ enum TickProcess {
 	PROCESS,
 }
 
+@export var enabled: bool = true
 ## When [method _tick] is processing a [method running_task].
 @export var tick_processing := TickProcess.PHYSICS
 
@@ -31,34 +32,30 @@ var running_task: BT_BaseTask:
 
 
 func _process(delta: float) -> void:
+	if not enabled:
+		return
+
 	if tick_processing == TickProcess.PROCESS:
 		_update_tick(delta)
 
 	if running_task:
 		if debug_running_task:
-			print(
-				(
-					"[BehaviorTree._process] Calling _process_tick on: %s"
-					% running_task.name
-				)
-			)
+			print("[BehaviorTree] _process_tick: ", running_task.name)
 		running_task._process_tick(delta)
 	elif debug_running_task:
 		print("[BehaviorTree._process] No running_task set")
 
 
 func _physics_process(delta: float) -> void:
+	if not enabled:
+		return
+
 	if tick_processing == TickProcess.PHYSICS:
 		_update_tick(delta)
 
 	if running_task:
 		if debug_running_task:
-			print(
-				(
-					"[BehaviorTree._physics_process] Calling _physics_tick on: %s"
-					% running_task.name
-				)
-			)
+			print("[BehaviorTree] _physics_tick: ", running_task.name)
 		running_task._physics_tick(delta)
 	elif debug_running_task:
 		print("[BehaviorTree._physics_process] No running_task set")
