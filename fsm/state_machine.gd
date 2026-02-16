@@ -1,16 +1,16 @@
 class_name StateMachine
 extends BehaviorControl
-## Implemntation of a Finite State Machine.
+## Implementation of a FiniteStateMachine.
 
 ## Emits after [signal state_end] when the previous state
 ## is finished.
-signal state_start(started_state: State)
+signal state_start(started_state: FiniteState)
 ## Emits before [signal state_start] when the previous state
 ## is finished.
-signal state_end(end_state: State)
+signal state_end(end_state: FiniteState)
 
-## Current [State] the parent node is in.
-var state: State:
+## Current [FiniteState] the parent node is in.
+var state: FiniteState:
 	set = _set_state
 ## The previous [Action] that was called through [method handle_action].
 var current_action: Action
@@ -19,14 +19,14 @@ var current_action: Action
 ## Finds the state as a [GDScript], assuming it's already a node that
 ## exists under this StateMachine node. It allows for clean syntax,
 ## like get_state(StateMove).
-func get_state(state_type: GDScript) -> State:
+func get_state(state_type: GDScript) -> FiniteState:
 	for node: Node in get_children():
-		var state_node := node as State
+		var state_node := node as FiniteState
 		assert(state_node, "Key Object is null.")
 		if is_instance_of(state_node, state_type):
 			return state_node
 
-	printerr("Couldn't find State: ", state_type.get_global_name())
+	printerr("Couldn't find FiniteState: ", state_type.get_global_name())
 	return null
 
 
@@ -36,7 +36,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	if not state:
-		push_warning("No inital state set!")
+		push_warning("No initial state set!")
 	assert(get_parent() or not is_inside_tree(), "StateMachine is an orphan?")
 
 
@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 		state._physics_tick(delta)
 
 
-## Passes the [Action] to the current [State], as well as sets
+## Passes the [Action] to the current [FiniteState], as well as sets
 ## [member current_action] to the submitted action.
 func _action_process(action: Action) -> void:
 	current_action = action
@@ -72,7 +72,7 @@ func handle_action(action: Action) -> void:
 		_action_process(action)
 
 
-func _set_state(new_state: State) -> void:
+func _set_state(new_state: FiniteState) -> void:
 	if state and not Engine.is_editor_hint():
 		state._on_state_end()
 		state_end.emit(state)
@@ -82,13 +82,13 @@ func _set_state(new_state: State) -> void:
 		state_start.emit(state)
 
 
-## Interrupts and immediately changes the current [State].
+## Interrupts and immediately changes the current [FiniteState].
 ## If wanting to wait for the state to finish instead, use [method queue_state].
 func change_state(new_state: GDScript) -> void:
 	var state_node := get_state(new_state)
 	change_state_node(state_node)
 
 
-func change_state_node(state_node: State) -> void:
+func change_state_node(state_node: FiniteState) -> void:
 	if is_instance_valid(state_node):
 		state = state_node

@@ -5,6 +5,9 @@ extends BaseState
 ## Abstract control point that BehaviorTree and StateMachine are
 ## extended from.
 
+# TODO: Figure out how to restructure this, because BehaviorTree doesn't
+# actually use this.
+
 signal enabled_toggled
 
 @export var enabled: bool = true:

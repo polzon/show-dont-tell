@@ -48,7 +48,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	return warnings
 
 
-func _setup_state(_new_state: State) -> void:
+func _setup_state(_new_state: FiniteState) -> void:
 	pass
 
 

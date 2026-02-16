@@ -4,14 +4,14 @@ extends Node
 
 signal transition_allowed
 
-signal state_connected(new_state: State)
-signal state_disconnected(old_state: State)
+signal state_connected(new_state: FiniteState)
+signal state_disconnected(old_state: FiniteState)
 
 ## The node this node will transition to if the requirements are met.
-@export var exit_node: State
+@export var exit_node: FiniteState
 
 ## The state this transaction node is connected to.
-var parent_state: State:
+var parent_state: FiniteState:
 	set = _set_state,
 	get = _get_state
 ## The state machine that [member state] is attached to.
@@ -36,14 +36,18 @@ func is_current_state() -> bool:
 	return false
 
 
-func _get_state() -> State:
-	if not parent_state and not _checked_parent_state and get_parent() is State:
+func _get_state() -> FiniteState:
+	if (
+		not parent_state
+		and not _checked_parent_state
+		and get_parent() is FiniteState
+	):
 		_checked_parent_state = true
 		parent_state = get_parent()
 	return parent_state
 
 
-func _set_state(new_state: State) -> void:
+func _set_state(new_state: FiniteState) -> void:
 	if parent_state:
 		state_disconnected.emit(parent_state)
 	parent_state = new_state
