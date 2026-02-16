@@ -1,7 +1,7 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/category_leaf.svg")
 class_name BT_LeafTask
-extends BT_BaseTask
+extends BehaviorTask
 ## Leaf tasks are the final nodes that a [BehaviorTree] ends on. This should
 ## handle the concrete behaviors of the tasks.
 ##

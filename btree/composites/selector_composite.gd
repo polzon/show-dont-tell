@@ -27,7 +27,7 @@ func _exited_state() -> void:
 
 func _tick(delta: float) -> Status:
 	while current_child_index < child_tasks.size():
-		var child: BT_BaseTask = child_tasks[current_child_index]
+		var child: BehaviorTask = child_tasks[current_child_index]
 		var child_status: Status = child.execute(delta)
 
 		if child_status == RUNNING:

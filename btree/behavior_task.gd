@@ -1,6 +1,6 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/category_bt.svg")
-class_name BT_BaseTask
+class_name BehaviorTask
 extends BaseState
 ## The core of a [BehaviorTree] task that everything is extended from.
 
@@ -34,8 +34,8 @@ var behavior_tree: BehaviorTree:
 var task_index: int = 0:
 	set = set_task_index
 
-@onready var parent_task := get_parent() as BT_BaseTask
-@onready var child_tasks: Array[BT_BaseTask] = _find_child_tasks()
+@onready var parent_task := get_parent() as BehaviorTask
+@onready var child_tasks: Array[BehaviorTask] = _find_child_tasks()
 
 
 func _enter_tree() -> void:
@@ -66,19 +66,19 @@ func execute(delta: float) -> Status:
 		behavior_tree.running_task = self
 		if behavior_tree and behavior_tree.debug_running_task:
 			print(
-				"[BT_BaseTask.execute] Set running_task to leaf: %s" % self.name
+				"[BehaviorTask.execute] Set running_task to leaf: %s" % self.name
 			)
 
 	assert(status != Status.NULL, "Error status: %s" % Status.find_key(status))
 	return status
 
 
-func prev_task() -> BT_BaseTask:
+func prev_task() -> BehaviorTask:
 	task_index -= 1
 	return child_tasks[task_index]
 
 
-func next_task() -> BT_BaseTask:
+func next_task() -> BehaviorTask:
 	if task_index >= child_tasks.size() - 1:
 		task_index = 0
 	else:
@@ -86,14 +86,14 @@ func next_task() -> BT_BaseTask:
 	return child_tasks[task_index]
 
 
-func first_task() -> BT_BaseTask:
+func first_task() -> BehaviorTask:
 	task_index = 0
 	return child_tasks[task_index]
 
 
-func find_task(type: GDScript) -> BT_BaseTask:
+func find_task(type: GDScript) -> BehaviorTask:
 	var matching_tasks := child_tasks.filter(
-		func(task: BT_BaseTask) -> bool: return is_instance_of(task, type)
+		func(task: BehaviorTask) -> bool: return is_instance_of(task, type)
 	)
 	return matching_tasks.front()
 
@@ -126,7 +126,7 @@ func _handle_action(_action: Action) -> void:
 	pass
 
 
-func _get_child_task() -> BT_BaseTask:
+func _get_child_task() -> BehaviorTask:
 	if child_tasks.is_empty():
 		if warn_missing_child:
 			push_warning("%s has no child task" % name)
@@ -141,10 +141,10 @@ func _execute_child(delta: float) -> Status:
 	return child.execute(delta)
 
 
-func _find_child_tasks() -> Array[BT_BaseTask]:
-	var tasks: Array[BT_BaseTask] = []
+func _find_child_tasks() -> Array[BehaviorTask]:
+	var tasks: Array[BehaviorTask] = []
 	for node in get_children(false):
-		if is_instance_valid(node) and node is BT_BaseTask:
+		if is_instance_valid(node) and node is BehaviorTask:
 			tasks.push_back(node)
 	return tasks
 

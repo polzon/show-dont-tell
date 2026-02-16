@@ -1,11 +1,11 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorTree
-extends BT_BaseTask
-## BehaviorTree behavior controller that processes various [BT_BaseTask]
+extends BehaviorTask
+## BehaviorTree behavior controller that processes various [BehaviorTask]
 ## and [Action].
 
-signal changed_task(task: BT_BaseTask)
+signal changed_task(task: BehaviorTask)
 
 enum TickProcess {
 	## [method _tick] is proccessed during [member _physics_process].
@@ -24,11 +24,18 @@ enum TickProcess {
 @export var debug_running_task: bool = false
 
 ## The child task currently being executed.
-var current_task: BT_BaseTask:
+var current_task: BehaviorTask:
 	set = set_current_task
-var process_chain: Array[BT_BaseTask] = []
-var running_task: BT_BaseTask:
+var process_chain: Array[BehaviorTask] = []
+var running_task: BehaviorTask:
 	set = set_running_task
+
+
+static func find_behavior_tree(node: Node) -> BehaviorTree:
+	for child: Node in node.find_children("", &"BehaviorTree"):
+		if child is BehaviorTree:
+			return child
+	return null
 
 
 func _process(delta: float) -> void:
@@ -70,7 +77,7 @@ func _update_tick(delta: float) -> void:
 		_print_process_chain()
 
 
-func _find_child_tasks() -> Array[BT_BaseTask]:
+func _find_child_tasks() -> Array[BehaviorTask]:
 	var found_tasks := super()
 	for task in found_tasks:
 		if not current_task:
@@ -79,12 +86,12 @@ func _find_child_tasks() -> Array[BT_BaseTask]:
 	return found_tasks
 
 
-func set_current_task(new_task: BT_BaseTask) -> void:
+func set_current_task(new_task: BehaviorTask) -> void:
 	current_task = new_task
 	changed_task.emit(current_task)
 
 
-func set_running_task(new_task: BT_BaseTask) -> void:
+func set_running_task(new_task: BehaviorTask) -> void:
 	if not new_task:
 		if running_task:
 			running_task.task_ended.disconnect(_clear_task)

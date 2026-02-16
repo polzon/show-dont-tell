@@ -1,7 +1,9 @@
+@icon("res://addons/show_not_tell/icons/tree.svg")
 class_name StateMachine
-extends BehaviorControl
+extends FiniteState
 ## Implementation of a FiniteStateMachine.
 
+signal enabled_toggled
 ## Emits after [signal state_end] when the previous state
 ## is finished.
 signal state_start(started_state: FiniteState)
@@ -9,11 +11,24 @@ signal state_start(started_state: FiniteState)
 ## is finished.
 signal state_end(end_state: FiniteState)
 
+@export var enabled: bool = true:
+	set = set_enabled
+
 ## Current [FiniteState] the parent node is in.
 var state: FiniteState:
-	set = _set_state
+	set = set_state
 ## The previous [Action] that was called through [method handle_action].
 var current_action: Action
+
+var _inital_process_mode: ProcessMode
+var _has_set_inital_process_mode: bool = false
+
+
+static func find_state_machine(node: Node) -> StateMachine:
+	for child: Node in node.find_children("", &"StateMachine"):
+		if child is StateMachine:
+			return child
+	return null
 
 
 ## Finds the state as a [GDScript], assuming it's already a node that
@@ -67,12 +82,7 @@ func _on_enabled_toggled() -> void:
 	set_physics_process(enabled)
 
 
-func handle_action(action: Action) -> void:
-	if enabled:
-		_action_process(action)
-
-
-func _set_state(new_state: FiniteState) -> void:
+func set_state(new_state: FiniteState) -> void:
 	if state and not Engine.is_editor_hint():
 		state._on_state_end()
 		state_end.emit(state)
@@ -80,6 +90,11 @@ func _set_state(new_state: FiniteState) -> void:
 	if state and not Engine.is_editor_hint():
 		state._on_state_start()
 		state_start.emit(state)
+
+
+func handle_action(action: Action) -> void:
+	if enabled:
+		_action_process(action)
 
 
 ## Interrupts and immediately changes the current [FiniteState].
@@ -92,3 +107,14 @@ func change_state(new_state: GDScript) -> void:
 func change_state_node(state_node: FiniteState) -> void:
 	if is_instance_valid(state_node):
 		state = state_node
+
+
+func set_enabled(is_enabled: bool) -> void:
+	enabled = is_enabled
+	if not _has_set_inital_process_mode:
+		_inital_process_mode = process_mode
+		_has_set_inital_process_mode = true
+	process_mode = (
+		_inital_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
+	)
+	enabled_toggled.emit()

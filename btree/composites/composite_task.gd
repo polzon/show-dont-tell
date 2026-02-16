@@ -1,7 +1,7 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/category_composite.svg")
 class_name BT_CompositeTask
-extends BT_BaseTask
+extends BehaviorTask
 ## Intermediary tasks of the [BehaviorTree] that lead to a [BT_LeafTask].
 ##
 ## Composite nodes are essential components of Behavior Trees, allowing
@@ -13,7 +13,7 @@ extends BT_BaseTask
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/composites
 
 var current_child_index: int = 0
-var shuffled_children: Array[BT_BaseTask] = []
+var shuffled_children: Array[BehaviorTask] = []
 
 
 func _reset_child_index() -> void:
