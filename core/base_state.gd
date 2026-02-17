@@ -25,6 +25,32 @@ func set_process_on_active(is_enabled: bool) -> void:
 	_setup_process_signal(process_on_active)
 
 
+func get_child_state(state_type: GDScript, internal: bool = false) -> BaseState:
+	assert(_assert_get_child_state(state_type), "Finding inconsistent results!")
+	return _get_child_state_loop(state_type, internal)
+
+
+func _get_child_state_filter(state_type: GDScript, internal: bool) -> Node:
+	var results := get_children(internal)
+	results = results.filter(
+		func(task: Node) -> bool: return is_instance_of(task, state_type)
+	)
+	return null if results.is_empty() else results.front()
+
+
+func _get_child_state_loop(state_type: GDScript, internal: bool) -> Node:
+	for node: Node in get_children(internal):
+		var state_node := node as Node
+		if is_instance_of(state_node, state_type):
+			return state_node
+	return null
+
+
+func _get_child_state_find(state_type: GDScript, _internal: bool) -> Node:
+	var results := find_children("", state_type.get_global_name(), false, true)
+	return results.front() if not results.is_empty() else null
+
+
 ## Processed when the [BaseState] has been entered.
 func _entered_state() -> void:
 	started.emit()
@@ -71,3 +97,10 @@ func _is_any_processing_enabled() -> bool:
 	)
 	set_process_on_active(processing_enabled)
 	return processing_enabled
+
+
+func _assert_get_child_state(state_type: GDScript) -> bool:
+	var filter_result := _get_child_state_filter(state_type, false)
+	var loop_result := _get_child_state_loop(state_type, false)
+	var find_result := _get_child_state_find(state_type, false)
+	return filter_result == loop_result and loop_result == find_result

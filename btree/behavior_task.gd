@@ -66,7 +66,10 @@ func execute(delta: float) -> Status:
 		behavior_tree.running_task = self
 		if behavior_tree and behavior_tree.debug_running_task:
 			print(
-				"[BehaviorTask.execute] Set running_task to leaf: %s" % self.name
+				(
+					"[BehaviorTask.execute] Set running_task to leaf: %s"
+					% self.name
+				)
 			)
 
 	assert(status != Status.NULL, "Error status: %s" % Status.find_key(status))
@@ -91,11 +94,13 @@ func first_task() -> BehaviorTask:
 	return child_tasks[task_index]
 
 
-func find_task(type: GDScript) -> BehaviorTask:
-	var matching_tasks := child_tasks.filter(
-		func(task: BehaviorTask) -> bool: return is_instance_of(task, type)
+func get_child_task(type: GDScript) -> BehaviorTask:
+	var task := get_child_state(type)
+	assert(
+		is_instance_valid(task),
+		"Failed to get task: %s" % type.get_global_name()
 	)
-	return matching_tasks.front()
+	return task
 
 
 func set_task_index(index: int) -> void:
@@ -106,6 +111,30 @@ func set_behavior_tree(tree: BehaviorTree) -> void:
 	behavior_tree = tree
 	if is_instance_valid(behavior_tree):
 		_assign_behavior_tree()
+
+
+func get_current_task() -> BehaviorTask:
+	assert(
+		behavior_tree and behavior_tree.current_task,
+		"Failed to find current task."
+	)
+	return behavior_tree.current_task if behavior_tree else null
+
+
+func get_running_task() -> BehaviorTask:
+	assert(
+		behavior_tree and behavior_tree.running_task,
+		"Failed to find running task."
+	)
+	return behavior_tree.running_task if behavior_tree else null
+
+
+func is_current_task() -> bool:
+	return get_current_task() == self
+
+
+func is_running_task() -> bool:
+	return get_running_task() == self
 
 
 ## Base process tick function that is triggered every [BehaviorTree]
@@ -156,3 +185,29 @@ func _assign_behavior_tree() -> void:
 
 func _update_child_tasks() -> void:
 	child_tasks = _find_child_tasks()
+
+
+func _assert_current_task() -> void:
+	assert(
+		is_current_task(),
+		(
+			"Asserting task %s does not match current task: %s"
+			% [
+				self.name,
+				get_current_task().name if get_current_task() else &""
+			]
+		)
+	)
+
+
+func _assert_running_task() -> void:
+	assert(
+		is_running_task(),
+		(
+			"Asserting task %s does not match running task: %s"
+			% [
+				self.name,
+				get_running_task().name if get_running_task() else &""
+			]
+		)
+	)

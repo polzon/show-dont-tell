@@ -31,18 +31,8 @@ static func find_state_machine(node: Node) -> StateMachine:
 	return null
 
 
-## Finds the state as a [GDScript], assuming it's already a node that
-## exists under this StateMachine node. It allows for clean syntax,
-## like get_state(StateMove).
-func get_state(state_type: GDScript) -> FiniteState:
-	for node: Node in get_children():
-		var state_node := node as FiniteState
-		assert(state_node, "Key Object is null.")
-		if is_instance_of(state_node, state_type):
-			return state_node
-
-	printerr("Couldn't find FiniteState: ", state_type.get_global_name())
-	return null
+func get_finite_state(state_type: GDScript) -> FiniteState:
+	return get_child_state(state_type) as FiniteState
 
 
 func _init() -> void:
@@ -100,7 +90,14 @@ func handle_action(action: Action) -> void:
 ## Interrupts and immediately changes the current [FiniteState].
 ## If wanting to wait for the state to finish instead, use [method queue_state].
 func change_state(new_state: GDScript) -> void:
-	var state_node := get_state(new_state)
+	var state_node := get_finite_state(new_state)
+	assert(
+		state_node,
+		(
+			"Trying to change to invalid state: %s, result: %s"
+			% [new_state.get_global_name(), state_node]
+		)
+	)
 	change_state_node(state_node)
 
 

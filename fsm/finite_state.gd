@@ -4,7 +4,7 @@ extends BaseState
 
 ## The [StateMachine] that is handling the [FiniteState].
 @onready var state_machine: StateMachine:
-	get = _get_state_machine
+	get = get_state_machine
 
 
 ## Called from [StateMachine] when an action is passed to it,
@@ -43,6 +43,14 @@ func current_state() -> FiniteState:
 	return null
 
 
+func get_finite_state(state_type: GDScript) -> FiniteState:
+	# TODO: Need to clarify that this is checking the state_machine,
+	# and not the calling node.
+	if state_machine:
+		return state_machine.get_child_state(state_type) as FiniteState
+	return null
+
+
 ## Returns a [bool] if this state is the current state being processed by the
 ## [StateMachine].
 func is_current_state() -> bool:
@@ -53,9 +61,8 @@ func is_current_state() -> bool:
 ## takes a [GDScript] object, assuming it's a script that inherits
 ## [FiniteState], otherwise it returns an error.
 func change_state(new_state: GDScript) -> void:
-	if state_machine:
-		var state_node := state_machine.get_state(new_state)
-		change_state_node(state_node)
+	var state_node := get_finite_state(new_state)
+	change_state_node(state_node)
 
 
 func change_state_node(state_node: FiniteState) -> void:
@@ -63,7 +70,7 @@ func change_state_node(state_node: FiniteState) -> void:
 		state_machine.change_state_node(state_node)
 
 
-func _get_state_machine() -> StateMachine:
+func get_state_machine() -> StateMachine:
 	if not state_machine:
 		state_machine = get_parent() as StateMachine
 	return state_machine

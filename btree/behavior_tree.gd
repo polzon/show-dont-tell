@@ -1,4 +1,3 @@
-@abstract
 @icon("res://addons/show_not_tell/icons/tree.svg")
 class_name BehaviorTree
 extends BehaviorTask
@@ -12,6 +11,9 @@ enum TickProcess {
 	PHYSICS,
 	## [method _tick] is proccessed during [member _process].
 	PROCESS,
+	## [method _tick] is proccessed during [member _process]
+	## and [member _physics_process].
+	BOTH,
 }
 
 @export var enabled: bool = true
@@ -42,13 +44,14 @@ func _process(delta: float) -> void:
 	if not enabled:
 		return
 
-	if tick_processing == TickProcess.PROCESS:
+	if tick_processing != TickProcess.PHYSICS:
 		_update_tick(delta)
 
 	if running_task:
 		if debug_running_task:
 			print("[BehaviorTree] _process_tick: ", running_task.name)
 		running_task._process_tick(delta)
+		running_task._assert_running_task()
 	elif debug_running_task:
 		print("[BehaviorTree._process] No running_task set")
 
@@ -57,13 +60,14 @@ func _physics_process(delta: float) -> void:
 	if not enabled:
 		return
 
-	if tick_processing == TickProcess.PHYSICS:
+	if tick_processing != TickProcess.PROCESS:
 		_update_tick(delta)
 
 	if running_task:
 		if debug_running_task:
 			print("[BehaviorTree] _physics_tick: ", running_task.name)
 		running_task._physics_tick(delta)
+		running_task._assert_running_task()
 	elif debug_running_task:
 		print("[BehaviorTree._physics_process] No running_task set")
 
@@ -73,6 +77,7 @@ func _update_tick(delta: float) -> void:
 	status = current_task.execute(delta)
 	if status != RUNNING:
 		current_task = next_task()
+		current_task._assert_current_task()
 	if print_task_chain:
 		_print_process_chain()
 
