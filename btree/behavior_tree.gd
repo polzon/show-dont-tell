@@ -116,8 +116,10 @@ func set_running_task(new_task: BehaviorTask) -> void:
 
 	else:
 		push_warning(
-			"[BehaviorTree]: Rejected assigning [%s] already running state: %s"
-			% [running_task.name, new_task.name]
+			(
+				"[BehaviorTree]: Rejected assigning [%s] already running state: %s"
+				% [running_task.name, new_task.name]
+			)
 		)
 
 

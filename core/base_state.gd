@@ -6,12 +6,12 @@ extends Node
 # This script is intended to be used as the base for both Behavior Tree and
 # the State Machine. Including the state machines and states themselves.
 
-static var debug_get_child_enabled: bool = false
-
 ## Emitted when the [BaseState] has been entered/started.
 signal started
 ## Emitted when the [BaseState] has been exited/stopped.
 signal ended
+
+static var debug_get_child_enabled: bool = false
 
 ## If set to `true`, the processing will be automatically toggled off or on
 ## when the state is changed. It will automatically toggle [method _process]
