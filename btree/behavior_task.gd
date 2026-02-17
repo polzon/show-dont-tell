@@ -61,16 +61,12 @@ func execute(delta: float) -> Status:
 	if status != RUNNING:
 		_exited_state()
 		task_ended.emit()
-
-	elif status == RUNNING and self is BT_LeafTask:
+	elif (
+		status == RUNNING
+		and self is BT_LeafTask
+		and behavior_tree.running_task != self
+	):
 		behavior_tree.running_task = self
-		if behavior_tree and behavior_tree.debug_running_task:
-			print(
-				(
-					"[BehaviorTask.execute] Set running_task to leaf: %s"
-					% self.name
-				)
-			)
 
 	assert(status != Status.NULL, "Error status: %s" % Status.find_key(status))
 	return status
@@ -95,7 +91,7 @@ func first_task() -> BehaviorTask:
 
 
 func get_child_task(type: GDScript) -> BehaviorTask:
-	var task := get_child_state(type)
+	var task := get_child_state(type) as BehaviorTask
 	assert(
 		is_instance_valid(task),
 		"Failed to get task: %s" % type.get_global_name()

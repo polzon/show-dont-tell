@@ -114,6 +114,12 @@ func set_running_task(new_task: BehaviorTask) -> void:
 		if print_active_state or debug_running_task:
 			print("[BehaviorTree]: Set running state: %s." % running_task.name)
 
+	else:
+		push_warning(
+			"[BehaviorTree]: Rejected assigning [%s] already running state: %s"
+			% [running_task.name, new_task.name]
+		)
+
 
 func handle_action(action: Action) -> void:
 	if running_task:

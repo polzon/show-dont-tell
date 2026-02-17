@@ -6,6 +6,8 @@ extends Node
 # This script is intended to be used as the base for both Behavior Tree and
 # the State Machine. Including the state machines and states themselves.
 
+static var debug_get_child_enabled: bool = false
+
 ## Emitted when the [BaseState] has been entered/started.
 signal started
 ## Emitted when the [BaseState] has been exited/stopped.
@@ -26,16 +28,19 @@ func set_process_on_active(is_enabled: bool) -> void:
 
 
 func get_child_state(state_type: GDScript, internal: bool = false) -> BaseState:
-	assert(_assert_get_child_state(state_type), "Finding inconsistent results!")
-	return _get_child_state_loop(state_type, internal)
+	if debug_get_child_enabled:
+		assert(
+			_assert_get_child_state(state_type), "Finding inconsistent results!"
+		)
+	return _get_child_state_custom(state_type, internal)
 
 
-func _get_child_state_filter(state_type: GDScript, internal: bool) -> Node:
-	var results := get_children(internal)
-	results = results.filter(
+func _get_child_state_custom(state_type: GDScript, internal: bool) -> Node:
+	var children := get_children(internal)
+	var index := children.find_custom(
 		func(task: Node) -> bool: return is_instance_of(task, state_type)
 	)
-	return null if results.is_empty() else results.front()
+	return null if index < 0 else children[index]
 
 
 func _get_child_state_loop(state_type: GDScript, internal: bool) -> Node:
@@ -62,7 +67,7 @@ func _exited_state() -> void:
 
 
 func _setup_process_signal(is_enabled: bool) -> void:
-	if has_method("_process"):
+	if has_method(&"_process"):
 		if is_enabled:
 			if not started.is_connected(set_process.bind(true)):
 				started.connect(set_process.bind(true))
@@ -76,7 +81,7 @@ func _setup_process_signal(is_enabled: bool) -> void:
 
 
 func _setup_physics_signal(is_enabled: bool) -> void:
-	if has_method("_physics_process"):
+	if has_method(&"_physics_process"):
 		if is_enabled:
 			if not started.is_connected(set_physics_process.bind(true)):
 				started.connect(set_physics_process.bind(true))
@@ -99,8 +104,10 @@ func _is_any_processing_enabled() -> bool:
 	return processing_enabled
 
 
+## For debug purposes. Calls all the search child functions and ensures the
+## results are the same for consistentcy.
 func _assert_get_child_state(state_type: GDScript) -> bool:
-	var filter_result := _get_child_state_filter(state_type, false)
+	var filter_result := _get_child_state_custom(state_type, false)
 	var loop_result := _get_child_state_loop(state_type, false)
 	var find_result := _get_child_state_find(state_type, false)
 	return filter_result == loop_result and loop_result == find_result
