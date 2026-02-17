@@ -116,7 +116,7 @@ func _try_replan() -> void:
 ## Returns the highest priority unsatisfied goal.
 func _get_highest_priority_goal() -> GOAPGoal:
 	var best_goal: GOAPGoal = null
-	var best_priority: float = - INF
+	var best_priority: float = -INF
 
 	for goal: GOAPGoal in goals:
 		if goal.is_satisfied(world_state):

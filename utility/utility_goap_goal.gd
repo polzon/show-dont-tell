@@ -16,7 +16,7 @@ var base_priority: float = 1.0
 func _init(
 	p_target_state: GOAPWorldState = null, p_base_priority: float = 1.0
 ) -> void:
-	super (p_target_state, p_base_priority)
+	super(p_target_state, p_base_priority)
 	base_priority = p_base_priority
 
 

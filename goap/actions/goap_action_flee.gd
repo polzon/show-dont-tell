@@ -6,7 +6,7 @@ extends GOAPAction
 var flee_actor: Actor
 
 ## Minimum safe distance in pixels.
-var safe_distance: float = 16.0 * 5.0 # 5 tiles at 16px per tile
+var safe_distance: float = 16.0 * 5.0  # 5 tiles at 16px per tile
 
 
 func _init(
@@ -15,7 +15,7 @@ func _init(
 	flee_actor = actor
 	safe_distance = p_safe_distance
 
-	super (GOAPWorldState.new(), GOAPWorldState.new(), action_cost)
+	super(GOAPWorldState.new(), GOAPWorldState.new(), action_cost)
 
 	# Precondition: There must be a threat nearby.
 	preconditions.set_value(&"has_nearby_threat", true)

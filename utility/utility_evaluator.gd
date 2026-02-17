@@ -31,7 +31,7 @@ func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityAction:
 		return null
 
 	var best_action: UtilityAction = null
-	var best_score: float = - INF
+	var best_score: float = -INF
 
 	for action: UtilityAction in actions:
 		if not action:

@@ -1,4 +1,3 @@
-@abstract
 @icon("res://addons/show_not_tell/icons/selector.svg")
 class_name BT_SelectorComposite
 extends BT_CompositeTask

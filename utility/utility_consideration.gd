@@ -55,6 +55,4 @@ func normalize_value(raw_value: float) -> float:
 	if max_value < min_value:
 		return 0.0
 
-	return clampf(
-		(raw_value - min_value) / (max_value - min_value), 0.0, 1.0
-	)
+	return clampf((raw_value - min_value) / (max_value - min_value), 0.0, 1.0)

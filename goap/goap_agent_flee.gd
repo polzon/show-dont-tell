@@ -8,10 +8,10 @@ extends GOAPAgent
 @export var threat_check_interval: float = 0.5
 
 ## Distance at which to consider an actor a threat (pixels).
-@export var threat_detection_range: float = 16.0 * 8.0 # 8 tiles
+@export var threat_detection_range: float = 16.0 * 8.0  # 8 tiles
 
 ## Safe distance to maintain from threats (pixels).
-@export var safe_distance: float = 16.0 * 5.0 # 5 tiles
+@export var safe_distance: float = 16.0 * 5.0  # 5 tiles
 
 var threat_check_timer: float = 0.0
 var should_flee: bool = false
@@ -19,7 +19,7 @@ var nearest_threat: Actor = null
 
 
 func _ready() -> void:
-	super ()
+	super()
 
 	# Wait for actor to be found.
 	await get_tree().process_frame
@@ -42,7 +42,7 @@ func _physics_process(_delta: float) -> void:
 	if should_flee and nearest_threat:
 		var flee_dir: Vector2 = (
 			(actor.global_position - nearest_threat.global_position)
-			.normalized()
+			. normalized()
 		)
 
 		var move_action := ActionMove.new(actor)
@@ -51,7 +51,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 	# Update threat detection.
 	threat_check_timer += delta

@@ -1,4 +1,4 @@
-class_name GOAPAction
+@abstract class_name GOAPAction
 extends RefCounted
 ## Base class for GOAP action metadata.
 ##
@@ -48,14 +48,7 @@ func apply_to_state(state: GOAPWorldState) -> GOAPWorldState:
 ## Creates and configures an Action instance for execution.
 ## Override in subclasses to return specific Action types.
 ## Called by GOAPAgent when executing a planned action sequence.
-func create_action() -> Action:
-	push_error(
-		(
-			"GOAPAction.create_action() must be overridden in subclass %s"
-			% get_script().resource_path
-		)
-	)
-	return null
+@abstract func create_action() -> Action
 
 
 ## Sets a precondition key-value requirement.

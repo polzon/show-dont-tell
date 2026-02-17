@@ -6,14 +6,14 @@ extends Resource
 ## into normalized scores. Different curve types provide different responses.
 
 enum CurveType {
-	LINEAR, ## Simple linear mapping
-	QUADRATIC, ## Squared response (slow start, fast finish)
-	INVERSE_QUADRATIC, ## Inverse squared (fast start, slow finish)
-	EXPONENTIAL, ## Exponential growth
-	INVERSE_EXPONENTIAL, ## Exponential decay
-	LOGISTIC, ## S-curve (sigmoid)
-	LOGIT, ## Inverse S-curve
-	CONSTANT, ## Always returns the same value
+	LINEAR,  ## Simple linear mapping
+	QUADRATIC,  ## Squared response (slow start, fast finish)
+	INVERSE_QUADRATIC,  ## Inverse squared (fast start, slow finish)
+	EXPONENTIAL,  ## Exponential growth
+	INVERSE_EXPONENTIAL,  ## Exponential decay
+	LOGISTIC,  ## S-curve (sigmoid)
+	LOGIT,  ## Inverse S-curve
+	CONSTANT,  ## Always returns the same value
 }
 
 ## The type of curve to use.

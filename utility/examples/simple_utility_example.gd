@@ -9,8 +9,8 @@ extends GOAPAgent
 const FALLBACK_FAR_DISTANCE: float = 999999.0
 
 ## Distance thresholds.
-@export var threat_detection_range: float = 16.0 * 10.0 # 10 tiles
-@export var safe_distance: float = 16.0 * 5.0 # 5 tiles
+@export var threat_detection_range: float = 16.0 * 10.0  # 10 tiles
+@export var safe_distance: float = 16.0 * 5.0  # 5 tiles
 
 var threat_check_timer: float = 0.0
 var flee_goal: UtilityGOAPGoal
@@ -19,7 +19,7 @@ var nearest_threat: Actor = null
 
 
 func _ready() -> void:
-	super ()
+	super()
 
 	await get_tree().process_frame
 
@@ -72,7 +72,7 @@ func _physics_process(_delta: float) -> void:
 	if flee_goal.priority > idle_goal.priority and nearest_threat:
 		var flee_dir: Vector2 = (
 			(actor.global_position - nearest_threat.global_position)
-			.normalized()
+			. normalized()
 		)
 
 		var move_action := ActionMove.new(actor)
@@ -81,11 +81,11 @@ func _physics_process(_delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	super (delta)
+	super(delta)
 
 	# Update goal priorities using utility AI.
 	threat_check_timer += delta
-	if threat_check_timer >= 0.2: # 5 times per second
+	if threat_check_timer >= 0.2:  # 5 times per second
 		threat_check_timer = 0.0
 		_update_goal_priorities()
 
@@ -123,7 +123,7 @@ func _update_goal_priorities() -> void:
 				var target_position: Vector2 = target_pos
 				dist = actor.global_position.distance_to(target_position)
 
-		if threat_check_timer == 0.0: # Only print on update
+		if threat_check_timer == 0.0:  # Only print on update
 			print(
 				(
 					"[%s] Dist: %.1f | Flee: %.2f | Idle: %.2f | Winner: %s"
