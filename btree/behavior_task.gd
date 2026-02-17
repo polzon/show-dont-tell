@@ -72,6 +72,13 @@ func execute(delta: float) -> Status:
 	return status
 
 
+func interrupt() -> void:
+	if status == RUNNING:
+		_exited_state()
+		task_ended.emit()
+	status = FAILED
+
+
 func prev_task() -> BehaviorTask:
 	task_index -= 1
 	return child_tasks[task_index]
