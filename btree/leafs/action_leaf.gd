@@ -15,3 +15,10 @@ extends BT_LeafTask
 ## SUCCESS. If the action fails or is interrupted, it should return FAILURE.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/action_leaf
+
+
+func execute(delta: float) -> Status:
+	var result := super.execute(delta)
+	if is_instance_valid(behavior_tree):
+		behavior_tree.set_leaf_executed(self)
+	return result

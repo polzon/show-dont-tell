@@ -5,6 +5,7 @@ extends BehaviorTask
 ## and [Action].
 
 signal changed_task(task: BehaviorTask)
+signal active_leaf_changed(leaf: BehaviorTask)
 
 enum TickProcess {
 	## [method _tick] is proccessed during [member _physics_process].
@@ -31,6 +32,9 @@ var current_task: BehaviorTask:
 var process_chain: Array[BehaviorTask] = []
 var running_task: BehaviorTask:
 	set = set_running_task
+
+var _last_executed_leaf: BehaviorTask = null:
+	set = set_leaf_executed
 
 
 static func find_behavior_tree(node: Node) -> BehaviorTree:
@@ -91,11 +95,6 @@ func _find_child_tasks() -> Array[BehaviorTask]:
 	return found_tasks
 
 
-func set_current_task(new_task: BehaviorTask) -> void:
-	current_task = new_task
-	changed_task.emit(current_task)
-
-
 func set_running_task(new_task: BehaviorTask) -> void:
 	if not new_task:
 		if running_task:
@@ -130,6 +129,18 @@ func handle_action(action: Action) -> void:
 
 func _clear_task() -> void:
 	running_task = null
+
+
+func set_current_task(new_task: BehaviorTask) -> void:
+	current_task = new_task
+	changed_task.emit(current_task)
+
+
+func set_leaf_executed(leaf: BehaviorTask) -> void:
+	# Track when the active leaf changes and emit signal
+	if leaf != _last_executed_leaf:
+		_last_executed_leaf = leaf
+		active_leaf_changed.emit(leaf)
 
 
 func _print_process_chain() -> void:
