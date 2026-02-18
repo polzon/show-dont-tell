@@ -28,9 +28,7 @@ func _tick(delta: float) -> Status:
 		var child_status: Status = child.execute(delta)
 
 		if child_status == RUNNING:
-			if _active_child != child:
-				_active_child = child
-				_active_child._entered_state()
+			_active_child = child
 			has_running_child = true
 			if debug_print:
 				print("[BT_ProcessingSelector] Active child: ", child.name)

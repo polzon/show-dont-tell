@@ -26,8 +26,6 @@ const SUCCESS = Status.SUCCESS
 const FAILED = Status.FAILED
 const RUNNING = Status.RUNNING
 
-@export var warn_missing_child: bool = false
-
 var status := SUCCESS
 var behavior_tree: BehaviorTree:
 	set = set_behavior_tree
@@ -159,11 +157,7 @@ func _handle_action(_action: Action) -> void:
 
 
 func _get_child_task() -> BehaviorTask:
-	if child_tasks.is_empty():
-		if warn_missing_child:
-			push_warning("%s has no child task" % name)
-		return null
-	return child_tasks[0]
+	return null if child_tasks.is_empty() else child_tasks[0]
 
 
 func _execute_child(delta: float) -> Status:
