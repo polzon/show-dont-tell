@@ -102,7 +102,8 @@ func change_state(new_state: GDScript) -> void:
 
 
 func change_state_node(state_node: FiniteState) -> void:
-	if is_instance_valid(state_node):
+	assert(state_node, "Trying to change to null state!")
+	if enabled:
 		state = state_node
 
 
