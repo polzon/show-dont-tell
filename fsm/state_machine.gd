@@ -40,9 +40,13 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	if not state:
-		push_warning("No initial state set!")
 	assert(get_parent() or not is_inside_tree(), "StateMachine is an orphan?")
+	if not state:
+		var first_state := _find_first_finite_state()
+		if not first_state:
+			push_warning("No initial state set!")
+		else:
+			change_state_node(first_state)
 
 
 func _process(delta: float) -> void:
@@ -70,6 +74,13 @@ func _action_process(action: Action) -> void:
 func _on_enabled_toggled() -> void:
 	set_process(enabled)
 	set_physics_process(enabled)
+
+
+func _find_first_finite_state() -> FiniteState:
+	for node: Node in get_children(false):
+		if node is FiniteState:
+			return node
+	return null
 
 
 func set_state(new_state: FiniteState) -> void:
