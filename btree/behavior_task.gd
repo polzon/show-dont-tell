@@ -33,7 +33,8 @@ var blackboard: BT_Blackboard:
 	get():
 		if not blackboard:
 			blackboard = (
-				_get_child_state_custom(BT_Blackboard, false) as BT_Blackboard
+				behavior_tree._get_child_state_custom(BT_Blackboard, false)
+				as BT_Blackboard
 			)
 		return blackboard
 var task_index: int = 0:

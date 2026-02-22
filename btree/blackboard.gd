@@ -8,6 +8,8 @@ extends Node
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/blackboard
 
+var data: Dictionary[StringName, Variant] = {}
+
 @onready var behavior_tree: BehaviorTree = _find_behavior_tree()
 
 
@@ -17,3 +19,11 @@ func _find_behavior_tree(parent: Node = self) -> BehaviorTree:
 	if parent.get_parent():
 		return _find_behavior_tree(parent.get_parent())
 	return null
+
+
+func set_data(key: StringName, value: Variant) -> void:
+	data[key] = value
+
+
+func get_data(key: StringName) -> Variant:
+	return data.get(key, null)
