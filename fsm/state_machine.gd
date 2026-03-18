@@ -43,10 +43,11 @@ func _ready() -> void:
 	assert(get_parent() or not is_inside_tree(), "StateMachine is an orphan?")
 	if not state:
 		var first_state := _find_first_finite_state()
-		if not first_state:
-			push_warning("No initial state set!")
-		else:
+		if first_state:
 			change_state_node(first_state)
+		# TODO: Re-enable warning later.
+		# else:
+		# 	push_warning("No initial state set!")
 
 
 func _process(delta: float) -> void:
