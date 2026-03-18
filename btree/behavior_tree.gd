@@ -4,6 +4,11 @@ extends BehaviorTask
 ## BehaviorTree behavior controller that processes various [BehaviorTask]
 ## and [Action].
 
+# TODO: Message behavior rework.
+# We can refactor how tasks communicate with the BehaviorTree. They can
+# emit a signal that propagates up, and all parent tasks can listen to
+# their child signals for this message.
+
 signal changed_task(task: BehaviorTask)
 signal active_leaf_changed(leaf: BehaviorTask)
 
@@ -17,6 +22,7 @@ enum TickProcess {
 	BOTH,
 }
 
+# ? Do we really need this?
 @export var enabled: bool = true
 ## When [method _tick] is processing a [method running_task].
 @export var tick_processing := TickProcess.PHYSICS
@@ -37,6 +43,7 @@ var _last_executed_leaf: BehaviorTask = null:
 	set = set_leaf_executed
 
 
+# TODO: Can refactor out. Child tasks should propagate this information.
 static func find_behavior_tree(node: Node) -> BehaviorTree:
 	for child: Node in node.find_children("", &"BehaviorTree"):
 		if child is BehaviorTree:
@@ -45,6 +52,7 @@ static func find_behavior_tree(node: Node) -> BehaviorTree:
 
 
 func _process(delta: float) -> void:
+	# ? Should not longer be neccesary if we are properly handling task states.
 	if not enabled:
 		return
 
@@ -54,13 +62,17 @@ func _process(delta: float) -> void:
 	if running_task:
 		if debug_running_task:
 			print("[BehaviorTree] _process_tick: ", running_task.name)
+		# TODO: Bad practice, should not be calling private methods.
+		# TODO: Also _assert_running_task should be called by the task itself.
 		running_task._process_tick(delta)
 		running_task._assert_running_task()
+
 	elif debug_running_task:
 		print("[BehaviorTree._process] No running_task set")
 
 
 func _physics_process(delta: float) -> void:
+	# ? Should not longer be neccesary if we are properly handling task states.
 	if not enabled:
 		return
 
@@ -70,10 +82,55 @@ func _physics_process(delta: float) -> void:
 	if running_task:
 		if debug_running_task:
 			print("[BehaviorTree] _physics_tick: ", running_task.name)
+		# TODO: Bad practice, should not be calling private methods.
 		running_task._physics_tick(delta)
 		running_task._assert_running_task()
+
 	elif debug_running_task:
 		print("[BehaviorTree._physics_process] No running_task set")
+
+
+func set_running_task(new_task: BehaviorTask) -> void:
+	# ? This can probably be refactored to be cleaner. Some duplicate code here.
+	if not new_task:
+		if running_task:
+			running_task.task_ended.disconnect(_clear_task)
+		running_task = null
+		if print_active_state or debug_running_task:
+			print("[BehaviorTree]: Cleared running state.")
+
+	elif new_task != running_task:
+		if running_task:
+			running_task.task_ended.disconnect(_clear_task)
+
+		running_task = new_task
+		running_task.task_ended.connect(_clear_task)
+		if print_active_state or debug_running_task:
+			print("[BehaviorTree]: Set running state: %s." % running_task.name)
+
+	else:
+		push_warning(
+			"[BehaviorTree]: Rejected state [%s], " % running_task.name,
+			"already running state: %s" % new_task.name
+		)
+
+
+# TODO: This needs a rework. Tasks should check actions through `ActionQueue`.
+func handle_action(action: Action) -> void:
+	if running_task:
+		running_task._handle_action(action)
+
+
+func set_current_task(new_task: BehaviorTask) -> void:
+	current_task = new_task
+	changed_task.emit(current_task)
+
+
+# ? Can probably be refactored to a private func and called via signal.
+func set_leaf_executed(leaf: BehaviorTask) -> void:
+	if leaf != _last_executed_leaf:
+		_last_executed_leaf = leaf
+		active_leaf_changed.emit(leaf)
 
 
 func _update_tick(delta: float) -> void:
@@ -95,52 +152,8 @@ func _find_child_tasks() -> Array[BehaviorTask]:
 	return found_tasks
 
 
-func set_running_task(new_task: BehaviorTask) -> void:
-	if not new_task:
-		if running_task:
-			running_task.task_ended.disconnect(_clear_task)
-		running_task = null
-		if print_active_state or debug_running_task:
-			print("[BehaviorTree]: Cleared running state.")
-
-	elif new_task != running_task:
-		# Allow switching from one task to another
-		if running_task:
-			running_task.task_ended.disconnect(_clear_task)
-
-		running_task = new_task
-		running_task.task_ended.connect(_clear_task)
-		if print_active_state or debug_running_task:
-			print("[BehaviorTree]: Set running state: %s." % running_task.name)
-
-	else:
-		push_warning(
-			(
-				"[BehaviorTree]: Rejected assigning [%s] already running state: %s"
-				% [running_task.name, new_task.name]
-			)
-		)
-
-
-func handle_action(action: Action) -> void:
-	if running_task:
-		running_task._handle_action(action)
-
-
 func _clear_task() -> void:
 	running_task = null
-
-
-func set_current_task(new_task: BehaviorTask) -> void:
-	current_task = new_task
-	changed_task.emit(current_task)
-
-
-func set_leaf_executed(leaf: BehaviorTask) -> void:
-	# Track when the active leaf changes and emit signal
-	if leaf != _last_executed_leaf:
-		_last_executed_leaf = leaf
-		active_leaf_changed.emit(leaf)
 
 
 func _print_process_chain() -> void:

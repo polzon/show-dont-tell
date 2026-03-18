@@ -20,5 +20,6 @@ extends BT_LeafTask
 func execute(delta: float) -> Status:
 	var result := super.execute(delta)
 	if is_instance_valid(behavior_tree):
+		# TODO: Should replace with a signal instead.
 		behavior_tree.set_leaf_executed(self)
 	return result
