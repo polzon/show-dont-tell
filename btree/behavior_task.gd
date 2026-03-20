@@ -31,7 +31,7 @@ var behavior_tree: BehaviorTree:
 	set = set_behavior_tree
 var blackboard: BT_Blackboard:
 	get():
-		if not blackboard:
+		if not blackboard and behavior_tree:
 			blackboard = (
 				behavior_tree._get_child_state_custom(BT_Blackboard, false)
 				as BT_Blackboard
@@ -56,7 +56,7 @@ func _exit_tree() -> void:
 
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
-	behavior_tree.process_chain.push_back(self)
+	behavior_tree.process_chain.push_back(self )
 
 	if status != RUNNING:
 		_entered_state()
