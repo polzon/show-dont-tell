@@ -56,7 +56,7 @@ func _exit_tree() -> void:
 
 func execute(delta: float) -> Status:
 	assert(behavior_tree, "Missing behavior tree!")
-	behavior_tree.process_chain.push_back(self )
+	behavior_tree.process_chain.push_back(self)
 
 	if status != RUNNING:
 		_entered_state()
