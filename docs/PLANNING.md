@@ -19,14 +19,19 @@ I think the main difference between btree and fsm is that btree lacks explicit t
 
 Also when a btree ticks inside of a FSM node, if these are interchangable then it would enter the FSM and never exit. We already have an interrupt in our FSM which could break out of this, or we could add explicit transitions to exit. Or simply break the FSM pattern entirely by doing the btree solution mentioned above but I don't like that solution.
 
+  - When a node or leaf enters it's "running" result, the root behavior tree or fsm will handle the physics and process ticks. Aka the current implementation already.
+
 A tree is basically a graph that always ends in a reset state.
 
 Every node in a FSM and BTREE essentially has a tick and transition between them. They're still essentially graphs.
 
+An easier way to clarify this is that this is essentially nesting fsm inside of behavior trees and vice versa.
+
+Seems like this design is similar to a StateTree?
+
 ## BTREE
 
 - [ ] Rework how Actions are processed. They should propagate similar to how Godot does _input() events.
-- [ ] Get rid of the concept of the behavior tree in general.
 
 ## FSM
 
