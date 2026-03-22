@@ -1,7 +1,14 @@
-# CORE:
+_Somewhat structured thoughts and to-do list to myself for planning the design of this library._
+
+## CORE:
+
 - [ ] Unify Btree and FSM to be interchangeable.
+- [ ] Come up with a plan a move more logic into actions.
+- [ ] Have blackboarding handle actions better.
+- [ ] Decide on a documentation framework.
 
 ### Planning thoughts:
+
 I want to unify the two which as far as I know hasn't been done before. Perhaps that's for good reason, but I will commit to the design decision as I think I have a solution.
 
 When I think of both of them, they are essentially states that are executing something. The problem with them interchanging is that FSM stays within its states and doesn't really have an exit, whereas BTree is meant to propagate up from the root node every tick.
@@ -14,16 +21,44 @@ Also when a btree ticks inside of a FSM node, if these are interchangable then i
 
 A tree is basically a graph that always ends in a reset state.
 
-# BTREE
+Every node in a FSM and BTREE essentially has a tick and transition between them. They're still essentially graphs.
+
+## BTREE
+
 - [ ] Rework how Actions are processed. They should propagate similar to how Godot does _input() events.
 - [ ] Get rid of the concept of the behavior tree in general.
 
-# FSM
+## FSM
+
 - [ ] Make transitions more explicit in definition.
+- [ ] Create FSM leaf node for btree to handle integration better.
+- [ ] Do we need a centralized FSM in our design? With FSM, only one node should be active at once, therefore we only need to allow that one to be running every tick.
+- [ ] Add interrupt logic.
 
-# GOAP
+## GOAP
+
 - [ ] Clean up inital vibe code implementation. It works but I lost track of the plot.
-- [ ] GOAP should be able to solve solve goals by parsing FSM and Btree.
+- [ ] GOAP should be able to solve solve goals by parsing FSM and btree.
+- [ ] Implement accessing the same blackboard that is used by btree (and optionally FSM).
+- [ ] Should be able to parse behavior trees and build a list of possible actions for planning.
 
-# Editor
+## UTILITY AI
+
+- [ ] Also clean up this vibe code mess. Hasn't actually been tested.
+
+## ACTIONS
+
+- [ ] Move code from personal project to this library.
+- [ ] Should move logic be moved to inside of the action?
+- [ ] Integrate better with blackboards.
+
+## EDITOR
+
 - [ ] Make it exist.
+
+## DEBUG
+
+- [ ] Enforce either extensive signalling on all AI logic, or spying on the behavior nodes so we can trace the path the AI is taking.
+- [ ] Profile execution time per behavior node.
+- [ ] Similar to the editor, create a graph inside of the debugger that shows the logic being ran.
+- [ ] Move my gdunit4 test cases from my game into this library. However I don't want the gdunit4 reliant test cases to throw not-found errors for those who don't use gdunit4...
