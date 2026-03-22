@@ -305,3 +305,103 @@ V1 is successful when:
 3. Process and physics behavior are deterministic across runs.
 4. Debug traces can explain every transition decision.
 5. Nested graph deadlock and livelock cases are prevented by policy.
+
+## Proposed Architecture Diagram
+
+```mermaid
+flowchart TD
+	subgraph Authoring[Authoring Graph Layer]
+		BT[BT-Style Nodes<br/>Selectors Sequences Conditions Actions]
+		FSM[FSM-Style Nodes<br/>States Explicit Transitions]
+	end
+
+	subgraph Compile[Normalization Layer]
+		ADAPTER[Compatibility Adapters<br/>BT + FSM to Runtime Primitives]
+		INTENTS[Transition Intent Emitters]
+	end
+
+	subgraph Runtime[Central Runtime Ownership]
+		SCHED[Scheduler]
+		ARB[Transition Arbiter]
+		LIFECYCLE[Lifecycle Manager<br/>Enter Interrupt Exit]
+		RUNNER[Running Node Tick Dispatcher<br/>Process + Physics]
+		EVENTBUS[Event and Action Propagation]
+	end
+
+	subgraph Data[Data and Observability]
+		BB[Typed Blackboard<br/>Scopes + Mutability + Ownership]
+		TRACE[Trace and Diagnostics<br/>Append-only Events]
+	end
+
+	BT --> ADAPTER
+	FSM --> ADAPTER
+	ADAPTER --> INTENTS
+
+	INTENTS --> ARB
+	SCHED --> ARB
+	ARB --> LIFECYCLE
+	LIFECYCLE --> RUNNER
+	EVENTBUS --> ARB
+	EVENTBUS --> RUNNER
+
+	RUNNER --> BB
+	LIFECYCLE --> BB
+	ARB --> TRACE
+	LIFECYCLE --> TRACE
+	RUNNER --> TRACE
+```
+
+## Proposed Logic Flow Diagram
+
+```mermaid
+flowchart TD
+	START[Frame Update Domain<br/>Process or Physics] --> COLLECT[Collect Transition Intents<br/>Active Path Events Reevaluation]
+	COLLECT --> GUARDS[Evaluate Guards]
+
+	GUARDS -->|No Valid Intents| TICK_ONLY[Tick Current Running Node]
+	GUARDS -->|Valid Intents| ARBITRATE[Arbitrate by Priority Scope Trigger Stable Tie-break]
+
+	ARBITRATE -->|No Winner| TICK_ONLY
+	ARBITRATE -->|Winner Selected| COMMIT[Commit Transition]
+
+	COMMIT --> EXIT_PATH[Exit Old Path<br/>Leaf up to Divergence]
+	EXIT_PATH --> ENTER_PATH[Enter New Path<br/>Divergence down to Target]
+	ENTER_PATH --> SET_RUNNING[Resolve Running Node]
+
+	SET_RUNNING --> TICK_ACTIVE[Dispatch Process Physics Ticks<br/>To Running Node]
+	TICK_ONLY --> TRACE[Emit Structured Trace]
+	TICK_ACTIVE --> TRACE
+
+	TRACE --> END[End Domain Update]
+```
+
+## Nested Boundary Diagram
+
+```mermaid
+flowchart TD
+	PARENT[Parent StateTree Runtime]
+
+	subgraph NESTED[Authoring Boundary]
+		ENTRY[Entry Node]
+		INNER[Inner Graph Nodes]
+		EXIT_A[Guarded Exit Intent]
+		EXIT_B[Interrupt Exit Intent]
+		EXIT_C[Timeout Fallback Intent]
+	end
+
+	SCHED[Central Scheduler and Arbiter]
+	SAFE[Parent Safe Fallback State]
+
+	PARENT --> ENTRY
+	ENTRY --> INNER
+	INNER --> EXIT_A
+	INNER --> EXIT_B
+	INNER --> EXIT_C
+
+	EXIT_A --> SCHED
+	EXIT_B --> SCHED
+	EXIT_C --> SCHED
+
+	SCHED -->|Valid Intent| PARENT
+	SCHED -->|No Valid Exit| SAFE
+```
