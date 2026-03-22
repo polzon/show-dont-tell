@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://6n7e8d62o8a6"]
+
+[ext_resource type="Script" uid="uid://c2nhycvksqmts" path="res://addons/show_not_tell/editor/file_view/file_menu_options.gd" id="1_7tfxj"]
+[ext_resource type="Script" uid="uid://dlfkmffpkcbsk" path="res://addons/show_not_tell/editor/behavior_graph_edit.gd" id="1_72loa"]
+
+[node name="BehaviorGridmap" type="Control" unique_id=50462008]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="EditorSplit" type="HSplitContainer" parent="." unique_id=1463529464]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offsets = PackedInt32Array(230)
+split_offset = 230
+metadata/_edit_lock_ = true
+
+[node name="EditorPanel" type="Panel" parent="EditorSplit" unique_id=1308517640]
+layout_mode = 2
+metadata/_edit_lock_ = true
+
+[node name="FileMargins" type="MarginContainer" parent="EditorSplit/EditorPanel" unique_id=2051425973]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="FileViewVBox" type="VBoxContainer" parent="EditorSplit/EditorPanel/FileMargins" unique_id=150786792]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="FileTree" type="Tree" parent="EditorSplit/EditorPanel/FileMargins/FileViewVBox" unique_id=1965411569]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SearchFileField" type="LineEdit" parent="EditorSplit/EditorPanel/FileMargins/FileViewVBox" unique_id=564584984]
+layout_mode = 2
+placeholder_text = "Search"
+alignment = 3
+
+[node name="EditorMargins" type="MarginContainer" parent="EditorSplit" unique_id=413225393]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="EditorVBox" type="VBoxContainer" parent="EditorSplit/EditorMargins" unique_id=695384189]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FileButtons" type="HBoxContainer" parent="EditorSplit/EditorMargins/EditorVBox" unique_id=1904561312]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="EditorSplit/EditorMargins/EditorVBox/FileButtons" unique_id=1254481235]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+
+[node name="FileMenu" type="PopupMenu" parent="EditorSplit/EditorMargins/EditorVBox/FileButtons/MenuBar" unique_id=239467117]
+oversampling_override = 1.0
+title = "File"
+size = Vector2i(195, 100)
+system_menu_id = 2
+item_count = 1
+item_0/text = "Open File"
+item_0/id = 0
+script = ExtResource("1_7tfxj")
+
+[node name="CreateMenu" type="PopupMenu" parent="EditorSplit/EditorMargins/EditorVBox/FileButtons/MenuBar" unique_id=402699311]
+oversampling_override = 1.0
+title = "Create"
+size = Vector2i(195, 100)
+system_menu_id = 2
+item_count = 1
+item_0/text = "Open File"
+item_0/id = 0
+
+[node name="GraphEditor" type="GraphEdit" parent="EditorSplit/EditorMargins/EditorVBox" unique_id=1998300143]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+grid_pattern = 1
+panning_scheme = 1
+right_disconnects = true
+minimap_enabled = false
+show_zoom_label = true
+script = ExtResource("1_72loa")
+metadata/_custom_type_script = "uid://dlfkmffpkcbsk"
