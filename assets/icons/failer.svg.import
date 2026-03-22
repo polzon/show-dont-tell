@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnw8ed55jcqmy"
-path="res://.godot/imported/cooldown.svg-3ca395995b586bd97bf522ec102d1623.ctex"
+uid="uid://2fj7htaqvcud"
+path="res://.godot/imported/failer.svg-ad7bc0dccead86243e8b1215ed952e45.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/cooldown.svg"
-dest_files=["res://.godot/imported/cooldown.svg-3ca395995b586bd97bf522ec102d1623.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/failer.svg"
+dest_files=["res://.godot/imported/failer.svg-ad7bc0dccead86243e8b1215ed952e45.ctex"]
 
 [params]
 
@@ -39,5 +40,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cffmoc3og8hux"
-path="res://.godot/imported/inverter.svg-76ba5d707d841bb70c8311cc82172b8a.ctex"
+uid="uid://c7akxvsg0f2by"
+path="res://.godot/imported/limiter.svg-d552e21681f618f1a67470b1586b4055.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/inverter.svg"
-dest_files=["res://.godot/imported/inverter.svg-76ba5d707d841bb70c8311cc82172b8a.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/limiter.svg"
+dest_files=["res://.godot/imported/limiter.svg-d552e21681f618f1a67470b1586b4055.ctex"]
 
 [params]
 

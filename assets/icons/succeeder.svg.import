@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7akxvsg0f2by"
-path="res://.godot/imported/limiter.svg-49c36626c35702511ca48518fb8d2fe4.ctex"
+uid="uid://dl6wo332kglbe"
+path="res://.godot/imported/succeeder.svg-1b23c566db3771f390173b0e8491570e.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/limiter.svg"
-dest_files=["res://.godot/imported/limiter.svg-49c36626c35702511ca48518fb8d2fe4.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/succeeder.svg"
+dest_files=["res://.godot/imported/succeeder.svg-1b23c566db3771f390173b0e8491570e.ctex"]
 
 [params]
 

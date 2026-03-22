@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl6wo332kglbe"
-path="res://.godot/imported/succeeder.svg-c23fb21092778d7efdef00c670792d52.ctex"
+uid="uid://bmnkcmk7bkdjd"
+path="res://.godot/imported/selector_random.svg-1afd3837916199e426514f195fe98eb1.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/succeeder.svg"
-dest_files=["res://.godot/imported/succeeder.svg-c23fb21092778d7efdef00c670792d52.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/selector_random.svg"
+dest_files=["res://.godot/imported/selector_random.svg-1afd3837916199e426514f195fe98eb1.ctex"]
 
 [params]
 

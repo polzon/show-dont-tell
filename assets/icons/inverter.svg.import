@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2fj7htaqvcud"
-path="res://.godot/imported/failer.svg-ba5286ca70119a4e3a0ec9579edbe46c.ctex"
+uid="uid://cffmoc3og8hux"
+path="res://.godot/imported/inverter.svg-75b68ef4e7a78a02be237ac6f7e16d10.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/failer.svg"
-dest_files=["res://.godot/imported/failer.svg-ba5286ca70119a4e3a0ec9579edbe46c.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/inverter.svg"
+dest_files=["res://.godot/imported/inverter.svg-75b68ef4e7a78a02be237ac6f7e16d10.ctex"]
 
 [params]
 

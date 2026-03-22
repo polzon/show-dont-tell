@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crkbov0h8sb8l"
-path="res://.godot/imported/selector_reactive.svg-80c83e44cb70c0a711b95efa510b8578.ctex"
+uid="uid://bat8ptdw5qt1d"
+path="res://.godot/imported/sequence_random.svg-c20b297d8e8fe0db07bb2d805ce5bf76.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/selector_reactive.svg"
-dest_files=["res://.godot/imported/selector_reactive.svg-80c83e44cb70c0a711b95efa510b8578.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/sequence_random.svg"
+dest_files=["res://.godot/imported/sequence_random.svg-c20b297d8e8fe0db07bb2d805ce5bf76.ctex"]
 
 [params]
 

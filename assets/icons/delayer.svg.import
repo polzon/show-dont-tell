@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qpdd6ue7x82h"
-path="res://.godot/imported/category_bt.svg-f49e1494631279817fcfcd12ea72bec3.ctex"
+uid="uid://d1mah6ei31bnl"
+path="res://.godot/imported/delayer.svg-72458900d6c7ab2f78c64471e90ed65c.ctex"
 metadata={
-"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/category_bt.svg"
-dest_files=["res://.godot/imported/category_bt.svg-f49e1494631279817fcfcd12ea72bec3.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/delayer.svg"
+dest_files=["res://.godot/imported/delayer.svg-72458900d6c7ab2f78c64471e90ed65c.ctex"]
 
 [params]
 
@@ -40,5 +39,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=true
-editor/convert_colors_with_editor_theme=true
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

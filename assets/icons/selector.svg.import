@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://py6i55erqupc"
-path="res://.godot/imported/until_fail.svg-69ad39255186b073b6df16a22f168d90.ctex"
+uid="uid://b2c5d20doh4sp"
+path="res://.godot/imported/selector.svg-34be2f4d9e6a0275b38b8c1adb67f197.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/icons/until_fail.svg"
-dest_files=["res://.godot/imported/until_fail.svg-69ad39255186b073b6df16a22f168d90.ctex"]
+source_file="res://addons/show_not_tell/assets/icons/selector.svg"
+dest_files=["res://.godot/imported/selector.svg-34be2f4d9e6a0275b38b8c1adb67f197.ctex"]
 
 [params]
 
@@ -39,5 +40,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true
