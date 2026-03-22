@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://6n7e8d62o8a6"]
 
+[ext_resource type="Script" uid="uid://c2nhycvksqmts" path="res://addons/show_not_tell/editor/file_view/file_menu_options.gd" id="1_7tfxj"]
 [ext_resource type="Script" uid="uid://dlfkmffpkcbsk" path="res://addons/show_not_tell/editor/behavior_graph_edit.gd" id="1_72loa"]
 
 [node name="BehaviorGridmap" type="Control" unique_id=50462008]
@@ -12,45 +13,69 @@ grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
-[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1463529464]
+[node name="EditorPanel" type="Panel" parent="." unique_id=1308517640]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="EditorSplit" type="HSplitContainer" parent="EditorPanel" unique_id=1463529464]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offsets = PackedInt32Array(252)
 dragger_visibility = 1
+split_offset = 252
+metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer" unique_id=150786792]
+[node name="FileViewBox" type="VBoxContainer" parent="EditorPanel/EditorSplit" unique_id=150786792]
 layout_mode = 2
 
-[node name="FileButtons" type="HBoxContainer" parent="HSplitContainer/VBoxContainer" unique_id=1904561312]
-layout_mode = 2
-
-[node name="FileButton" type="Button" parent="HSplitContainer/VBoxContainer/FileButtons" unique_id=710552747]
-layout_mode = 2
-text = "File"
-flat = true
-
-[node name="AnotherButton" type="Button" parent="HSplitContainer/VBoxContainer/FileButtons" unique_id=1614594364]
-layout_mode = 2
-text = "Another Button"
-flat = true
-
-[node name="SearchField" type="LineEdit" parent="HSplitContainer/VBoxContainer" unique_id=564584984]
+[node name="SearchFileField" type="LineEdit" parent="EditorPanel/EditorSplit/FileViewBox" unique_id=564584984]
 layout_mode = 2
 placeholder_text = "Search"
+flat = true
 
-[node name="FileTree" type="Tree" parent="HSplitContainer/VBoxContainer" unique_id=1965411569]
+[node name="FileTree" type="Tree" parent="EditorPanel/EditorSplit/FileViewBox" unique_id=1965411569]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GraphEditor" type="GraphEdit" parent="HSplitContainer" unique_id=1998300143]
+[node name="EditorBox" type="VBoxContainer" parent="EditorPanel/EditorSplit" unique_id=695384189]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="FileButtons" type="HBoxContainer" parent="EditorPanel/EditorSplit/EditorBox" unique_id=1904561312]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="EditorPanel/EditorSplit/EditorBox/FileButtons" unique_id=1254481235]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+
+[node name="FileMenu" type="PopupMenu" parent="EditorPanel/EditorSplit/EditorBox/FileButtons/MenuBar" unique_id=239467117]
+oversampling_override = 1.0
+title = "File"
+size = Vector2i(195, 100)
+system_menu_id = 2
+item_count = 1
+item_0/text = "Open File"
+item_0/id = 0
+script = ExtResource("1_7tfxj")
+
+[node name="GraphEditor" type="GraphEdit" parent="EditorPanel/EditorSplit/EditorBox" unique_id=1998300143]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 grid_pattern = 1
 panning_scheme = 1
 right_disconnects = true
+minimap_enabled = false
 show_zoom_label = true
 script = ExtResource("1_72loa")
 metadata/_custom_type_script = "uid://dlfkmffpkcbsk"

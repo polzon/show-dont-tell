@@ -12,6 +12,8 @@ I think the main difference between btree and fsm is that btree lacks explicit t
 
 Also when a btree ticks inside of a FSM node, if these are interchangable then it would enter the FSM and never exit. We already have an interrupt in our FSM which could break out of this, or we could add explicit transitions to exit. Or simply break the FSM pattern entirely by doing the btree solution mentioned above but I don't like that solution.
 
+A tree is basically a graph that always ends in a reset state.
+
 # BTREE
 - [ ] Rework how Actions are processed. They should propagate similar to how Godot does _input() events.
 - [ ] Get rid of the concept of the behavior tree in general.
