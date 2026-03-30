@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dw7rom0hiff6c"
-path="res://.godot/imported/blackboard.svg-87abb231774d0b0e1e67fd72f5ce0722.ctex"
+path="res://.godot/imported/blackboard.svg-4762db9ca1468c8a0730611f9077f8ef.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/blackboard.svg"
-dest_files=["res://.godot/imported/blackboard.svg-87abb231774d0b0e1e67fd72f5ce0722.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/blackboard.svg"
+dest_files=["res://.godot/imported/blackboard.svg-4762db9ca1468c8a0730611f9077f8ef.ctex"]
 
 [params]
 

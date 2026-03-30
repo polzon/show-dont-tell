@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://py6i55erqupc"
-path="res://.godot/imported/until_fail.svg-9a5f5336bef599a55f3f2862520f3d5d.ctex"
+path="res://.godot/imported/until_fail.svg-9169363c52c1d5469520634deadea75b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/until_fail.svg"
-dest_files=["res://.godot/imported/until_fail.svg-9a5f5336bef599a55f3f2862520f3d5d.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/until_fail.svg"
+dest_files=["res://.godot/imported/until_fail.svg-9169363c52c1d5469520634deadea75b.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cy8yh2gol2nfu"
-path="res://.godot/imported/simple_parallel.svg-bd99523891bb0c01d1ef3c47f13df03a.ctex"
+path="res://.godot/imported/simple_parallel.svg-1ee39d42372f92e547c0f97868076462.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/simple_parallel.svg"
-dest_files=["res://.godot/imported/simple_parallel.svg-bd99523891bb0c01d1ef3c47f13df03a.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/simple_parallel.svg"
+dest_files=["res://.godot/imported/simple_parallel.svg-1ee39d42372f92e547c0f97868076462.ctex"]
 
 [params]
 

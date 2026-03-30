@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5gw354thiofm"
-path="res://.godot/imported/sequence.svg-beb219f31b17761fa7236d81ee00021e.ctex"
+path="res://.godot/imported/sequence.svg-a83058039a8139e386065242ed57bdf2.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/sequence.svg"
-dest_files=["res://.godot/imported/sequence.svg-beb219f31b17761fa7236d81ee00021e.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/sequence.svg"
+dest_files=["res://.godot/imported/sequence.svg-a83058039a8139e386065242ed57bdf2.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://eq0sp4g3s75r"
-path="res://.godot/imported/category_leaf.svg-4f52395e623a79a05ff2128846a14964.ctex"
+path="res://.godot/imported/category_leaf.svg-ad6dd1794e6df56a34ff8d5a7818144d.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/category_leaf.svg"
-dest_files=["res://.godot/imported/category_leaf.svg-4f52395e623a79a05ff2128846a14964.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/category_leaf.svg"
+dest_files=["res://.godot/imported/category_leaf.svg-ad6dd1794e6df56a34ff8d5a7818144d.ctex"]
 
 [params]
 

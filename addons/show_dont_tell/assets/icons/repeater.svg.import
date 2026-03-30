@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhu1h1pwh10dr"
-path="res://.godot/imported/repeater.svg-cd1ca815710acd2d6e35ebca7a1d48bd.ctex"
+path="res://.godot/imported/repeater.svg-95db49165ca0c8d7a3d7329760d7e643.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/repeater.svg"
-dest_files=["res://.godot/imported/repeater.svg-cd1ca815710acd2d6e35ebca7a1d48bd.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/repeater.svg"
+dest_files=["res://.godot/imported/repeater.svg-95db49165ca0c8d7a3d7329760d7e643.ctex"]
 
 [params]
 

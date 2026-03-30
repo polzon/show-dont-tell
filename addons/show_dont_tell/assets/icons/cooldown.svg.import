@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dnw8ed55jcqmy"
-path="res://.godot/imported/cooldown.svg-5f28ffe66a47e40a9b176da7dc618d8c.ctex"
+path="res://.godot/imported/cooldown.svg-686e4a92d692b25efce6a5192b47c663.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/show_not_tell/assets/icons/cooldown.svg"
-dest_files=["res://.godot/imported/cooldown.svg-5f28ffe66a47e40a9b176da7dc618d8c.ctex"]
+source_file="res://addons/show_dont_tell/addons/show_dont_tell/assets/icons/cooldown.svg"
+dest_files=["res://.godot/imported/cooldown.svg-686e4a92d692b25efce6a5192b47c663.ctex"]
 
 [params]
 
