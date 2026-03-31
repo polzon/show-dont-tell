@@ -1,0 +1,42 @@
+class_name MockTask
+extends BehaviorTask
+## Generic Mock Task for testing composites and decorators.
+##
+## Can be configured to return any status, track execution, and simulate
+## various scenarios for testing task behavior.
+
+var was_executed: bool = false
+var execution_count: int = 0
+var configured_status: Status = SUCCESS
+var child_was_called: bool = false
+var handle_action_was_called: bool = false
+var last_action_received: Action = null
+
+
+func _tick(_delta: float) -> Status:
+	was_executed = true
+	execution_count += 1
+	return configured_status
+
+
+func execute(delta: float) -> Status:
+	child_was_called = true
+	return super.execute(delta)
+
+
+func _handle_action(action: Action) -> void:
+	handle_action_was_called = true
+	last_action_received = action
+	super._handle_action(action)
+
+
+func set_return_status(new_status: Status) -> void:
+	configured_status = new_status
+
+
+func reset() -> void:
+	was_executed = false
+	execution_count = 0
+	child_was_called = false
+	handle_action_was_called = false
+	last_action_received = null
