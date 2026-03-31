@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://6n7e8d62o8a6"]
 
-[ext_resource type="Script" uid="uid://c2nhycvksqmts" path="res://addons/show_not_tell/editor/file_view/file_menu_options.gd" id="1_7tfxj"]
-[ext_resource type="Script" uid="uid://dlfkmffpkcbsk" path="res://addons/show_not_tell/editor/behavior_graph_edit.gd" id="1_72loa"]
+[ext_resource type="Script" uid="uid://c2nhycvksqmts" path="res://addons/show_dont_tell/addons/show_dont_tell/editor/file_view/file_menu_options.gd" id="1_7tfxj"]
+[ext_resource type="Script" uid="uid://dlfkmffpkcbsk" path="res://addons/show_dont_tell/addons/show_dont_tell/editor/behavior_graph_edit.gd" id="1_72loa"]
 
 [node name="BehaviorGridmap" type="Control" unique_id=50462008]
 custom_minimum_size = Vector2(300, 300)
