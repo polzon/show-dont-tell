@@ -182,7 +182,7 @@ func _apply_subpixel_offset() -> void:
 	var pixel_h: float = 1.0 / cam_zoom_y if cam_zoom_y > 0.0 else 1.0
 
 	# Snap the camera world position to the nearest pixel boundary.
-	var snapped := Vector2(
+	var snapped_position := Vector2(
 		snappedf(world_pos.x, pixel_w),
 		snappedf(world_pos.y, pixel_h)
 	)
@@ -192,4 +192,4 @@ func _apply_subpixel_offset() -> void:
 	# compensates for the fractional pixel so motion appears smooth without
 	# jitter.  No stretch scale factor is required here because Camera2D.offset
 	# is a world-space property.
-	camera.offset = world_pos - snapped
+	camera.offset = world_pos - snapped_position
