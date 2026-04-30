@@ -1,6 +1,6 @@
 class_name MockState
 extends FiniteState
-## Mock State for testing State behavior.
+## Mock [FiniteState] for testing [StateMachine] behavior.
 
 var tick_called: bool = false
 var physics_tick_called: bool = false
