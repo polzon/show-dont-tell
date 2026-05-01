@@ -1,9 +1,10 @@
 class_name TestBehaviorControl
 extends GdUnitTestSuite
-## Test the BaseState class, which serves as the abstract base for
-## StateMachine and BehaviorTree.
-## Tests the enabled property which is implemented in StateMachine
-## and BehaviorTree.
+## Test the [BaseState] class, which serves as the abstract base for
+## [StateMachine] and [BehaviorTree].
+
+# TODO: Some of these tests are redundant and could be reduced.
+# ? BaseState / BaseTask extend this, so we can create reusable tests for them.
 
 
 func test_enabled_default_true() -> void:
@@ -32,14 +33,12 @@ func test_enabled_toggled_signal_emitted() -> void:
 
 func test_enabled_toggled_signal_emit_count() -> void:
 	var control := _create_test_control()
-	var signal_name := control.enabled_toggled.get_name()
+	var signal_name: String = control.enabled_toggled.get_name()
 
 	assert_signal(control).is_emitted(signal_name)
 	control.enabled = false
-
 	assert_signal(control).is_emitted(signal_name)
 	control.enabled = true
-
 	assert_signal(control).is_emitted(signal_name)
 	control.enabled = false
 
