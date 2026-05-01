@@ -1,8 +1,10 @@
 class_name MockCondition
 extends BT_ConditionLeaf
-## Mock Condition for testing behavior tree condition logic.
+## Mock [BT_ConditionLeaf] for testing [BehaviorTree] condition logic.
 ##
 ## Allows tests to configure a return status and track execution count.
+
+# ? Can probably be removed and replaced with mock() in unit tests.
 
 enum ConfigMode { ALWAYS_SUCCESS, ALWAYS_FAILED, TOGGLE }
 

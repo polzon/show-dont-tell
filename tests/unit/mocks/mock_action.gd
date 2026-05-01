@@ -1,9 +1,9 @@
 class_name MockAction
 extends ActorAction
-## Mock Action for testing action handling in FSM/BTree.
+## Mock [ActorAction] for testing action handling in FSM/BTree.
 ##
 ## Allows tests to track whether the action was created, performed, or
-## handled by state machines/behavior trees.
+## handled by [StateMachine]/[BehaviorTree]s.
 
 var was_performed: bool = false
 var perform_count: int = 0

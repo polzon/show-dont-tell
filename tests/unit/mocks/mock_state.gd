@@ -2,6 +2,8 @@ class_name MockState
 extends FiniteState
 ## Mock [FiniteState] for testing [StateMachine] behavior.
 
+# ? Consider changing FiniteState to a non-abstract class.
+
 var tick_called: bool = false
 var physics_tick_called: bool = false
 var handle_action_called: bool = false

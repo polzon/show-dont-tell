@@ -1,9 +1,12 @@
 class_name MockTask
 extends BehaviorTask
-## Generic Mock Task for testing composites and decorators.
+## Generic Mock [BehaviorTask] for testing [BehaviorTree]
+## composites and decorators.
 ##
 ## Can be configured to return any status, track execution, and simulate
 ## various scenarios for testing task behavior.
+
+# ? Consider if we can remove this and use mock() in unit tests instead.
 
 var was_executed: bool = false
 var execution_count: int = 0

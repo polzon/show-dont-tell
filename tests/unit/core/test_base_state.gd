@@ -3,6 +3,8 @@ extends GdUnitTestSuite
 ## Test the BaseState class, which serves as the foundation for both
 ## FSM States and BT BaseTasks.
 
+# ! We can replace ConcreteTestState with MockState. They do the same thing.
+
 
 func test_started_signal_emitted_on_enter() -> void:
 	var state := _create_test_state()
@@ -51,7 +53,6 @@ func test_signal_emit_count() -> void:
 	state._entered_state()
 
 
-# Helper functions
 func _create_test_state() -> BaseState:
 	var state := ConcreteTestState.new()
 	add_child(state)

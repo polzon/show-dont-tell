@@ -32,14 +32,15 @@ func test_enabled_toggled_signal_emitted() -> void:
 
 func test_enabled_toggled_signal_emit_count() -> void:
 	var control := _create_test_control()
+	var signal_name := control.enabled_toggled.get_name()
 
-	assert_signal(control).is_emitted("enabled_toggled")
+	assert_signal(control).is_emitted(signal_name)
 	control.enabled = false
 
-	assert_signal(control).is_emitted("enabled_toggled")
+	assert_signal(control).is_emitted(signal_name)
 	control.enabled = true
 
-	assert_signal(control).is_emitted("enabled_toggled")
+	assert_signal(control).is_emitted(signal_name)
 	control.enabled = false
 
 
