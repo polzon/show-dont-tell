@@ -7,3 +7,4 @@ Related AI archtectures I'm still looking into and learning. May or may not be i
 - [Boids](https://people.ece.cornell.edu/land/courses/ece4760/labs/s2021/Boids/Boids.html)
 - [StateCharts](https://statecharts.dev/)
 - [StateTrees](https://dev.epicgames.com/documentation/en-us/unreal-engine/overview-of-state-tree-in-unreal-engine)
+- [NodeCanvas (Unity Plugin)](https://nodecanvas.paradoxnotion.com/)
