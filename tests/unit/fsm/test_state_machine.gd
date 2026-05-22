@@ -35,7 +35,7 @@ class TestStateWithHandleAction:
 
 	var handle_action_called: bool = false
 
-	func _handle_action(_action: Action) -> void:
+	func _handle_action(_command: Command) -> void:
 		handle_action_called = true
 
 
@@ -93,9 +93,9 @@ func test_handle_action_forwards_to_state() -> void:
 		TestStateWithHandleAction
 	)
 	sm.state = state
-	var action: TestAction = TestAction.new()
+	var command: TestAction = TestAction.new()
 
-	sm.handle_action(action)
+	sm.handle_action(command)
 
 	assert_that(state.handle_action_called).is_equal(true)
 
@@ -107,9 +107,9 @@ func test_handle_action_when_disabled() -> void:
 	)
 	sm.state = state
 	sm.enabled = false
-	var action: TestAction = TestAction.new()
+	var command: TestAction = TestAction.new()
 
-	sm.handle_action(action)
+	sm.handle_action(command)
 
 	assert_that(state.handle_action_called).is_equal(false)
 

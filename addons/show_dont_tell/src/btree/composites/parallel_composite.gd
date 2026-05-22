@@ -14,7 +14,7 @@ extends BT_CompositeTask
 ## like a subtree. If the primary node returns SUCCESS or FAILURE, this node
 ## will interrupt the secondary node and return the primary node's result.
 ## If this node is running under delay mode, it will wait for the
-## secondary node to finish its action after the primary node terminates.
+## secondary node to finish its command after the primary node terminates.
 ##
 ## @tutorial(Beehave Reference):
 ## https://bitbra.in/beehave/#/manual/simple_parallel

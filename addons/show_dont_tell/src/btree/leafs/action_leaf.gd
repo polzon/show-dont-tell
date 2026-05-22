@@ -1,5 +1,5 @@
 @abstract
-@icon("res://addons/show_not_tell/icons/action.svg")
+@icon("res://addons/show_not_tell/icons/command.svg")
 class_name BT_ActionLeaf
 extends BT_LeafTask
 ## The ActionLeaf node is a key element in Behavior Trees, designed to
@@ -8,11 +8,11 @@ extends BT_LeafTask
 ## responsible for executing the specific task in the game.
 ##
 ## ActionLeaf nodes should return a custom user value depending on the result
-## of the action. Since actions can potentially span across multiple frames,
-## they should return RUNNING when the action is still being executed.
+## of the command. Since actions can potentially span across multiple frames,
+## they should return RUNNING when the command is still being executed.
 ## [br][br]
-## When the action is completed successfully, the ActionLeaf node should return
-## SUCCESS. If the action fails or is interrupted, it should return FAILURE.
+## When the command is completed successfully, the ActionLeaf node should return
+## SUCCESS. If the command fails or is interrupted, it should return FAILURE.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/action_leaf
 

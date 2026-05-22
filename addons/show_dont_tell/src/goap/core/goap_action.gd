@@ -3,7 +3,7 @@ extends RefCounted
 ## Base class for GOAP action metadata.
 ##
 ## GOAPActions describe planning-level requirements (preconditions, effects,
-## cost) and create/configure actual Action instances for execution.
+## cost) and create/configure actual Command instances for execution.
 ## This separates planning from execution, allowing the GOAP planner to
 ## reason about actions without creating expensive runtime objects.
 
@@ -45,10 +45,10 @@ func apply_to_state(state: GOAPWorldState) -> GOAPWorldState:
 	return new_state
 
 
-## Creates and configures an Action instance for execution.
-## Override in subclasses to return specific Action types.
+## Creates and configures an Command instance for execution.
+## Override in subclasses to return specific Command types.
 ## Called by GOAPAgent when executing a planned action sequence.
-@abstract func create_action() -> Action
+@abstract func create_command() -> Command
 
 
 ## Sets a precondition key-value requirement.

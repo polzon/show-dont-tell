@@ -28,7 +28,7 @@ var planner: GOAPPlanner
 ## The actor this agent controls.
 var actor: Actor
 
-## Action queue to send planned actions to.
+## Command queue to send planned actions to.
 var action_queue: ActionQueue:
 	get:
 		if actor:
@@ -146,12 +146,12 @@ func _execute_next_action() -> void:
 		return
 
 	var goap_action: GOAPAction = current_plan[current_action_index]
-	var action: Action = goap_action.create_action()
+	var action: Command = goap_action.create_action()
 
 	if not action:
 		push_error(
 			(
-				"GOAPAgent: GOAP action %s failed to create Action instance."
+				"GOAPAgent: GOAP action %s failed to create Command instance."
 				% goap_action.get_action_name()
 			)
 		)

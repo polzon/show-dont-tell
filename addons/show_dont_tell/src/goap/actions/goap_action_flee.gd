@@ -25,7 +25,7 @@ func _init(
 
 
 ## Creates an ActionMove that moves away from the nearest threat.
-func create_action() -> Action:
+func create_action() -> Command:
 	if not flee_actor:
 		push_error("GOAPActionFlee: No actor set.")
 		return null

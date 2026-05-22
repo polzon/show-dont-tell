@@ -2,7 +2,7 @@
 class_name BehaviorTree
 extends BehaviorTask
 ## BehaviorTree behavior controller that processes various [BehaviorTask]
-## and [Action].
+## and [Command].
 
 # TODO: Message behavior rework.
 # We can refactor how tasks communicate with the BehaviorTree. They can
@@ -116,9 +116,9 @@ func set_running_task(new_task: BehaviorTask) -> void:
 
 
 # TODO: This needs a rework. Tasks should check actions through `ActionQueue`.
-func handle_action(action: Action) -> void:
+func handle_action(command: Command) -> void:
 	if running_task:
-		running_task._handle_action(action)
+		running_task._handle_action(command)
 
 
 func set_current_task(new_task: BehaviorTask) -> void:

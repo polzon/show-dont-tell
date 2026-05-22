@@ -66,9 +66,9 @@ func test_handle_action_called() -> void:
 		TestStateWithHandleAction
 	)
 	state_machine.state = state
-	var action: TestAction = TestAction.new()
+	var command: TestAction = TestAction.new()
 
-	state._handle_action(action)
+	state._handle_action(command)
 
 	assert_that(state.handle_action_called).is_equal(true)
 
@@ -133,7 +133,7 @@ class TestStateWithHandleAction:
 
 	var handle_action_called: bool = false
 
-	func _handle_action(_action: Action) -> void:
+	func _handle_action(_command: Command) -> void:
 		handle_action_called = true
 
 

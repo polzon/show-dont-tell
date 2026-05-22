@@ -7,9 +7,9 @@ extends BaseState
 	get = get_state_machine
 
 
-## Called from [StateMachine] when an action is passed to it,
+## Called from [StateMachine] when an command is passed to it,
 ## but only when it's the [member current_state].
-func _handle_action(_action: Action) -> void:
+func _handle_action(_command: Command) -> void:
 	pass
 
 

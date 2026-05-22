@@ -1,4 +1,4 @@
-@abstract class_name Action
+@abstract class_name Command
 extends RefCounted
 ## Command pattern for handling advanced input actions.
 

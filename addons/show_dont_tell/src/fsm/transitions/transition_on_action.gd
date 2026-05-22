@@ -1,7 +1,7 @@
 @tool
 class_name TransitionOnAction
 extends StateTransition
-## Generic transition state that emits a transition attempt when an action
+## Generic transition state that emits a transition attempt when an command
 ## is pressed.
 
 @export var transition_actions: Array[StringName] = []:
@@ -17,14 +17,14 @@ func _init() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	for action: StringName in transition_actions:
+	for command: StringName in transition_actions:
 		assert(
-			InputMap.has_action(action),
-			str("Invalid action assigned: %s" % action)
+			InputMap.has_action(command),
+			str("Invalid command assigned: %s" % command)
 		)
 
 		if (
-			event.is_action(action)
+			event.is_action(command)
 			and is_current_state()
 			and exit_node
 			and is_active_actor()
@@ -42,7 +42,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: Array[String] = []
 	for action_str: StringName in transition_actions:
 		if not InputMap.has_action(action_str):
-			warnings.push_back(action_str + " is an invalid action!")
+			warnings.push_back(action_str + " is an invalid command!")
 	if not exit_node:
 		warnings.push_back("No exit node set!")
 	return warnings

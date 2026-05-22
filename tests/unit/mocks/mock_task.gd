@@ -13,7 +13,7 @@ var execution_count: int = 0
 var configured_status: Status = SUCCESS
 var child_was_called: bool = false
 var handle_action_was_called: bool = false
-var last_action_received: Action = null
+var last_action_received: Command = null
 
 
 func _tick(_delta: float) -> Status:
@@ -27,10 +27,10 @@ func execute(delta: float) -> Status:
 	return super.execute(delta)
 
 
-func _handle_action(action: Action) -> void:
+func _handle_action(command: Command) -> void:
 	handle_action_was_called = true
-	last_action_received = action
-	super._handle_action(action)
+	last_action_received = command
+	super._handle_action(command)
 
 
 func set_return_status(new_status: Status) -> void:

@@ -1,6 +1,6 @@
 class_name TestActionLeaf
 extends GdUnitTestSuite
-## Test the BT_ActionLeaf (executes an action).
+## Test the BT_ActionLeaf (executes an command).
 
 
 func test_action_leaf_created() -> void:

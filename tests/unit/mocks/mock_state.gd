@@ -17,7 +17,7 @@ func _physics_tick(_delta: float) -> void:
 	physics_tick_called = true
 
 
-func _handle_action(_action: Variant) -> void:
+func _handle_action(_command: Variant) -> void:
 	handle_action_called = true
 
 

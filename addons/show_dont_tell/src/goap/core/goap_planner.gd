@@ -13,7 +13,7 @@ class PlanNode:
 	## World state at this node.
 	var state: GOAPWorldState
 
-	## Action that led to this node (null for goal node).
+	## Command that led to this node (null for goal node).
 	var action: GOAPAction
 
 	## Parent node in search tree.
