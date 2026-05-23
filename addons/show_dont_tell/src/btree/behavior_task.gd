@@ -160,7 +160,7 @@ func _physics_tick(_delta: float) -> void:
 	pass
 
 
-func _handle_action(_command: Command) -> void:
+func _handle_command(_command: Command) -> void:
 	pass
 
 

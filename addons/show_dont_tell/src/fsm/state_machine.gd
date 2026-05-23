@@ -17,7 +17,7 @@ signal state_end(end_state: FiniteState)
 ## Current [FiniteState] the parent node is in.
 var state: FiniteState:
 	set = set_state
-## The previous [Command] that was called through [method handle_action].
+## The previous [Command] that was called through [method handle_command].
 var current_action: Command
 
 var _inital_process_mode: ProcessMode
@@ -69,7 +69,7 @@ func _physics_process(delta: float) -> void:
 func _action_process(command: Command) -> void:
 	current_action = command
 	if is_instance_valid(state):
-		state._handle_action(command)
+		state._handle_command(command)
 
 
 func _on_enabled_toggled() -> void:
@@ -94,7 +94,7 @@ func set_state(new_state: FiniteState) -> void:
 		state_start.emit(state)
 
 
-func handle_action(command: Command) -> void:
+func handle_command(command: Command) -> void:
 	if enabled:
 		_action_process(command)
 

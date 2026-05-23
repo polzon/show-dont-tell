@@ -2,7 +2,7 @@ class_name CommandQueue
 extends RefCounted
 ## Simple queue to store and process [Command] commands for a target node.
 
-signal handle_action(command: Command)
+signal handle_command(command: Command)
 
 var pending_actions: Array[Command] = []
 ## Max size for [member _action_queue]. Set to 0 or lower to disable the limit.
@@ -22,17 +22,17 @@ func _on_target_ready() -> void:
 	var fsm := StateMachine.find_state_machine(target)
 	if (
 		is_instance_valid(fsm)
-		and not handle_action.is_connected(fsm.handle_action)
+		and not handle_command.is_connected(fsm.handle_command)
 	):
-		handle_action.connect(fsm.handle_action)
+		handle_command.connect(fsm.handle_command)
 
 	# Behavior Tree
 	var btree := BehaviorTree.find_behavior_tree(target)
 	if (
 		is_instance_valid(btree)
-		and not handle_action.is_connected(btree.handle_action)
+		and not handle_command.is_connected(btree.handle_command)
 	):
-		handle_action.connect(btree.handle_action)
+		handle_command.connect(btree.handle_command)
 
 
 func act(command: Command) -> void:
@@ -45,5 +45,5 @@ func act(command: Command) -> void:
 func process_queue() -> void:
 	while not pending_actions.is_empty():
 		var command: Command = pending_actions.pop_back()
-		handle_action.emit(command)
+		handle_command.emit(command)
 		command.perform()

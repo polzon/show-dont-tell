@@ -116,9 +116,9 @@ func set_running_task(new_task: BehaviorTask) -> void:
 
 
 # TODO: This needs a rework. Tasks should check actions through `CommandQueue`.
-func handle_action(command: Command) -> void:
+func handle_command(command: Command) -> void:
 	if running_task:
-		running_task._handle_action(command)
+		running_task._handle_command(command)
 
 
 func set_current_task(new_task: BehaviorTask) -> void:

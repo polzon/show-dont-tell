@@ -12,7 +12,7 @@ var was_executed: bool = false
 var execution_count: int = 0
 var configured_status: Status = SUCCESS
 var child_was_called: bool = false
-var handle_action_was_called: bool = false
+var handle_command_was_called: bool = false
 var last_action_received: Command = null
 
 
@@ -27,10 +27,10 @@ func execute(delta: float) -> Status:
 	return super.execute(delta)
 
 
-func _handle_action(command: Command) -> void:
-	handle_action_was_called = true
+func _handle_command(command: Command) -> void:
+	handle_command_was_called = true
 	last_action_received = command
-	super._handle_action(command)
+	super._handle_command(command)
 
 
 func set_return_status(new_status: Status) -> void:
@@ -41,5 +41,5 @@ func reset() -> void:
 	was_executed = false
 	execution_count = 0
 	child_was_called = false
-	handle_action_was_called = false
+	handle_command_was_called = false
 	last_action_received = null

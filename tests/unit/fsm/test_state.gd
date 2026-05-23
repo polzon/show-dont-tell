@@ -60,7 +60,7 @@ func test_physics_tick_called_when_current() -> void:
 	assert_that(state.physics_tick_called).is_equal(true)
 
 
-func test_handle_action_called() -> void:
+func test_handle_command_called() -> void:
 	var state_machine := _create_state_machine()
 	var state: TestStateWithHandleCommand = state_machine.get_finite_state(
 		TestStateWithHandleCommand
@@ -68,9 +68,9 @@ func test_handle_action_called() -> void:
 	state_machine.state = state
 	var command: TestCommand = TestCommand.new()
 
-	state._handle_action(command)
+	state._handle_command(command)
 
-	assert_that(state.handle_action_called).is_equal(true)
+	assert_that(state.handle_command_called).is_equal(true)
 
 
 # Helper functions
@@ -131,10 +131,10 @@ class TestStateWithPhysicsTick:
 class TestStateWithHandleCommand:
 	extends FiniteState
 
-	var handle_action_called: bool = false
+	var handle_command_called: bool = false
 
-	func _handle_action(_command: Command) -> void:
-		handle_action_called = true
+	func _handle_command(_command: Command) -> void:
+		handle_command_called = true
 
 
 class TestCommand:
