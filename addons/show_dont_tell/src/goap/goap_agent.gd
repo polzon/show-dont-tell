@@ -4,8 +4,8 @@ extends Node
 ##
 ## The GOAPAgent is a controller that uses GOAP planning to achieve goals.
 ## It maintains a world state, plans action sequences using GOAPPlanner,
-## and queues actions to an ActionQueue for execution.
-## This integrates with the existing Actor/ActionQueue architecture.
+## and queues actions to an CommandQueue for execution.
+## This integrates with the existing Actor/CommandQueue architecture.
 
 ## Whether the agent should continuously replan.
 @export var continuous_planning: bool = true
@@ -17,7 +17,7 @@ extends Node
 var world_state: GOAPWorldState
 
 ## Available GOAP actions the agent can use.
-var available_actions: Array[GOAPAction] = []
+var available_actions: Array[GOAPCommand] = []
 
 ## Active goals the agent is trying to achieve.
 var goals: Array[GOAPGoal] = []
@@ -29,14 +29,14 @@ var planner: GOAPPlanner
 var actor: Actor
 
 ## Command queue to send planned actions to.
-var action_queue: ActionQueue:
+var command_queue: CommandQueue:
 	get:
 		if actor:
-			return actor.action_queue
+			return actor.command_queue
 		return null
 
 ## Current plan being executed.
-var current_plan: Array[GOAPAction] = []
+var current_plan: Array[GOAPCommand] = []
 
 ## Index of current action in the plan.
 var current_action_index: int = 0
@@ -105,7 +105,7 @@ func _try_replan() -> void:
 		return
 
 	# Plan new action sequence.
-	var plan: Array[GOAPAction] = planner.plan(
+	var plan: Array[GOAPCommand] = planner.plan(
 		world_state, goal, available_actions
 	)
 
@@ -129,7 +129,7 @@ func _get_highest_priority_goal() -> GOAPGoal:
 
 
 ## Executes a planned action sequence.
-func _execute_plan(plan: Array[GOAPAction]) -> void:
+func _execute_plan(plan: Array[GOAPCommand]) -> void:
 	current_plan = plan
 	current_action_index = 0
 	_execute_next_action()
@@ -141,12 +141,12 @@ func _execute_next_action() -> void:
 		_on_plan_complete()
 		return
 
-	if not action_queue:
-		push_warning("GOAPAgent: No ActionQueue to execute plan.")
+	if not command_queue:
+		push_warning("GOAPAgent: No CommandQueue to execute plan.")
 		return
 
-	var goap_action: GOAPAction = current_plan[current_action_index]
-	var action: Command = goap_action.create_action()
+	var goap_action: GOAPCommand = current_plan[current_action_index]
+	var action: Command = goap_action.create_command()
 
 	if not action:
 		push_error(
@@ -159,7 +159,7 @@ func _execute_next_action() -> void:
 		return
 
 	# Queue the action for execution.
-	action_queue.act(action)
+	command_queue.act(action)
 
 	# Apply predicted effects to world state.
 	world_state.apply_effects(goap_action.effects)
@@ -184,12 +184,12 @@ func _on_plan_failed() -> void:
 
 
 ## Adds a GOAP action to the agent's available actions.
-func add_action(action: GOAPAction) -> void:
+func add_action(action: GOAPCommand) -> void:
 	available_actions.append(action)
 
 
 ## Removes a GOAP action from available actions.
-func remove_action(action: GOAPAction) -> void:
+func remove_action(action: GOAPCommand) -> void:
 	available_actions.erase(action)
 
 

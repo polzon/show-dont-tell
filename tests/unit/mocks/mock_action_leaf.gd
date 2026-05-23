@@ -1,6 +1,6 @@
-class_name MockActionLeaf
-extends BT_ActionLeaf
-## Mock [BT_ActionLeaf] for testing [BehaviorTree] command execution.
+class_name MockCommandLeaf
+extends BT_CommandLeaf
+## Mock [BT_CommandLeaf] for testing [BehaviorTree] command execution.
 ##
 ## Tracks execution and allows configuration of return status.
 

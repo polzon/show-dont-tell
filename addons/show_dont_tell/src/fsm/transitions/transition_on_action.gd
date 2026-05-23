@@ -1,5 +1,5 @@
 @tool
-class_name TransitionOnAction
+class_name TransitionOnCommand
 extends StateTransition
 ## Generic transition state that emits a transition attempt when an command
 ## is pressed.

@@ -62,11 +62,11 @@ func test_physics_tick_called_when_current() -> void:
 
 func test_handle_action_called() -> void:
 	var state_machine := _create_state_machine()
-	var state: TestStateWithHandleAction = state_machine.get_finite_state(
-		TestStateWithHandleAction
+	var state: TestStateWithHandleCommand = state_machine.get_finite_state(
+		TestStateWithHandleCommand
 	)
 	state_machine.state = state
-	var command: TestAction = TestAction.new()
+	var command: TestCommand = TestCommand.new()
 
 	state._handle_action(command)
 
@@ -94,8 +94,8 @@ func _create_state_machine() -> StateMachine:
 	state_with_physics.name = "StateWithPhysicsTick"
 	sm.add_child(state_with_physics)
 
-	var state_with_action := TestStateWithHandleAction.new()
-	state_with_action.name = "StateWithHandleAction"
+	var state_with_action := TestStateWithHandleCommand.new()
+	state_with_action.name = "StateWithHandleCommand"
 	sm.add_child(state_with_action)
 
 	return sm
@@ -128,7 +128,7 @@ class TestStateWithPhysicsTick:
 		physics_tick_called = true
 
 
-class TestStateWithHandleAction:
+class TestStateWithHandleCommand:
 	extends FiniteState
 
 	var handle_action_called: bool = false
@@ -137,8 +137,8 @@ class TestStateWithHandleAction:
 		handle_action_called = true
 
 
-class TestAction:
-	extends ActorAction
+class TestCommand:
+	extends ActorCommand
 
 	func _init() -> void:
 		super._init(null)

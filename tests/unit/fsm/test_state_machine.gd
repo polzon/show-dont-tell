@@ -30,7 +30,7 @@ class TestStateWithPhysicsTick:
 		physics_tick_called = true
 
 
-class TestStateWithHandleAction:
+class TestStateWithHandleCommand:
 	extends FiniteState
 
 	var handle_action_called: bool = false
@@ -39,8 +39,8 @@ class TestStateWithHandleAction:
 		handle_action_called = true
 
 
-class TestAction:
-	extends ActorAction
+class TestCommand:
+	extends ActorCommand
 
 	func _init() -> void:
 		super._init(null)
@@ -89,11 +89,11 @@ func test_state_change_signal_order() -> void:
 
 func test_handle_action_forwards_to_state() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithHandleAction = sm.get_finite_state(
-		TestStateWithHandleAction
+	var state: TestStateWithHandleCommand = sm.get_finite_state(
+		TestStateWithHandleCommand
 	)
 	sm.state = state
-	var command: TestAction = TestAction.new()
+	var command: TestCommand = TestCommand.new()
 
 	sm.handle_action(command)
 
@@ -102,12 +102,12 @@ func test_handle_action_forwards_to_state() -> void:
 
 func test_handle_action_when_disabled() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithHandleAction = sm.get_finite_state(
-		TestStateWithHandleAction
+	var state: TestStateWithHandleCommand = sm.get_finite_state(
+		TestStateWithHandleCommand
 	)
 	sm.state = state
 	sm.enabled = false
-	var command: TestAction = TestAction.new()
+	var command: TestCommand = TestCommand.new()
 
 	sm.handle_action(command)
 
@@ -171,8 +171,8 @@ func _create_state_machine() -> StateMachine:
 	state_with_physics.name = "StateWithPhysicsTick"
 	sm.add_child(state_with_physics)
 
-	var state_with_action := TestStateWithHandleAction.new()
-	state_with_action.name = "StateWithHandleAction"
+	var state_with_action := TestStateWithHandleCommand.new()
+	state_with_action.name = "StateWithHandleCommand"
 	sm.add_child(state_with_action)
 
 	add_child(sm)

@@ -1,10 +1,10 @@
-class_name TestTransitionOnAction
+class_name TestTransitionOnCommand
 extends GdUnitTestSuite
-## Test the TransitionOnAction transition method.
+## Test the TransitionOnCommand transition method.
 
 
 func test_transition_export_property() -> void:
-	var transition := TransitionOnAction.new()
+	var transition := TransitionOnCommand.new()
 
 	transition.transition_actions = ["move_left", "move_right"]
 
@@ -14,7 +14,7 @@ func test_transition_export_property() -> void:
 
 
 func test_multiple_actions_property() -> void:
-	var transition := TransitionOnAction.new()
+	var transition := TransitionOnCommand.new()
 
 	transition.transition_actions = ["action_a", "action_b", "action_c"]
 
@@ -35,8 +35,8 @@ func _create_state_machine() -> StateMachine:
 	exit_state.name = "ExitState"
 	sm.add_child(exit_state)
 
-	var transition := TransitionOnAction.new()
-	transition.name = "TransitionOnAction"
+	var transition := TransitionOnCommand.new()
+	transition.name = "TransitionOnCommand"
 	transition.transition_actions = ["move_left"]
 	transition.exit_node = exit_state
 	state_a.add_child(transition)

@@ -1,4 +1,4 @@
-class_name UtilityAction
+class_name UtilityCommand
 extends Resource
 ## An action with utility scoring based on multiple considerations.
 ##
@@ -42,11 +42,11 @@ func add_consideration(consideration: UtilityConsideration) -> void:
 
 
 ## Executes this action's behavior.
-## Override in subclasses or use composition with GOAPAction.
+## Override in subclasses or use composition with GOAPCommand.
 func execute(_actor: Actor, _context: Dictionary = {}) -> void:
 	push_warning(
 		(
-			"UtilityAction.execute() not implemented in %s"
+			"UtilityCommand.execute() not implemented in %s"
 			% get_script().resource_path
 		)
 	)

@@ -1,17 +1,17 @@
 @abstract
 @icon("res://addons/show_not_tell/icons/command.svg")
-class_name BT_ActionLeaf
+class_name BT_CommandLeaf
 extends BT_LeafTask
-## The ActionLeaf node is a key element in Behavior Trees, designed to
+## The CommandLeaf node is a key element in Behavior Trees, designed to
 ## represent ACTIONS that game characters or objects perform, such as gathering
 ## wood or fishing. As leaf nodes, they don't have any children and are
 ## responsible for executing the specific task in the game.
 ##
-## ActionLeaf nodes should return a custom user value depending on the result
+## CommandLeaf nodes should return a custom user value depending on the result
 ## of the command. Since actions can potentially span across multiple frames,
 ## they should return RUNNING when the command is still being executed.
 ## [br][br]
-## When the command is completed successfully, the ActionLeaf node should return
+## When the command is completed successfully, the CommandLeaf node should return
 ## SUCCESS. If the command fails or is interrupted, it should return FAILURE.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/action_leaf

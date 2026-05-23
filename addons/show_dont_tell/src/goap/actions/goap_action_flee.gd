@@ -1,5 +1,5 @@
-class_name GOAPActionFlee
-extends GOAPAction
+class_name GOAPCommandFlee
+extends GOAPCommand
 ## GOAP action that flees from threats by moving away.
 
 ## The actor performing this action.
@@ -24,10 +24,10 @@ func _init(
 	effects.set_value(&"at_safe_distance", true)
 
 
-## Creates an ActionMove that moves away from the nearest threat.
-func create_action() -> Command:
+## Creates an CommandMove that moves away from the nearest threat.
+func create_command() -> Command:
 	if not flee_actor:
-		push_error("GOAPActionFlee: No actor set.")
+		push_error("GOAPCommandFlee: No actor set.")
 		return null
 
 	# Find nearest actor (excluding self).
@@ -40,8 +40,8 @@ func create_action() -> Command:
 		(flee_actor.global_position - nearest.global_position).normalized()
 	)
 
-	# Create ActionMove with flee direction.
-	var move_action := ActionMove.new(flee_actor)
+	# Create CommandMove with flee direction.
+	var move_action := CommandMove.new(flee_actor)
 	move_action.input_dir = flee_dir
 
 	return move_action

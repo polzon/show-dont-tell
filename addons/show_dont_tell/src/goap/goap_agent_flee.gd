@@ -35,7 +35,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if not actor or not action_queue:
+	if not actor or not command_queue:
 		return
 
 	# Send continuous flee movement if we should flee.
@@ -45,9 +45,9 @@ func _physics_process(_delta: float) -> void:
 			. normalized()
 		)
 
-		var move_action := ActionMove.new(actor)
+		var move_action := CommandMove.new(actor)
 		move_action.input_dir = flee_dir
-		action_queue.act(move_action)
+		command_queue.act(move_action)
 
 
 func _process(delta: float) -> void:

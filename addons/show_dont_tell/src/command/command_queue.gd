@@ -1,4 +1,4 @@
-class_name ActionQueue
+class_name CommandQueue
 extends RefCounted
 ## Simple queue to store and process [Command] commands for a target node.
 

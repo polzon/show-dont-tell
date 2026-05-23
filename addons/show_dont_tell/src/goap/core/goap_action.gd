@@ -1,8 +1,8 @@
-@abstract class_name GOAPAction
+@abstract class_name GOAPCommand
 extends RefCounted
 ## Base class for GOAP action metadata.
 ##
-## GOAPActions describe planning-level requirements (preconditions, effects,
+## GOAPCommands describe planning-level requirements (preconditions, effects,
 ## cost) and create/configure actual Command instances for execution.
 ## This separates planning from execution, allowing the GOAP planner to
 ## reason about actions without creating expensive runtime objects.
@@ -64,13 +64,13 @@ func set_effect(key: StringName, value: Variant) -> void:
 ## Returns this action's name for debugging.
 ## Override in subclasses to provide meaningful names.
 func get_action_name() -> String:
-	return "GOAPAction"
+	return "GOAPCommand"
 
 
 ## Returns a string representation for debugging.
 func _to_string() -> String:
 	return (
-		"GOAPAction(%s, cost=%s, pre=%s, eff=%s)"
+		"GOAPCommand(%s, cost=%s, pre=%s, eff=%s)"
 		% [
 			get_action_name(),
 			cost,

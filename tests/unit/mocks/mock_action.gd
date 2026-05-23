@@ -1,6 +1,6 @@
-class_name MockAction
-extends ActorAction
-## Mock [ActorAction] for testing command handling in FSM/BTree.
+class_name MockCommand
+extends ActorCommand
+## Mock [ActorCommand] for testing command handling in FSM/BTree.
 ##
 ## Allows tests to track whether the command was created, performed, or
 ## handled by [StateMachine]/[BehaviorTree]s.

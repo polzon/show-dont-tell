@@ -6,16 +6,16 @@ extends RefCounted
 ## and returns the highest-scoring action. Useful for AI decision-making.
 
 ## Available actions to evaluate.
-var actions: Array[UtilityAction] = []
+var actions: Array[UtilityCommand] = []
 
 
 ## Adds an action to the evaluator.
-func add_action(action: UtilityAction) -> void:
+func add_action(action: UtilityCommand) -> void:
 	actions.append(action)
 
 
 ## Removes an action from the evaluator.
-func remove_action(action: UtilityAction) -> void:
+func remove_action(action: UtilityCommand) -> void:
 	actions.erase(action)
 
 
@@ -26,14 +26,14 @@ func clear_actions() -> void:
 
 ## Evaluates all actions and returns the highest-scoring one.
 ## Returns null if no actions are available or all score 0.
-func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityAction:
+func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityCommand:
 	if actions.is_empty():
 		return null
 
-	var best_action: UtilityAction = null
+	var best_action: UtilityCommand = null
 	var best_score: float = -INF
 
-	for action: UtilityAction in actions:
+	for action: UtilityCommand in actions:
 		if not action:
 			continue
 
@@ -55,7 +55,7 @@ func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityAction:
 func evaluate_all(actor: Actor, context: Dictionary = {}) -> Array[Dictionary]:
 	var scored_actions: Array[Dictionary] = []
 
-	for action: UtilityAction in actions:
+	for action: UtilityCommand in actions:
 		if not action:
 			continue
 

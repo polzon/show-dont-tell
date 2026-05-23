@@ -14,7 +14,7 @@ class PlanNode:
 	var state: GOAPWorldState
 
 	## Command that led to this node (null for goal node).
-	var action: GOAPAction
+	var action: GOAPCommand
 
 	## Parent node in search tree.
 	var parent: PlanNode
@@ -32,7 +32,7 @@ class PlanNode:
 
 	func _init(
 		p_state: GOAPWorldState,
-		p_action: GOAPAction = null,
+		p_action: GOAPCommand = null,
 		p_parent: PlanNode = null,
 		p_g_cost: float = 0.0,
 		p_h_cost: float = 0.0
@@ -50,12 +50,12 @@ class PlanNode:
 
 
 ## Plans an action sequence from current state to goal.
-## Returns array of GOAPActions in execution order, or empty array if no plan.
+## Returns array of GOAPCommands in execution order, or empty array if no plan.
 func plan(
 	current_state: GOAPWorldState,
 	goal: GOAPGoal,
-	available_actions: Array[GOAPAction]
-) -> Array[GOAPAction]:
+	available_actions: Array[GOAPCommand]
+) -> Array[GOAPCommand]:
 	# Check if goal already satisfied.
 	if goal.is_satisfied(current_state):
 		return []
@@ -85,7 +85,7 @@ func plan(
 		closed_list.append(current.state)
 
 		# Expand neighbors (actions that could lead here).
-		for action: GOAPAction in available_actions:
+		for action: GOAPCommand in available_actions:
 			# Skip if preconditions not met.
 			if not current_state.satisfies(action.preconditions):
 				continue
@@ -138,8 +138,8 @@ func _get_lowest_f_cost_node(nodes: Array[PlanNode]) -> PlanNode:
 
 ## Reconstructs the action sequence from a goal node.
 ## Returns actions in execution order (start to goal).
-func _reconstruct_plan(goal_node: PlanNode) -> Array[GOAPAction]:
-	var actions: Array[GOAPAction] = []
+func _reconstruct_plan(goal_node: PlanNode) -> Array[GOAPCommand]:
+	var actions: Array[GOAPCommand] = []
 	var current: PlanNode = goal_node
 
 	while current.parent != null:
@@ -151,7 +151,7 @@ func _reconstruct_plan(goal_node: PlanNode) -> Array[GOAPAction]:
 
 ## Returns true if the action's effects contribute to the target state.
 func _action_contributes(
-	action: GOAPAction, target_state: GOAPWorldState
+	action: GOAPCommand, target_state: GOAPWorldState
 ) -> bool:
 	var effect_keys: Array[StringName] = action.effects.get_keys()
 	var target_keys: Array[StringName] = target_state.get_keys()
@@ -168,7 +168,7 @@ func _action_contributes(
 
 ## Applies an action backward (removes its effects from state).
 func _apply_action_backward(
-	state: GOAPWorldState, action: GOAPAction
+	state: GOAPWorldState, action: GOAPCommand
 ) -> GOAPWorldState:
 	var new_state: GOAPWorldState = state.duplicate()
 
