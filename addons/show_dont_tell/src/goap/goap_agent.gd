@@ -17,7 +17,7 @@ extends Node
 var world_state: GOAPWorldState
 
 ## Available GOAP actions the agent can use.
-var available_actions: Array[GOAPCommand] = []
+var available_commands: Array[GOAPCommand] = []
 
 ## Active goals the agent is trying to achieve.
 var goals: Array[GOAPGoal] = []
@@ -106,7 +106,7 @@ func _try_replan() -> void:
 
 	# Plan new action sequence.
 	var plan: Array[GOAPCommand] = planner.plan(
-		world_state, goal, available_actions
+		world_state, goal, available_commands
 	)
 
 	if plan.size() > 0:
@@ -183,14 +183,14 @@ func _on_plan_failed() -> void:
 	current_action_index = 0
 
 
-## Adds a GOAP action to the agent's available actions.
-func add_action(action: GOAPCommand) -> void:
-	available_actions.append(action)
+## Adds a GOAP command to the agent's available commands.
+func add_command(command: GOAPCommand) -> void:
+	available_commands.append(command)
 
 
-## Removes a GOAP action from available actions.
-func remove_action(action: GOAPCommand) -> void:
-	available_actions.erase(action)
+## Removes a GOAP command from available commands.
+func remove_command(command: GOAPCommand) -> void:
+	available_commands.erase(command)
 
 
 ## Adds a goal to the agent.

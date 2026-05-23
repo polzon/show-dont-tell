@@ -6,34 +6,34 @@ extends RefCounted
 ## and returns the highest-scoring action. Useful for AI decision-making.
 
 ## Available actions to evaluate.
-var actions: Array[UtilityCommand] = []
+var commands: Array[UtilityCommand] = []
 
 
 ## Adds an action to the evaluator.
 func add_action(action: UtilityCommand) -> void:
-	actions.append(action)
+	commands.append(action)
 
 
 ## Removes an action from the evaluator.
-func remove_action(action: UtilityCommand) -> void:
-	actions.erase(action)
+func recommand_move(action: UtilityCommand) -> void:
+	commands.erase(action)
 
 
-## Clears all actions.
+## Clears all commands.
 func clear_actions() -> void:
-	actions.clear()
+	commands.clear()
 
 
 ## Evaluates all actions and returns the highest-scoring one.
 ## Returns null if no actions are available or all score 0.
 func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityCommand:
-	if actions.is_empty():
+	if commands.is_empty():
 		return null
 
 	var best_action: UtilityCommand = null
 	var best_score: float = -INF
 
-	for action: UtilityCommand in actions:
+	for action: UtilityCommand in commands:
 		if not action:
 			continue
 
@@ -53,19 +53,19 @@ func evaluate_best(actor: Actor, context: Dictionary = {}) -> UtilityCommand:
 ## Evaluates all actions and returns them sorted by score (highest first).
 ## Useful for debugging or fallback logic.
 func evaluate_all(actor: Actor, context: Dictionary = {}) -> Array[Dictionary]:
-	var scored_actions: Array[Dictionary] = []
+	var scored_commands: Array[Dictionary] = []
 
-	for action: UtilityCommand in actions:
+	for action: UtilityCommand in commands:
 		if not action:
 			continue
 
 		var score: float = action.evaluate(actor, context)
-		scored_actions.append({"action": action, "score": score})
+		scored_commands.append({"command": action, "score": score})
 
 	# Sort by score descending.
-	scored_actions.sort_custom(
+	scored_commands.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
 			return a["score"] > b["score"]
 	)
 
-	return scored_actions
+	return scored_commands

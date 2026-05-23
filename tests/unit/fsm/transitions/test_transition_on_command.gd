@@ -6,19 +6,19 @@ extends GdUnitTestSuite
 func test_transition_export_property() -> void:
 	var transition := TransitionOnCommand.new()
 
-	transition.transition_actions = ["move_left", "move_right"]
+	transition.transition_commands = ["move_left", "move_right"]
 
-	assert_that(transition.transition_actions.size()).is_equal(2)
-	assert_that("move_left" in transition.transition_actions).is_equal(true)
+	assert_that(transition.transition_commands.size()).is_equal(2)
+	assert_that("move_left" in transition.transition_commands).is_equal(true)
 	transition.free()
 
 
 func test_multiple_actions_property() -> void:
 	var transition := TransitionOnCommand.new()
 
-	transition.transition_actions = ["action_a", "action_b", "action_c"]
+	transition.transition_commands = ["action_a", "action_b", "action_c"]
 
-	assert_that(transition.transition_actions.size()).is_equal(3)
+	assert_that(transition.transition_commands.size()).is_equal(3)
 	transition.free()
 
 
@@ -37,7 +37,7 @@ func _create_state_machine() -> StateMachine:
 
 	var transition := TransitionOnCommand.new()
 	transition.name = "TransitionOnCommand"
-	transition.transition_actions = ["move_left"]
+	transition.transition_commands = ["move_left"]
 	transition.exit_node = exit_state
 	state_a.add_child(transition)
 

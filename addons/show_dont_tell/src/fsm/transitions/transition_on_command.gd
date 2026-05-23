@@ -1,12 +1,12 @@
 @tool
 class_name TransitionOnCommand
 extends StateTransition
-## Generic transition state that emits a transition attempt when an command
+## Generic transition state that emits a transition attempt when a command
 ## is pressed.
 
-@export var transition_actions: Array[StringName] = []:
+@export var transition_commands: Array[StringName] = []:
 	set(v):
-		transition_actions = v
+		transition_commands = v
 		update_configuration_warnings()
 
 
@@ -17,7 +17,7 @@ func _init() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	for command: StringName in transition_actions:
+	for command: StringName in transition_commands:
 		assert(
 			InputMap.has_action(command),
 			str("Invalid command assigned: %s" % command)
@@ -40,7 +40,7 @@ func _check_transition() -> bool:
 func _get_configuration_warnings() -> PackedStringArray:
 	InputMap.load_from_project_settings()
 	var warnings: Array[String] = []
-	for action_str: StringName in transition_actions:
+	for action_str: StringName in transition_commands:
 		if not InputMap.has_action(action_str):
 			warnings.push_back(action_str + " is an invalid command!")
 	if not exit_node:

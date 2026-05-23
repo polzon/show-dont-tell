@@ -45,9 +45,9 @@ func _physics_process(_delta: float) -> void:
 			. normalized()
 		)
 
-		var move_action := CommandMove.new(actor)
-		move_action.input_dir = flee_dir
-		command_queue.act(move_action)
+		var command_move := CommandMove.new(actor)
+		command_move.input_dir = flee_dir
+		command_queue.act(command_move)
 
 
 func _process(delta: float) -> void:

@@ -1,9 +1,9 @@
 class_name GOAPPlanner
 extends RefCounted
-## A* planner for GOAP action sequences.
+## A* planner for GOAP command sequences.
 ##
-## Plans optimal action sequences by searching backward from a goal state
-## to the current world state. Uses A* pathfinding with action costs and
+## Plans optimal command sequences by searching backward from a goal state
+## to the current world state. Uses A* pathfinding with command costs and
 ## heuristics to find efficient plans.
 
 
@@ -14,7 +14,7 @@ class PlanNode:
 	var state: GOAPWorldState
 
 	## Command that led to this node (null for goal node).
-	var action: GOAPCommand
+	var command: GOAPCommand
 
 	## Parent node in search tree.
 	var parent: PlanNode
@@ -32,13 +32,13 @@ class PlanNode:
 
 	func _init(
 		p_state: GOAPWorldState,
-		p_action: GOAPCommand = null,
+		p_command: GOAPCommand = null,
 		p_parent: PlanNode = null,
 		p_g_cost: float = 0.0,
 		p_h_cost: float = 0.0
 	) -> void:
 		state = p_state
-		action = p_action
+		command = p_command
 		parent = p_parent
 		g_cost = p_g_cost
 		h_cost = p_h_cost
@@ -49,12 +49,12 @@ class PlanNode:
 @export var max_iterations: int = 1000
 
 
-## Plans an action sequence from current state to goal.
+## Plans an command sequence from current state to goal.
 ## Returns array of GOAPCommands in execution order, or empty array if no plan.
 func plan(
 	current_state: GOAPWorldState,
 	goal: GOAPGoal,
-	available_actions: Array[GOAPCommand]
+	available_commands: Array[GOAPCommand]
 ) -> Array[GOAPCommand]:
 	# Check if goal already satisfied.
 	if goal.is_satisfied(current_state):
@@ -84,19 +84,19 @@ func plan(
 
 		closed_list.append(current.state)
 
-		# Expand neighbors (actions that could lead here).
-		for action: GOAPCommand in available_actions:
+		# Expand neighbors (commands that could lead here).
+		for command: GOAPCommand in available_commands:
 			# Skip if preconditions not met.
-			if not current_state.satisfies(action.preconditions):
+			if not current_state.satisfies(command.preconditions):
 				continue
 
-			# Check if action's effects contribute to current node's state.
-			if not _action_contributes(action, current.state):
+			# Check if command's effects contribute to current node's state.
+			if not _command_contributes(command, current.state):
 				continue
 
-			# Create new state by removing action's effects.
-			var new_state: GOAPWorldState = _apply_action_backward(
-				current.state, action
+			# Create new state by removing command's effects.
+			var new_state: GOAPWorldState = _apply_command_backward(
+				current.state, command
 			)
 
 			# Skip if already closed.
@@ -104,7 +104,7 @@ func plan(
 				continue
 
 			# Calculate costs.
-			var g_cost: float = current.g_cost + action.cost
+			var g_cost: float = current.g_cost + command.cost
 			var h_cost: float = _calculate_heuristic(new_state, current_state)
 
 			# Check if this is a better path to an existing node.
@@ -112,14 +112,14 @@ func plan(
 			if existing:
 				if g_cost < existing.g_cost:
 					existing.parent = current
-					existing.action = action
+					existing.command = command
 					existing.g_cost = g_cost
 					existing.h_cost = h_cost
 				continue
 
 			# Add new node.
 			var new_node: PlanNode = PlanNode.new(
-				new_state, action, current, g_cost, h_cost
+				new_state, command, current, g_cost, h_cost
 			)
 			open_list.append(new_node)
 
@@ -136,29 +136,29 @@ func _get_lowest_f_cost_node(nodes: Array[PlanNode]) -> PlanNode:
 	return lowest
 
 
-## Reconstructs the action sequence from a goal node.
-## Returns actions in execution order (start to goal).
+## Reconstructs the command sequence from a goal node.
+## Returns commands in execution order (start to goal).
 func _reconstruct_plan(goal_node: PlanNode) -> Array[GOAPCommand]:
-	var actions: Array[GOAPCommand] = []
+	var commands: Array[GOAPCommand] = []
 	var current: PlanNode = goal_node
 
 	while current.parent != null:
-		actions.push_front(current.action)
+		commands.push_front(current.command)
 		current = current.parent
 
-	return actions
+	return commands
 
 
-## Returns true if the action's effects contribute to the target state.
-func _action_contributes(
-	action: GOAPCommand, target_state: GOAPWorldState
+## Returns true if the command's effects contribute to the target state.
+func _command_contributes(
+	command: GOAPCommand, target_state: GOAPWorldState
 ) -> bool:
-	var effect_keys: Array[StringName] = action.effects.get_keys()
+	var effect_keys: Array[StringName] = command.effects.get_keys()
 	var target_keys: Array[StringName] = target_state.get_keys()
 
 	for key: StringName in effect_keys:
 		if key in target_keys:
-			var effect_value: Variant = action.effects.get_value(key)
+			var effect_value: Variant = command.effects.get_value(key)
 			var target_value: Variant = target_state.get_value(key)
 			if effect_value == target_value:
 				return true
@@ -166,22 +166,22 @@ func _action_contributes(
 	return false
 
 
-## Applies an action backward (removes its effects from state).
-func _apply_action_backward(
-	state: GOAPWorldState, action: GOAPCommand
+## Applies an command backward (removes its effects from state).
+func _apply_command_backward(
+	state: GOAPWorldState, command: GOAPCommand
 ) -> GOAPWorldState:
 	var new_state: GOAPWorldState = state.duplicate()
 
-	# Remove satisfied conditions that this action provides.
-	for key: StringName in action.effects.get_keys():
+	# Remove satisfied conditions that this command provides.
+	for key: StringName in command.effects.get_keys():
 		if new_state.has(key):
-			var effect_value: Variant = action.effects.get_value(key)
+			var effect_value: Variant = command.effects.get_value(key)
 			var state_value: Variant = new_state.get_value(key)
 			if effect_value == state_value:
 				new_state.erase(key)
 
-	# Add action's preconditions as new requirements.
-	new_state.apply_effects(action.preconditions)
+	# Add command's preconditions as new requirements.
+	new_state.apply_effects(command.preconditions)
 
 	return new_state
 

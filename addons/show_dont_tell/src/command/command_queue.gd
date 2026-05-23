@@ -4,8 +4,8 @@ extends RefCounted
 
 signal handle_command(command: Command)
 
-var pending_actions: Array[Command] = []
-## Max size for [member _action_queue]. Set to 0 or lower to disable the limit.
+var pending_commands: Array[Command] = []
+## Max size for [member _command_queue]. Set to 0 or lower to disable the limit.
 var queue_limit: int = 0
 var target: Node
 
@@ -37,13 +37,13 @@ func _on_target_ready() -> void:
 
 func act(command: Command) -> void:
 	if queue_limit > 0:
-		while pending_actions.size() > queue_limit:
-			pending_actions.remove_at(0)
-	pending_actions.push_back(command)
+		while pending_commands.size() > queue_limit:
+			pending_commands.remove_at(0)
+	pending_commands.push_back(command)
 
 
 func process_queue() -> void:
-	while not pending_actions.is_empty():
-		var command: Command = pending_actions.pop_back()
+	while not pending_commands.is_empty():
+		var command: Command = pending_commands.pop_back()
 		handle_command.emit(command)
 		command.perform()

@@ -41,10 +41,10 @@ func create_command() -> Command:
 	)
 
 	# Create CommandMove with flee direction.
-	var move_action := CommandMove.new(flee_actor)
-	move_action.input_dir = flee_dir
+	var command_move := CommandMove.new(flee_actor)
+	command_move.input_dir = flee_dir
 
-	return move_action
+	return command_move
 
 
 ## Returns the action name for debugging.
