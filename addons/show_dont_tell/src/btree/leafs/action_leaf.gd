@@ -11,8 +11,9 @@ extends BT_LeafTask
 ## of the command. Since actions can potentially span across multiple frames,
 ## they should return RUNNING when the command is still being executed.
 ## [br][br]
-## When the command is completed successfully, the CommandLeaf node should return
-## SUCCESS. If the command fails or is interrupted, it should return FAILURE.
+## When the command is completed successfully, the CommandLeaf node should
+## return SUCCESS. If the command fails or is interrupted, it should
+## return FAILURE.
 ##
 ## @tutorial(Beehave Reference): https://bitbra.in/beehave/#/manual/action_leaf
 
