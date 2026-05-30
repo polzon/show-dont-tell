@@ -3,7 +3,7 @@ extends BaseState
 ## Abstract base class for FiniteState nodes.
 
 ## The [StateMachine] that is handling the [FiniteState].
-@onready var state_machine: StateMachine:
+var state_machine: StateMachine:
 	get = get_state_machine
 
 
@@ -72,5 +72,13 @@ func change_state_node(state_node: FiniteState) -> void:
 
 func get_state_machine() -> StateMachine:
 	if not state_machine:
-		state_machine = get_parent() as StateMachine
+		state_machine = _recursively_find_state_machine(get_parent())
 	return state_machine
+
+
+func _recursively_find_state_machine(node: Node) -> StateMachine:
+	if node is StateMachine:
+		return node
+	if node.get_parent():
+		return _recursively_find_state_machine(node.get_parent())
+	return null
