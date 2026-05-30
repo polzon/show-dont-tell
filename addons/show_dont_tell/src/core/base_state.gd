@@ -67,6 +67,7 @@ func _exited_state() -> void:
 
 
 func _setup_process_signal(is_enabled: bool) -> void:
+	# TODO: Change this, since it will always have _process.
 	if has_method(&"_process"):
 		if is_enabled:
 			if not started.is_connected(set_process.bind(true)):

@@ -1,8 +1,8 @@
 @tool
 class_name TransitionOnCommand
 extends StateTransition
-## Generic transition state that emits a transition attempt when a command
-## is pressed.
+## [StateTransition] implemntation that emits [signal transition_allowed] when
+## a registered command in [member transition_commands] is triggered.
 
 @export var transition_commands: Array[StringName] = []:
 	set(v):
