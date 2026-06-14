@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/selector.svg")
+@icon("res://addons/show_dont_tell/icons/selector.svg")
 class_name BT_SelectorComposite
 extends BT_CompositeTask
 ## The Selector node is another fundamental building block in Behavior Trees,

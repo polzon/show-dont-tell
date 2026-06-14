@@ -2,7 +2,7 @@ class_name BehaviorGraph
 extends EditorPlugin
 
 const EDITOR_TSCN_UID = "uid://6n7e8d62o8a6"
-const DOCK_SETTING_NAME = "addons/show_not_tell/enable_dock"
+const DOCK_SETTING_NAME = "addons/show_dont_tell/enable_dock"
 const DOCK_SETTING_DEFAULT = false
 
 

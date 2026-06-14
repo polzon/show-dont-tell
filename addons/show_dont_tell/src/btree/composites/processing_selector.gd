@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/selector.svg")
+@icon("res://addons/show_dont_tell/icons/selector.svg")
 class_name BT_ProcessingSelector
 extends BT_SelectorComposite
 ## Selector that re-evaluates children each frame and returns their status

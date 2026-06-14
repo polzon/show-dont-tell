@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/succeeder.svg")
+@icon("res://addons/show_dont_tell/icons/succeeder.svg")
 class_name BT_SucceederDecorator
 extends BT_DecoratorTask
 ## A Succeeder node converts FAILURE to SUCCESS. If the child returns

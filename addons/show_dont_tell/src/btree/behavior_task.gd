@@ -1,5 +1,5 @@
 @abstract
-@icon("res://addons/show_not_tell/icons/category_bt.svg")
+@icon("res://addons/show_dont_tell/icons/category_bt.svg")
 class_name BehaviorTask
 extends BaseState
 ## The core of a [BehaviorTree] task that everything is extended from.
