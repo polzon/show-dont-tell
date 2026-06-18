@@ -1,4 +1,4 @@
-class_name TransitionExample
+@abstract class_name TransitionExample
 extends TransitionRule
 
 @export var enable_debug: bool = false
