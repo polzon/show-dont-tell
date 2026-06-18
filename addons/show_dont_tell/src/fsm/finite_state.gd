@@ -2,6 +2,8 @@
 extends BaseState
 ## Abstract base class for FiniteState nodes.
 
+@export var state_data: StateData
+
 ## The [StateMachine] that is handling the [FiniteState].
 var state_machine: StateMachine:
 	get = get_state_machine
@@ -24,7 +26,7 @@ func _on_state_end() -> void:
 	return
 
 
-## Similar to [member _physics_update], but only runs when the state is
+## Similar to [member _physics_update], but only runs when the state instance is class
 ## the current state.
 func _physics_tick(_delta: float) -> void:
 	pass

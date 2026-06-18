@@ -1,4 +1,6 @@
-@abstract class_name BaseState
+@abstract
+@icon("uid://qpdd6ue7x82h")
+class_name BaseState
 extends Node
 ## The origin node that all behavior derrives from.
 

@@ -1,4 +1,4 @@
-@icon("res://addons/show_dont_tell/icons/tree.svg")
+@icon("uid://deryyg2hbmaaw")
 class_name StateMachine
 extends FiniteState
 ## Implementation of a FiniteStateMachine.
