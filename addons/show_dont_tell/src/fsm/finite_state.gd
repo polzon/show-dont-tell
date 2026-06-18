@@ -1,4 +1,4 @@
-@abstract class_name FiniteState
+class_name FiniteState
 extends BaseState
 ## Abstract base class for FiniteState nodes.
 
@@ -9,6 +9,11 @@ var state_machine: StateMachine:
 	get = get_state_machine
 
 
+func _ready() -> void:
+	if state_data:
+		state_data.register_state(self)
+
+
 ## Called from [StateMachine] when an command is passed to it,
 ## but only when it's the [member current_state].
 func _handle_command(_command: Command) -> void:
@@ -17,25 +22,29 @@ func _handle_command(_command: Command) -> void:
 
 ## Emitted when this [FiniteState] node is made active.
 func _on_state_start() -> void:
-	return
+	if state_data:
+		state_data._on_state_start()
 
 
 ## Emitted right before the current [FiniteState] is about to be replaced with
 ## a new state. This will deactivate the [FiniteState] node, not free it.
 func _on_state_end() -> void:
-	return
+	if state_data:
+		state_data._on_state_end()
 
 
 ## Similar to [member _physics_update], but only runs when the state instance is class
 ## the current state.
-func _physics_tick(_delta: float) -> void:
-	pass
+func _physics_tick(delta: float) -> void:
+	if state_data:
+		state_data._physics_tick(delta)
 
 
 ## Similar to [member _process], but only runs when the state is
 ##  the current state.
-func _tick(_delta: float) -> void:
-	pass
+func _tick(delta: float) -> void:
+	if state_data:
+		state_data._process_tick(delta)
 
 
 ## Returns the active [FiniteState] the [StateMachine] is processing.
