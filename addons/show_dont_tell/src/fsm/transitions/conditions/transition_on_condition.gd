@@ -5,8 +5,18 @@ class_name TransitionOnCondition
 extends Resource
 ## Base class for conditional logic on if a FiniteState transition can occur.
 
+@export var invert_condition: bool = false:
+	set(v):
+		invert_condition = v
+		changed.emit()
+
+
+func tick_transition() -> bool:
+	return not _can_transition() if invert_condition else _can_transition()
+
+
 ## Checks if a transition can be performed.
-@abstract func can_transition() -> bool
+@abstract func _can_transition() -> bool
 
 
 ## Optional override for [TransitionCondition] auto-generated friendly name.

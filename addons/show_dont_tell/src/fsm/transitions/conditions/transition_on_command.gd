@@ -5,6 +5,7 @@ extends TransitionOnCondition
 @export var command_type: StringName
 @export var command_timeout_ms: float = 500.0
 
+@export_group("Debug")
 @export var enable_debug: bool = false
 
 var last_command: Command
@@ -19,7 +20,7 @@ func handle_command(command: Command) -> void:
 			print("TransitionOnCommand: Received %s." % command_type)
 
 
-func can_transition() -> bool:
+func _can_transition() -> bool:
 	if last_command != null:
 		if enable_debug:
 			print("TransitionOnCommand: Can transition.")

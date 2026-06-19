@@ -19,7 +19,7 @@ enum ActionMethod {
 		changed.emit()
 
 
-func can_transition() -> bool:
+func _can_transition() -> bool:
 	if InputMap.has_action(trigger_action):
 		if (
 			(
