@@ -9,6 +9,10 @@ var parent_state: FiniteState
 var state_machine: StateMachine
 
 
+func handle_command(_command: Command) -> void:
+	pass
+
+
 func register_state(state: FiniteState) -> void:
 	parent_state = state
 	state_machine = parent_state.get_state_machine()

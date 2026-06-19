@@ -17,7 +17,8 @@ func _ready() -> void:
 ## Called from [StateMachine] when an command is passed to it,
 ## but only when it's the [member current_state].
 func _handle_command(_command: Command) -> void:
-	pass
+	if state_data:
+		state_data.handle_command(_command)
 
 
 ## Emitted when this [FiniteState] node is made active.
@@ -45,6 +46,20 @@ func _physics_tick(delta: float) -> void:
 func _tick(delta: float) -> void:
 	if state_data:
 		state_data._process_tick(delta)
+		_tick_transitions()
+
+
+func _tick_transitions() -> void:
+	for child: Node in get_children():
+		if child is TransitionCondition:
+			var condition := child as TransitionCondition
+			var result := condition.can_transition()
+			print(
+				(
+					"Transition condition: %s, result: %s"
+					% [condition.name, result]
+				)
+			)
 
 
 ## Returns the active [FiniteState] the [StateMachine] is processing.
