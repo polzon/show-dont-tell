@@ -10,6 +10,16 @@ extends Resource
 		invert_condition = v
 		changed.emit()
 
+var _parent: TransitionCondition
+
+
+func ready() -> void:
+	pass
+
+
+func register_parent(parent_transition: TransitionCondition) -> void:
+	_parent = parent_transition
+
 
 func tick_transition() -> bool:
 	return not _can_transition() if invert_condition else _can_transition()

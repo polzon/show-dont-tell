@@ -20,6 +20,7 @@ var state_machine: StateMachine:
 func _ready() -> void:
 	if state_data:
 		state_data.register_state(self)
+		state_data.state_timeout.connect(_on_state_end)
 
 
 ## Called from [StateMachine] when an command is passed to it,
@@ -41,8 +42,8 @@ func _on_state_start() -> void:
 ## Emitted right before the current [FiniteState] is about to be replaced with
 ## a new state. This will deactivate the [FiniteState] node, not free it.
 func _on_state_end() -> void:
-	if state_data:
-		state_data._on_state_end()
+	# if state_data:
+	# 	state_data.exit_state()
 	if print_state_changes:
 		print("FiniteState: Exiting state: %s" % name)
 	state_ended.emit()
@@ -114,6 +115,8 @@ func change_state(new_state: GDScript) -> void:
 
 func change_state_node(state_node: FiniteState) -> void:
 	if state_machine and state_node:
+		if state_data:
+			state_data.exit_state()
 		state_machine.change_state_node(state_node)
 		state_changed.emit(state_node)
 

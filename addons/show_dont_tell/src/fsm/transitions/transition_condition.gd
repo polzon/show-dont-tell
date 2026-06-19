@@ -7,18 +7,16 @@ const _PREFIX := "If_"
 const _PREFIX_INVERTED := "IfNot_"
 
 @export var condition: TransitionOnCondition:
-	set(v):
-		condition = v
-		_update_name()
-		if condition and not condition.changed.is_connected(_update_name):
-			condition.changed.connect(_update_name)
+	set = _set_condition
 
 @export_group("Debug")
 @export var print_exit_transition: bool = false
 
 
 func _ready() -> void:
-	_update_name()
+	_set_condition(condition)
+	if condition:
+		condition.ready()
 
 
 func _update_name() -> void:
@@ -68,6 +66,15 @@ func get_exit_node() -> FiniteState:
 				return child_condition.get_exit_node()
 
 	return null
+
+
+func _set_condition(new_condition: TransitionOnCondition) -> void:
+	condition = new_condition
+	if condition:
+		condition.register_parent(self)
+	_update_name()
+	if condition and not condition.changed.is_connected(_update_name):
+		condition.changed.connect(_update_name)
 
 
 func _get_configuration_warnings() -> PackedStringArray:
