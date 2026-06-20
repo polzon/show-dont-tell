@@ -3,6 +3,8 @@
 class_name StateData
 extends Resource
 
+signal state_started
+signal state_ended
 signal state_timeout
 
 var parent_state: FiniteState
@@ -28,12 +30,18 @@ func _physics_tick(_delta: float) -> void:
 	pass
 
 
+func state_start() -> void:
+	state_started.emit()
+	_on_state_start()
+
+
 func _on_state_start() -> void:
 	pass
 
 
 func exit_state() -> void:
 	state_timeout.emit()
+	state_ended.emit()
 	_on_state_end()
 
 

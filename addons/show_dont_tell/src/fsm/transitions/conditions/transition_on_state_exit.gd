@@ -7,10 +7,20 @@ var _parent_state: FiniteState:
 var _has_exited: bool = false
 
 
+func _ready() -> void:
+	var state_data := _find_parent_finite_state_data()
+	if state_data:
+		state_data.state_timeout.connect(request_transition.emit)
+
+
 func _get_parent_state() -> FiniteState:
 	if not _parent_state and _parent:
 		_parent_state = _parent.get_parent() as FiniteState
 		_parent_state.state_ended.connect(_on_parent_state_exit)
+		if _parent_state.state_data:
+			_parent_state.state_data.state_timeout.connect(
+				_on_parent_state_exit
+			)
 	return _parent_state
 
 

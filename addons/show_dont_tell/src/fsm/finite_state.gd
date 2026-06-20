@@ -20,7 +20,6 @@ var state_machine: StateMachine:
 func _ready() -> void:
 	if state_data:
 		state_data.register_state(self)
-		state_data.state_timeout.connect(_on_state_end)
 
 
 ## Called from [StateMachine] when an command is passed to it,
@@ -32,8 +31,13 @@ func _handle_command(_command: Command) -> void:
 
 ## Emitted when this [FiniteState] node is made active.
 func _on_state_start() -> void:
-	if state_data:
-		state_data._on_state_start()
+	if not state_data:
+		if print_state_changes:
+			push_error("FiniteState: No state data for state: %s" % name)
+		state_started.emit()
+		return
+
+	state_data.state_start()
 	if print_state_changes:
 		print("FiniteState: Entering state: %s" % name)
 	state_started.emit()
@@ -42,8 +46,13 @@ func _on_state_start() -> void:
 ## Emitted right before the current [FiniteState] is about to be replaced with
 ## a new state. This will deactivate the [FiniteState] node, not free it.
 func _on_state_end() -> void:
-	# if state_data:
-	# 	state_data.exit_state()
+	if not state_data:
+		if print_state_changes:
+			push_error("FiniteState: No state data for state: %s" % name)
+		state_ended.emit()
+		return
+
+	state_data.exit_state()
 	if print_state_changes:
 		print("FiniteState: Exiting state: %s" % name)
 	state_ended.emit()
@@ -74,6 +83,7 @@ func _tick_transitions() -> void:
 func _tick_condition(condition: TransitionCondition) -> void:
 	if not condition.can_transition():
 		return
+
 	var exit_node := condition.get_exit_node()
 	if exit_node:
 		if print_state_changes:
