@@ -43,7 +43,8 @@ func create_condition(condition_script: GDScript) -> GdBuilderFsmState:
 	var condition_node := TransitionCondition.new()
 	if condition_script:
 		_set_condition_data(condition_node, condition_script)
-	_root.add_child(condition_node)
+	var deepest_node := _get_deepest_node(_root)
+	deepest_node.add_child(condition_node)
 	return self
 
 
@@ -59,3 +60,9 @@ func _set_condition_data(
 			condition.condition = data_obj
 		elif data_obj is not RefCounted:
 			data_obj.free()
+
+
+func _get_deepest_node(node: Node) -> Node:
+	if node.get_child_count() == 0:
+		return node
+	return _get_deepest_node(node.get_child(0))
