@@ -19,7 +19,7 @@ var state_machine: StateMachine:
 
 func _ready() -> void:
 	if state_data:
-		state_data.register_state(self)
+		state_data.setup_state_data(self)
 
 
 ## Called from [StateMachine] when an command is passed to it,
@@ -124,11 +124,11 @@ func change_state(new_state: GDScript) -> void:
 
 
 func change_state_node(state_node: FiniteState) -> void:
-	if state_machine and state_node:
-		if state_data:
-			state_data.exit_state()
-		state_machine.change_state_node(state_node)
-		state_changed.emit(state_node)
+	if not state_machine or not state_node:
+		return
+
+	state_machine.change_state_node(state_node)
+	state_changed.emit(state_node)
 
 
 func get_state_machine() -> StateMachine:

@@ -5,6 +5,7 @@ extends Resource
 
 signal state_started
 signal state_ended
+## When the state naturally calls its exit.
 signal state_timeout
 
 var parent_state: FiniteState
@@ -17,7 +18,8 @@ func handle_command(_command: Command) -> void:
 	pass
 
 
-func register_state(state: FiniteState) -> void:
+## Called externally by the [FiniteState] when the state data is being setup.
+func setup_state_data(state: FiniteState) -> void:
 	parent_state = state
 	state_machine = parent_state.get_state_machine()
 
@@ -30,20 +32,29 @@ func _physics_tick(_delta: float) -> void:
 	pass
 
 
+## Called externally by the [FiniteState] when the state is being entered.
 func state_start() -> void:
 	state_started.emit()
 	_on_state_start()
 
 
+## Internal function called when the state is being entered.
 func _on_state_start() -> void:
 	pass
 
 
+## Called externally by the [FiniteState] when the state is being exited.
 func exit_state() -> void:
-	state_timeout.emit()
-	state_ended.emit()
 	_on_state_end()
+	state_ended.emit()
 
 
+## Internal function called when the state is being exited.
+## This is called before [signal state_ended] is emitted.
 func _on_state_end() -> void:
 	pass
+
+
+## Called by this class when the state requests and exit or wants to leave.
+func request_exit() -> void:
+	state_timeout.emit()
