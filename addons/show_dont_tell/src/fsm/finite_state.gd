@@ -58,8 +58,8 @@ func _on_state_end() -> void:
 	state_ended.emit()
 
 
-## Similar to [member _physics_update], but only runs when the state instance is class
-## the current state.
+## Similar to [member _physics_update], but only runs when the state instance
+## is class the current state.
 func _physics_tick(delta: float) -> void:
 	if state_data:
 		state_data._physics_tick(delta)
