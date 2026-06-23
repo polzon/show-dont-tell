@@ -1,5 +1,5 @@
 @abstract
-@icon("res://addons/show_not_tell/icons/category_decorator.svg")
+@icon("res://addons/show_dont_tell/icons/category_decorator.svg")
 class_name BT_DecoratorTask
 extends BehaviorTask
 ## Decorators are versatile nodes that can be combined with any other nodes.

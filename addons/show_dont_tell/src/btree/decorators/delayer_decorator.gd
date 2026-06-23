@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/delayer.svg")
+@icon("res://addons/show_dont_tell/icons/delayer.svg")
 class_name BT_DelayerDecorator
 extends BT_DecoratorTask
 ## When first executing the Delayer node, it will start an internal timer

@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/failer.svg")
+@icon("res://addons/show_dont_tell/icons/failer.svg")
 class_name BT_FailerDecorator
 extends BT_DecoratorTask
 ## A Failer node converts SUCCESS to FAILURE. If the child returns

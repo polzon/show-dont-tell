@@ -1,4 +1,6 @@
-@abstract class_name BaseState
+@abstract
+@icon("uid://qpdd6ue7x82h")
+class_name BaseState
 extends Node
 ## The origin node that all behavior derrives from.
 
@@ -67,6 +69,7 @@ func _exited_state() -> void:
 
 
 func _setup_process_signal(is_enabled: bool) -> void:
+	# TODO: Change this, since it will always have _process.
 	if has_method(&"_process"):
 		if is_enabled:
 			if not started.is_connected(set_process.bind(true)):

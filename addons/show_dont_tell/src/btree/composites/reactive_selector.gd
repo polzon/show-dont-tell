@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/selector_reactive.svg")
+@icon("res://addons/show_dont_tell/icons/selector_reactive.svg")
 class_name BT_ReactiveSelector
 extends BT_SelectorComposite
 ## Reactive selector composite.

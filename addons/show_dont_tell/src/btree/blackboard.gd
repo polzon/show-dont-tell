@@ -1,4 +1,4 @@
-@icon("res://addons/show_not_tell/icons/blackboard.svg")
+@icon("res://addons/show_dont_tell/icons/blackboard.svg")
 class_name BT_Blackboard
 extends Node
 ## The Blackboard is a useful object in Behavior Trees, designed to store and

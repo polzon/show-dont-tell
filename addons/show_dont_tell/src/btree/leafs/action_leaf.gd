@@ -1,5 +1,5 @@
 @abstract
-@icon("res://addons/show_not_tell/icons/command.svg")
+@icon("res://addons/show_dont_tell/icons/command.svg")
 class_name BT_CommandLeaf
 extends BT_LeafTask
 ## The CommandLeaf node is a key element in Behavior Trees, designed to

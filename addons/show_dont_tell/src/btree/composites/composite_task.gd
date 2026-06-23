@@ -1,5 +1,5 @@
 @abstract
-@icon("res://addons/show_not_tell/icons/category_composite.svg")
+@icon("res://addons/show_dont_tell/icons/category_composite.svg")
 class_name BT_CompositeTask
 extends BehaviorTask
 ## Intermediary tasks of the [BehaviorTree] that lead to a [BT_LeafTask].
