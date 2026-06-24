@@ -48,7 +48,7 @@ class TestCommand:
 
 func test_state_getter_by_script() -> void:
 	var sm := _create_state_machine()
-	var state: FiniteState = sm.get_finite_state(TestStateA)
+	var state: FiniteState = sm.find_state_of_type(TestStateA)
 
 	assert_that(state).is_not_null()
 	assert_object(state).is_instanceof(TestStateA)
@@ -56,7 +56,7 @@ func test_state_getter_by_script() -> void:
 
 func test_state_setter() -> void:
 	var sm := _create_state_machine()
-	var state: FiniteState = sm.get_finite_state(TestStateA)
+	var state: FiniteState = sm.find_state_of_type(TestStateA)
 
 	sm.state = state
 
@@ -65,8 +65,8 @@ func test_state_setter() -> void:
 
 func test_state_change_emits_signals() -> void:
 	var sm := _create_state_machine()
-	var state_a: FiniteState = sm.get_finite_state(TestStateA)
-	var state_b: FiniteState = sm.get_finite_state(TestStateB)
+	var state_a: FiniteState = sm.find_state_of_type(TestStateA)
+	var state_b: FiniteState = sm.find_state_of_type(TestStateB)
 	sm.state = state_a
 
 	# Changing state should emit both signals
@@ -77,8 +77,8 @@ func test_state_change_emits_signals() -> void:
 
 func test_state_change_signal_order() -> void:
 	var sm := _create_state_machine()
-	var state_a: FiniteState = sm.get_finite_state(TestStateA)
-	var state_b: FiniteState = sm.get_finite_state(TestStateB)
+	var state_a: FiniteState = sm.find_state_of_type(TestStateA)
+	var state_b: FiniteState = sm.find_state_of_type(TestStateB)
 	sm.state = state_a
 
 	# Verify both signals were emitted
@@ -89,7 +89,7 @@ func test_state_change_signal_order() -> void:
 
 func test_handle_command_forwards_to_state() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithHandleCommand = sm.get_finite_state(
+	var state: TestStateWithHandleCommand = sm.find_state_of_type(
 		TestStateWithHandleCommand
 	)
 	sm.state = state
@@ -102,7 +102,7 @@ func test_handle_command_forwards_to_state() -> void:
 
 func test_handle_command_when_disabled() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithHandleCommand = sm.get_finite_state(
+	var state: TestStateWithHandleCommand = sm.find_state_of_type(
 		TestStateWithHandleCommand
 	)
 	sm.state = state
@@ -129,7 +129,7 @@ func test_ready_with_no_state_warning() -> void:
 
 func test_process_ticks_state() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithTick = sm.get_finite_state(TestStateWithTick)
+	var state: TestStateWithTick = sm.find_state_of_type(TestStateWithTick)
 	sm.state = state
 	sm.set_process(true)
 
@@ -140,7 +140,7 @@ func test_process_ticks_state() -> void:
 
 func test_physics_process_ticks_state() -> void:
 	var sm := _create_state_machine()
-	var state: TestStateWithPhysicsTick = sm.get_finite_state(
+	var state: TestStateWithPhysicsTick = sm.find_state_of_type(
 		TestStateWithPhysicsTick
 	)
 	sm.state = state
