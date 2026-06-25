@@ -24,13 +24,6 @@ var _inital_process_mode: ProcessMode
 var _has_set_inital_process_mode: bool = false
 
 
-static func find_state_machine(node: Node) -> StateMachine:
-	for child: Node in node.find_children("", &"StateMachine"):
-		if child is StateMachine:
-			return child
-	return null
-
-
 func find_state_of_type(state_type: GDScript) -> FiniteState:
 	return get_child_state(state_type) as FiniteState
 
@@ -131,7 +124,7 @@ func _set_enabled(is_enabled: bool) -> void:
 
 func _propagate_state_machine() -> void:
 	for child: Node in get_children():
-		var finite_state := child as FiniteState
-		if finite_state:
+		if child and child is FiniteState:
+			var finite_state: FiniteState = child
 			finite_state.state_machine = self
 			finite_state.propagate_state_machine()

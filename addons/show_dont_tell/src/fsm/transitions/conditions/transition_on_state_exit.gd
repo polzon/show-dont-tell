@@ -23,8 +23,8 @@ func _ready() -> void:
 
 
 func _get_parent_state() -> FiniteState:
-	if not _parent_state and _parent:
-		_parent_state = _parent.get_parent() as FiniteState
+	if not _parent_state and _parent and _parent.get_parent() is FiniteState:
+		_parent_state = _parent.get_parent()
 	return _parent_state
 
 

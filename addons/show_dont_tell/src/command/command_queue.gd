@@ -12,27 +12,6 @@ var target: Node
 
 func _init(parent_target: Node) -> void:
 	target = parent_target
-	target.ready.connect(_on_target_ready)
-
-
-func _on_target_ready() -> void:
-	assert(target, "Target is invalid.")
-
-	# State Machine
-	var fsm := StateMachine.find_state_machine(target)
-	if (
-		is_instance_valid(fsm)
-		and not handle_command.is_connected(fsm.handle_command)
-	):
-		handle_command.connect(fsm.handle_command)
-
-	# Behavior Tree
-	var btree := BehaviorTree.find_behavior_tree(target)
-	if (
-		is_instance_valid(btree)
-		and not handle_command.is_connected(btree.handle_command)
-	):
-		handle_command.connect(btree.handle_command)
 
 
 func act(command: Command) -> void:

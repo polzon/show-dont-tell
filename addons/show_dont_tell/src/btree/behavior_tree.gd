@@ -43,14 +43,6 @@ var _last_executed_leaf: BehaviorTask = null:
 	set = set_leaf_executed
 
 
-# TODO: Can refactor out. Child tasks should propagate this information.
-static func find_behavior_tree(node: Node) -> BehaviorTree:
-	for child: Node in node.find_children("", &"BehaviorTree"):
-		if child is BehaviorTree:
-			return child
-	return null
-
-
 func _process(delta: float) -> void:
 	# ? Should not longer be neccesary if we are properly handling task states.
 	if not enabled:
