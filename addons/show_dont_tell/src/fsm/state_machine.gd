@@ -12,7 +12,7 @@ signal state_start(started_state: FiniteState)
 signal state_end(end_state: FiniteState)
 
 @export var enabled: bool = true:
-	set = set_enabled
+	set = _set_enabled
 
 ## Current [FiniteState] the parent node is in.
 var state: FiniteState:
@@ -24,43 +24,45 @@ var _inital_process_mode: ProcessMode
 var _has_set_inital_process_mode: bool = false
 
 
-static func find_state_machine(node: Node) -> StateMachine:
-	for child: Node in node.find_children("", &"StateMachine"):
-		if child is StateMachine:
-			return child
-	return null
-
-
-func get_finite_state(state_type: GDScript) -> FiniteState:
+func find_state_of_type(state_type: GDScript) -> FiniteState:
 	return get_child_state(state_type) as FiniteState
 
 
 func _init() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	enabled_toggled.connect(_on_enabled_toggled)
+	child_order_changed.connect(_propagate_state_machine)
 
 
 func _ready() -> void:
-	assert(get_parent() or not is_inside_tree(), "StateMachine is an orphan?")
-	if not state:
-		var first_state := _find_first_finite_state()
-		if first_state:
-			change_state_node(first_state)
-		# TODO: Re-enable warning later.
-		# else:
-		# 	push_warning("No initial state set!")
+	if Engine.is_editor_hint():
+		return
+
+	_propagate_state_machine()
+	if state:
+		return
+	var first_state := _find_first_finite_state()
+	if first_state:
+		change_state_node(first_state)
 
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		set_process(false)
-	elif state:
+		return
+
+	if state:
 		state._tick(delta)
 
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		set_physics_process(false)
-	elif state:
+		return
+
+	if state:
 		state._physics_tick(delta)
 
 
@@ -102,7 +104,7 @@ func handle_command(command: Command) -> void:
 ## Interrupts and immediately changes the current [FiniteState].
 ## If wanting to wait for the state to finish instead, use [method queue_state].
 func change_state(new_state: GDScript) -> void:
-	var state_node := get_finite_state(new_state)
+	var state_node := find_state_of_type(new_state)
 	assert(
 		state_node,
 		(
@@ -119,7 +121,7 @@ func change_state_node(state_node: FiniteState) -> void:
 		state = state_node
 
 
-func set_enabled(is_enabled: bool) -> void:
+func _set_enabled(is_enabled: bool) -> void:
 	enabled = is_enabled
 	if not _has_set_inital_process_mode:
 		_inital_process_mode = process_mode
@@ -128,3 +130,14 @@ func set_enabled(is_enabled: bool) -> void:
 		_inital_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
 	)
 	enabled_toggled.emit()
+
+
+func _propagate_state_machine() -> void:
+	if Engine.is_editor_hint():
+		return
+
+	for child: Node in get_children():
+		if child and child is FiniteState:
+			var finite_state: FiniteState = child
+			finite_state.state_machine = self
+			finite_state.propagate_state_machine()

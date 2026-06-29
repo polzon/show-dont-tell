@@ -1,6 +1,7 @@
 @tool
 class_name TransitionOnCommand
 extends TransitionOnCondition
+## Passes a transition check when an expected [Command] is passed to this.
 
 @export var command_type: StringName
 @export var command_timeout_ms: float = 500.0
@@ -34,6 +35,7 @@ func _on_transition(_state: FiniteState) -> void:
 		print("TransitionOnCommand: On transition event.")
 
 
+# ! Not currently functional yet.
 func _get_property_list() -> Array[Dictionary]:
 	var properties: Array[Dictionary] = []
 	if command_type != "":
@@ -54,3 +56,7 @@ func _configuration_warning() -> PackedStringArray:
 	if command_type == "":
 		warnings.append("Command type is empty.")
 	return warnings
+
+
+func _get_friendly_name() -> String:
+	return "CommandIsRecieved"

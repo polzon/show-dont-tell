@@ -5,7 +5,7 @@ extends GdUnitTestSuite
 
 func test_state_machine_getter() -> void:
 	var state_machine := _create_state_machine()
-	var state: FiniteState = state_machine.get_finite_state(TestStateA)
+	var state: FiniteState = state_machine.find_state_of_type(TestStateA)
 	state_machine.state = state
 
 	assert_that(state.state_machine).is_equal(state_machine)
@@ -13,7 +13,7 @@ func test_state_machine_getter() -> void:
 
 func test_is_current_state_true() -> void:
 	var state_machine := _create_state_machine()
-	var state: FiniteState = state_machine.get_finite_state(TestStateA)
+	var state: FiniteState = state_machine.find_state_of_type(TestStateA)
 	state_machine.state = state
 
 	assert_that(state.is_current_state()).is_equal(true)
@@ -21,8 +21,8 @@ func test_is_current_state_true() -> void:
 
 func test_is_current_state_false() -> void:
 	var state_machine := _create_state_machine()
-	var state_a: FiniteState = state_machine.get_finite_state(TestStateA)
-	var state_b: FiniteState = state_machine.get_finite_state(TestStateB)
+	var state_a: FiniteState = state_machine.find_state_of_type(TestStateA)
+	var state_b: FiniteState = state_machine.find_state_of_type(TestStateB)
 	state_machine.state = state_a
 
 	assert_that(state_b.is_current_state()).is_equal(false)
@@ -30,7 +30,7 @@ func test_is_current_state_false() -> void:
 
 func test_current_state_returns_state() -> void:
 	var state_machine := _create_state_machine()
-	var state_a: FiniteState = state_machine.get_finite_state(TestStateA)
+	var state_a: FiniteState = state_machine.find_state_of_type(TestStateA)
 	state_machine.state = state_a
 
 	assert_that(state_a.current_state()).is_equal(state_a)
@@ -38,7 +38,7 @@ func test_current_state_returns_state() -> void:
 
 func test_tick_called_when_current() -> void:
 	var state_machine := _create_state_machine()
-	var state: TestStateWithTick = state_machine.get_finite_state(
+	var state: TestStateWithTick = state_machine.find_state_of_type(
 		TestStateWithTick
 	)
 	state_machine.state = state
@@ -50,7 +50,7 @@ func test_tick_called_when_current() -> void:
 
 func test_physics_tick_called_when_current() -> void:
 	var state_machine := _create_state_machine()
-	var state: TestStateWithPhysicsTick = state_machine.get_finite_state(
+	var state: TestStateWithPhysicsTick = state_machine.find_state_of_type(
 		TestStateWithPhysicsTick
 	)
 	state_machine.state = state
@@ -62,7 +62,7 @@ func test_physics_tick_called_when_current() -> void:
 
 func test_handle_command_called() -> void:
 	var state_machine := _create_state_machine()
-	var state: TestStateWithHandleCommand = state_machine.get_finite_state(
+	var state: TestStateWithHandleCommand = state_machine.find_state_of_type(
 		TestStateWithHandleCommand
 	)
 	state_machine.state = state

@@ -9,7 +9,6 @@ signal state_ended
 signal state_timeout
 
 var parent_state: FiniteState
-
 ## The [StateMachine] that is handling the [FiniteState].
 var state_machine: StateMachine
 
@@ -18,17 +17,11 @@ func handle_command(_command: Command) -> void:
 	pass
 
 
-## Called externally by the [FiniteState] when the state data is being setup.
-func setup_state_data(state: FiniteState) -> void:
-	parent_state = state
-	state_machine = parent_state.get_state_machine()
-
-
-func _process_tick(_delta: float) -> void:
+func process_tick(_delta: float) -> void:
 	pass
 
 
-func _physics_tick(_delta: float) -> void:
+func physics_tick(_delta: float) -> void:
 	pass
 
 

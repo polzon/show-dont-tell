@@ -7,29 +7,33 @@ signal state_ended
 ## Emitted after [method change_state_node] has been called.
 signal state_changed(new_state: FiniteState)
 
-@export var state_data: StateData
+## The state logic that defines the behavior of this state.
+@export var state_data: StateData:
+	set = _set_state_data
 
 @export_group("Debug")
 @export var print_state_changes: bool = false
 
 ## The [StateMachine] that is handling the [FiniteState].
 var state_machine: StateMachine:
-	get = get_state_machine
+	set = _set_state_machine
+
+
+func _init() -> void:
+	child_order_changed.connect(propagate_state_machine)
 
 
 func _ready() -> void:
-	if state_data:
-		state_data.setup_state_data(self)
+	_set_state_data(state_data)
 
 
-## Called from [StateMachine] when an command is passed to it,
-## but only when it's the [member current_state].
+## Propagated from the [StateMachine] while this is the current state.
 func _handle_command(_command: Command) -> void:
 	if state_data:
 		state_data.handle_command(_command)
 
 
-## Emitted when this [FiniteState] node is made active.
+## Called when this node is made active by the [StateMachine].
 func _on_state_start() -> void:
 	if not state_data:
 		if print_state_changes:
@@ -43,8 +47,7 @@ func _on_state_start() -> void:
 	state_started.emit()
 
 
-## Emitted right before the current [FiniteState] is about to be replaced with
-## a new state. This will deactivate the [FiniteState] node, not free it.
+## Called when this node is being exited by the [StateMachine].
 func _on_state_end() -> void:
 	if not state_data:
 		if print_state_changes:
@@ -58,29 +61,32 @@ func _on_state_end() -> void:
 	state_ended.emit()
 
 
-## Similar to [member _physics_update], but only runs when the state instance
-## is class the current state.
+## Similar to [member _physics_update], but only ticks when it's the
+## current state.
 func _physics_tick(delta: float) -> void:
 	if state_data:
-		state_data._physics_tick(delta)
+		state_data.physics_tick(delta)
 
 
-## Similar to [member _process], but only runs when the state is
-##  the current state.
+## Similar to [member _process], but only ticks if it's the current state.
 func _tick(delta: float) -> void:
 	if state_data:
-		state_data._process_tick(delta)
+		state_data.process_tick(delta)
 		_tick_transitions()
 
 
+## Ticks all child [TransitionCondition] nodes and passes them to
+## [member _tick_transition_condition].
 func _tick_transitions() -> void:
 	for child: Node in get_children():
 		if child is TransitionCondition:
 			var condition := child as TransitionCondition
-			_tick_condition(condition)
+			_tick_transition_condition(condition)
 
 
-func _tick_condition(condition: TransitionCondition) -> void:
+## Ticks and individual [TransitionCondition] node, checking if it can
+## transition to a new state.
+func _tick_transition_condition(condition: TransitionCondition) -> void:
 	if not condition.can_transition():
 		return
 
@@ -96,21 +102,43 @@ func _tick_condition(condition: TransitionCondition) -> void:
 		change_state_node(exit_node)
 
 
+func propagate_state_machine() -> void:
+	if state_data:
+		state_data.state_machine = state_machine
+
+	for child: Node in get_children():
+		if child is FiniteState:
+			(child as FiniteState).state_machine = state_machine
+
+
+func _set_state_data(new_state_data: StateData) -> void:
+	state_data = new_state_data
+	if state_data:
+		state_data.parent_state = self
+
+
+func _set_state_machine(new_state_machine: StateMachine) -> void:
+	state_machine = new_state_machine
+	if state_data:
+		state_data.state_machine = state_machine
+		propagate_state_machine()
+
+
 ## Returns the active [FiniteState] the [StateMachine] is processing.
 func current_state() -> FiniteState:
-	return state_machine.state if state_machine else null
-
-
-func get_finite_state(state_type: GDScript) -> FiniteState:
-	# TODO: Need to clarify that this is checking the state_machine,
-	# and not the calling node.
 	if state_machine:
-		return state_machine.get_child_state(state_type) as FiniteState
+		return state_machine.state
+	push_error("FiniteState: No state machine found for state: %s" % name)
 	return null
 
 
-## Returns a [bool] if this state is the current state being processed by the
-## [StateMachine].
+func find_state_of_type(state_type: GDScript) -> FiniteState:
+	if not state_machine:
+		return
+	return state_machine.get_child_state(state_type) as FiniteState
+
+
+## Returns if this is the current state being processed by the [StateMachine].
 func is_current_state() -> bool:
 	return current_state() == self
 
@@ -119,27 +147,12 @@ func is_current_state() -> bool:
 ## takes a [GDScript] object, assuming it's a script that inherits
 ## [FiniteState], otherwise it returns an error.
 func change_state(new_state: GDScript) -> void:
-	var state_node := get_finite_state(new_state)
+	var state_node := find_state_of_type(new_state)
 	change_state_node(state_node)
 
 
 func change_state_node(state_node: FiniteState) -> void:
 	if not state_machine or not state_node:
 		return
-
 	state_machine.change_state_node(state_node)
 	state_changed.emit(state_node)
-
-
-func get_state_machine() -> StateMachine:
-	if not state_machine:
-		state_machine = _recursively_find_state_machine(get_parent())
-	return state_machine
-
-
-func _recursively_find_state_machine(node: Node) -> StateMachine:
-	if node is StateMachine:
-		return node
-	if node.get_parent():
-		return _recursively_find_state_machine(node.get_parent())
-	return null
