@@ -3,49 +3,6 @@ extends GdUnitTestSuite
 ## Test the StateMachine class.
 
 
-# Forward declare test state classes
-class TestStateA:
-	extends FiniteState
-
-
-class TestStateB:
-	extends FiniteState
-
-
-class TestStateWithTick:
-	extends FiniteState
-
-	var tick_called: bool = false
-
-	func _tick(_delta: float) -> void:
-		tick_called = true
-
-
-class TestStateWithPhysicsTick:
-	extends FiniteState
-
-	var physics_tick_called: bool = false
-
-	func _physics_tick(_delta: float) -> void:
-		physics_tick_called = true
-
-
-class TestStateWithHandleCommand:
-	extends FiniteState
-
-	var handle_command_called: bool = false
-
-	func _handle_command(_command: Command) -> void:
-		handle_command_called = true
-
-
-class TestCommand:
-	extends ActorCommand
-
-	func _init() -> void:
-		super._init(null)
-
-
 func test_state_getter_by_script() -> void:
 	var sm := _create_state_machine()
 	var state: FiniteState = sm.find_state_of_type(TestStateA)
@@ -93,11 +50,11 @@ func test_handle_command_forwards_to_state() -> void:
 		TestStateWithHandleCommand
 	)
 	sm.state = state
-	var command: TestCommand = TestCommand.new()
+	var command := TestCommand.new()
 
 	sm.handle_command(command)
 
-	assert_that(state.handle_command_called).is_equal(true)
+	assert_bool(state.handle_command_called).is_equal(true)
 
 
 func test_handle_command_when_disabled() -> void:
@@ -107,21 +64,18 @@ func test_handle_command_when_disabled() -> void:
 	)
 	sm.state = state
 	sm.enabled = false
-	var command: TestCommand = TestCommand.new()
+	var command := TestCommand.new()
 
 	sm.handle_command(command)
 
-	assert_that(state.handle_command_called).is_equal(false)
+	assert_bool(state.handle_command_called).is_equal(false)
 
 
 func test_ready_with_no_state_warning() -> void:
 	var sm: StateMachine = auto_free(StateMachine.new())
 	add_child(sm)
+	await await_idle_frame()
 
-	# Should push warning when ready is called without initial state
-	await get_tree().process_frame
-
-	# Verify the ready path ran and no initial state was selected.
 	assert_that(sm.is_inside_tree()).is_equal(true)
 	assert_that(sm).is_not_null()
 	assert_that(sm.state == null).is_equal(true)
@@ -131,11 +85,10 @@ func test_process_ticks_state() -> void:
 	var sm := _create_state_machine()
 	var state: TestStateWithTick = sm.find_state_of_type(TestStateWithTick)
 	sm.state = state
-	sm.set_process(true)
 
 	sm._process(0.016)
 
-	assert_that(state.tick_called).is_equal(true)
+	assert_bool(state.tick_called).is_equal(true)
 
 
 func test_physics_process_ticks_state() -> void:
@@ -144,14 +97,12 @@ func test_physics_process_ticks_state() -> void:
 		TestStateWithPhysicsTick
 	)
 	sm.state = state
-	sm.set_physics_process(true)
 
 	sm._physics_process(0.016)
 
-	assert_that(state.physics_tick_called).is_equal(true)
+	assert_bool(state.physics_tick_called).is_equal(true)
 
 
-# Helper functions
 func _create_state_machine() -> StateMachine:
 	var sm: StateMachine = auto_free(StateMachine.new())
 
@@ -178,3 +129,43 @@ func _create_state_machine() -> StateMachine:
 	add_child(sm)
 
 	return sm
+
+
+# Forward declare test state classes
+class TestStateA:
+	extends FiniteState
+
+
+class TestStateB:
+	extends FiniteState
+
+
+class TestStateWithTick:
+	extends FiniteState
+
+	var tick_called: bool = false
+
+	func _tick(_delta: float) -> void:
+		tick_called = true
+
+
+class TestStateWithPhysicsTick:
+	extends FiniteState
+
+	var physics_tick_called: bool = false
+
+	func _physics_tick(_delta: float) -> void:
+		physics_tick_called = true
+
+
+class TestStateWithHandleCommand:
+	extends FiniteState
+
+	var handle_command_called: bool = false
+
+	func _handle_command(_command: Command) -> void:
+		handle_command_called = true
+
+
+class TestCommand:
+	extends Command
