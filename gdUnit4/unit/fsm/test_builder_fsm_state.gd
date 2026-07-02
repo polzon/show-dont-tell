@@ -8,7 +8,7 @@ func test_state_creation_valid() -> void:
 	var builder := GdBuilderFsmState.new_state(StateDataMove)
 	assert_object(builder).is_not_null()
 
-	var root := builder.get_root()
+	var root: FiniteState = auto_free(builder.get_root())
 	add_child(root)
 
 	assert_object(root).is_not_null()
@@ -20,7 +20,7 @@ func test_state_creation_invalid(
 ) -> void:
 	var wrong_script: GDScript = wrong_type
 	var builder := GdBuilderFsmState.new_state(wrong_script)
-	var root := builder.get_root()
+	var root: FiniteState = auto_free(builder.get_root())
 	add_child(root)
 
 	assert_object(root).is_not_null()
@@ -31,7 +31,7 @@ func test_add_condition_valid() -> void:
 	var builder := GdBuilderFsmState.new_state(StateDataMove).if_condition(
 		TransitionOnCommand
 	)
-	var root := builder.get_root()
+	var root: FiniteState = auto_free(builder.get_root())
 	add_child(root)
 
 	assert_object(root).is_not_null()
@@ -43,15 +43,17 @@ func test_add_condition_valid() -> void:
 
 func test_create_condition_exit() -> void:
 	var first_builder := GdBuilderFsmState.new_state(StateDataIdle)
-	add_child(first_builder.get_root())
+	var first_root: FiniteState = auto_free(first_builder.get_root())
+	add_child(first_root)
 
 	var second_builder := (
 		GdBuilderFsmState
 		. new_state(StateDataIdle)
 		. if_condition(TransitionOnCommand)
-		. exit_to(first_builder.get_root())
+		. exit_to(first_root)
 	)
-	add_child(second_builder.get_root())
+	var second_root: FiniteState = auto_free(second_builder.get_root())
+	add_child(second_root)
 
 	var nodes := second_builder.get_all_nodes()
 	assert_array(nodes).is_not_empty()

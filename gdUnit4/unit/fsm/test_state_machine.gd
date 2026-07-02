@@ -27,8 +27,8 @@ func test_state_change_emits_signals() -> void:
 	sm.state = state_a
 
 	# Changing state should emit both signals
-	assert_signal(sm).is_emitted("state_start")
-	assert_signal(sm).is_emitted("state_end")
+	assert_signal(sm).is_emitted(sm.state_start)
+	assert_signal(sm).is_emitted(sm.state_end)
 	sm.state = state_b
 
 
@@ -39,8 +39,8 @@ func test_state_change_signal_order() -> void:
 	sm.state = state_a
 
 	# Verify both signals were emitted
-	assert_signal(sm).is_emitted("state_end")
-	assert_signal(sm).is_emitted("state_start")
+	assert_signal(sm).is_emitted(sm.state_end)
+	assert_signal(sm).is_emitted(sm.state_start)
 	sm.state = state_b
 
 

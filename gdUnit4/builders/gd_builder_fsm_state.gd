@@ -1,14 +1,10 @@
 class_name GdBuilderFsmState
 extends RefCounted
+## Is probably an Assembler but idk the difference loool.
 
 var _root: FiniteState
 var _nodes: Array[Node] = []:
 	get = get_all_nodes
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE:
-		_root.free()
 
 
 func get_root() -> FiniteState:
@@ -72,7 +68,7 @@ func _set_condition_data(
 
 
 func exit_to(exit_node: Node) -> GdBuilderFsmState:
-	var last_condition_node := _get_lastest_condition_node()
+	var last_condition_node := _get_latest_condition_node()
 	assert(last_condition_node, "Failed to find condition node.")
 	if not last_condition_node:
 		return self
@@ -99,7 +95,7 @@ func _get_reverse_nodes() -> Array[Node]:
 	return reverse_arr
 
 
-func _get_lastest_condition_node() -> TransitionCondition:
+func _get_latest_condition_node() -> TransitionCondition:
 	for node: Node in _get_reverse_nodes():
 		if node is TransitionCondition:
 			return node
