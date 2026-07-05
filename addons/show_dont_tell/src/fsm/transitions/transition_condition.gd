@@ -14,6 +14,10 @@ const _PREFIX_INVERTED := "IfNot_"
 
 
 func _ready() -> void:
+	_update_name()
+	if Engine.is_editor_hint():
+		return
+
 	_set_condition(condition)
 	if condition:
 		condition.ready()
@@ -44,7 +48,8 @@ func _update_name() -> void:
 func can_transition() -> bool:
 	if condition:
 		return condition.tick_transition()
-	return true
+	push_warning("TransitionCondition: No condition assigned for %s" % name)
+	return false
 
 
 func get_exit_node() -> FiniteState:
@@ -65,15 +70,20 @@ func get_exit_node() -> FiniteState:
 					)
 				return child_condition.get_exit_node()
 
+	push_warning("TransitionCondition: No exit node found for %s" % name)
 	return null
 
 
 func _set_condition(new_condition: TransitionOnCondition) -> void:
 	condition = new_condition
-	if condition:
+	if condition and not Engine.is_editor_hint():
 		condition.register_parent(self)
 	_update_name()
-	if condition and not condition.changed.is_connected(_update_name):
+	if (
+		condition
+		and not condition.changed.is_connected(_update_name)
+		and not Engine.is_editor_hint()
+	):
 		condition.changed.connect(_update_name)
 
 
