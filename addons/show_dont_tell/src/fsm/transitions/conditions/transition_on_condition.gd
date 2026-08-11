@@ -22,6 +22,7 @@ func ready() -> void:
 	_ready()
 
 
+## Called when the [TransitionNode] containing this script is ready.
 func _ready() -> void:
 	pass
 
