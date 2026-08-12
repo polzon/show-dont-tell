@@ -2,6 +2,16 @@
 extends RefCounted
 ## Command pattern for handling advanced input actions.
 
+var consumed: bool = false
+
+
+func consume() -> void:
+	consumed = true
+
+
+func is_consumed() -> bool:
+	return consumed
+
 
 func perform() -> void:
 	pass

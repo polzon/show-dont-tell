@@ -31,6 +31,10 @@ func register_parent(parent_transition: TransitionCondition) -> void:
 	_parent = parent_transition
 
 
+func handle_command(_command: Command) -> bool:
+	return false
+
+
 func tick_transition() -> bool:
 	return not _can_transition() if invert_condition else _can_transition()
 

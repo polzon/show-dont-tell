@@ -52,6 +52,19 @@ func can_transition() -> bool:
 	return false
 
 
+func handle_command(command: Command) -> bool:
+	if not command or command.is_consumed():
+		return false
+	if condition and condition.handle_command(command):
+		return true
+	for child in get_children():
+		if child is TransitionCondition:
+			var child_condition := child as TransitionCondition
+			if child_condition.handle_command(command):
+				return true
+	return false
+
+
 func get_exit_node() -> FiniteState:
 	for child in get_children():
 		if child is TransitionExit:

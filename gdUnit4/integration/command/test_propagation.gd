@@ -82,3 +82,24 @@ func test_handle_propagates_to_state_data_with_condition_node_then_exit_node(
 	assert_that(state.handle_command_called).is_true()
 	assert_int(state.handle_command_call_count).is_equal(1)
 	assert_that(state_data.last_command).is_same(command)
+
+
+func test_handle_command_stops_when_condition_consumes_it() -> void:
+	var machine: StateMachine = auto_free(StateMachine.new())
+	var state: MockState = auto_free(MockState.new())
+	var state_data := MockStateData.new()
+	var condition_node := TransitionCondition.new()
+	var command_condition := MockTransitionOnCommand.new()
+	var command := MockCommand.new()
+
+	condition_node.condition = command_condition
+	state.state_data = state_data
+	state.add_child(condition_node)
+	machine.state = state
+
+	machine.handle_command(command)
+
+	assert_that(command_condition.last_command).is_same(command)
+	assert_that(command.is_consumed()).is_true()
+	assert_that(state_data.last_command).is_null()
+	assert_int(state.handle_command_call_count).is_equal(1)

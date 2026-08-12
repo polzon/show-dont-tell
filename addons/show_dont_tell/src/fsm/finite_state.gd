@@ -29,6 +29,13 @@ func _ready() -> void:
 
 ## Propagated from the [StateMachine] while this is the current state.
 func _handle_command(_command: Command) -> void:
+	if not _command or _command.is_consumed():
+		return
+	for child: Node in get_children():
+		if child is TransitionCondition:
+			var condition := child as TransitionCondition
+			if condition.handle_command(_command):
+				return
 	if state_data:
 		state_data.handle_command(_command)
 

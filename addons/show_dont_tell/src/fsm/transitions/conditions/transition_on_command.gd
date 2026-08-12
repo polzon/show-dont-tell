@@ -13,12 +13,15 @@ var last_command: Command
 var last_command_time_ms: float
 
 
-func handle_command(command: Command) -> void:
+func handle_command(command: Command) -> bool:
 	if is_instance_of(command, command_type):
 		last_command = command
 		last_command_time_ms = Time.get_ticks_msec()
+		command.consume()
 		if enable_debug:
 			print("TransitionOnCommand: Received %s." % command_type)
+		return true
+	return false
 
 
 func _can_transition() -> bool:
