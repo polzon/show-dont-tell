@@ -7,11 +7,6 @@ signal handle_command(command: Command)
 var pending_commands: Array[Command] = []
 ## Max size for [member _command_queue]. Set to 0 or lower to disable the limit.
 var queue_limit: int = 0
-var target: Node
-
-
-func _init(parent_target: Node) -> void:
-	target = parent_target
 
 
 func act(command: Command) -> void:
@@ -23,6 +18,6 @@ func act(command: Command) -> void:
 
 func process_queue() -> void:
 	while not pending_commands.is_empty():
-		var command: Command = pending_commands.pop_back()
+		var command: Command = pending_commands.pop_front()
 		handle_command.emit(command)
 		command.perform()

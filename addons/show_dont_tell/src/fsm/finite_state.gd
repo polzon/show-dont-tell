@@ -62,7 +62,7 @@ func _on_state_end() -> void:
 		state_ended.emit()
 		return
 
-	state_data.exit_state()
+	state_data.state_end()
 	if print_state_changes:
 		print("FiniteState: Exiting state: %s" % name)
 	state_ended.emit()

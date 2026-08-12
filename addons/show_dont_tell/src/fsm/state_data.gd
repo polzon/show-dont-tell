@@ -37,7 +37,7 @@ func _on_state_start() -> void:
 
 
 ## Called externally by the [FiniteState] when the state is being exited.
-func exit_state() -> void:
+func state_end() -> void:
 	_on_state_end()
 	state_ended.emit()
 

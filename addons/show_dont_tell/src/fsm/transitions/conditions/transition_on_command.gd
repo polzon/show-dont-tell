@@ -3,7 +3,7 @@ class_name TransitionOnCommand
 extends TransitionOnCondition
 ## Passes a transition check when an expected [Command] is passed to this.
 
-@export var command_type: StringName
+@export var command_type: GDScript
 @export var command_timeout_ms: float = 500.0
 
 @export_group("Debug")
@@ -38,28 +38,23 @@ func _on_transition(_state: FiniteState) -> void:
 		print("TransitionOnCommand: On transition event.")
 
 
-# ! Not currently functional yet.
-func _get_property_list() -> Array[Dictionary]:
-	var properties: Array[Dictionary] = []
-	if command_type != "":
-		properties.append(
-			{
-				"name": "command_type",
-				"type": TYPE_OBJECT,
-				"hint": PROPERTY_HINT_RESOURCE_TYPE,
-				"hint_string": command_type,
-				"usage": PROPERTY_USAGE_EDITOR or PROPERTY_USAGE_READ_ONLY
-			}
-		)
-	return properties
-
-
 func _configuration_warning() -> PackedStringArray:
 	var warnings: PackedStringArray = []
-	if command_type == "":
+	if not command_type:
 		warnings.append("Command type is empty.")
+	elif not _is_command_script(command_type):
+		warnings.append("Command type must extend Command.")
 	return warnings
 
 
+func _is_command_script(script: GDScript) -> bool:
+	var current: Script = script
+	while current:
+		if current == Command:
+			return true
+		current = current.get_base_script()
+	return false
+
+
 func _get_friendly_name() -> String:
-	return "CommandIsRecieved"
+	return "CommandIsReceived"
