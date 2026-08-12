@@ -3,24 +3,25 @@ extends GdUnitTestSuite
 ## Test the BT_SequenceComposite (executes children in order).
 
 
-func test_sequence_composite_created() -> void:
-	var composite := ConcreteSequenceComposite.new()
-
-	assert_that(composite).is_not_null()
-
-	composite.free()
-
-
-func test_sequence_composite_is_composite_task() -> void:
-	var composite := ConcreteSequenceComposite.new()
-
-	assert_object(composite).is_instanceof(BT_CompositeTask)
-	assert_object(composite).is_instanceof(BehaviorTask)
-
-	composite.free()
+## Method-backed because class references are not constant expressions.
+func _base_type_cases() -> Array[Array]:
+	var cases: Array[Array] = [
+		[BT_CompositeTask],
+		[BehaviorTask],
+	]
+	for case in cases:
+		assert_array(case).is_not_empty()
+	return cases
 
 
-# Concrete implementation for testing
+func test_sequence_composite_is_a_task_type(
+	base_type: GDScript, _test_parameters := _base_type_cases()
+) -> void:
+	var composite: Node = auto_free(ConcreteSequenceComposite.new())
+
+	assert_object(composite).is_instanceof(base_type)
+
+
 class ConcreteSequenceComposite:
 	extends BT_SequenceComposite
 

@@ -1,105 +1,66 @@
 extends GdUnitTestSuite
 
+## Command handling forwards through the state tree to state_data unless a
+## condition consumes the command first. Each row seeds a tree topology and
+## pins where the command ends up.
+## Rows: [has_state_data, topology, reaches_state_data, consumed].
+enum Topology {
+	NO_CHILDREN,
+	CONDITION,
+	CONDITION_WITH_EXIT,
+	CONSUMING_CONDITION,
+}
 
-func test_handle_command_propagates_to_state_data() -> void:
-	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var state_data := MockStateData.new()
-	var command := MockCommand.new()
-
-	state.state_data = state_data
-	machine.state = state
-
-	machine.handle_command(command)
-
-	assert_that(state.handle_command_called).is_true()
-	assert_int(state.handle_command_call_count).is_equal(1)
-	assert_that(state_data.last_command).is_same(command)
-
-
-func test_handle_command_propagates_to_state_data_with_no_state_data() -> void:
-	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var command := MockCommand.new()
-
-	machine.state = state
-
-	machine.handle_command(command)
-
-	assert_that(state.handle_command_called).is_true()
-	assert_int(state.handle_command_call_count).is_equal(1)
+const COMMAND_CASES: Array[Array] = [
+	[false, Topology.NO_CHILDREN, false, false],
+	[false, Topology.CONDITION, false, false],
+	[true, Topology.NO_CHILDREN, true, false],
+	[true, Topology.CONDITION, true, false],
+	[true, Topology.CONDITION_WITH_EXIT, true, false],
+	[true, Topology.CONSUMING_CONDITION, false, true],
+]
 
 
-func test_handle_command_propagates_condition_node() -> void:
-	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var condition_node := TransitionCondition.new()
-	var command := MockCommand.new()
-
-	state.add_child(condition_node)
-	machine.state = state
-
-	machine.handle_command(command)
-
-	assert_that(state.handle_command_called).is_true()
-	assert_int(state.handle_command_call_count).is_equal(1)
-
-
-func test_handle_command_propagates_to_state_data_with_condition_node() -> void:
-	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var state_data := MockStateData.new()
-	var condition_node := TransitionCondition.new()
-	var command := MockCommand.new()
-
-	state.state_data = state_data
-	state.add_child(condition_node)
-	machine.state = state
-
-	machine.handle_command(command)
-
-	assert_that(state.handle_command_called).is_true()
-	assert_int(state.handle_command_call_count).is_equal(1)
-	assert_that(state_data.last_command).is_same(command)
-
-
-func test_handle_propagates_to_state_data_with_condition_node_then_exit_node(
+func test_handle_command_case(
+	has_state_data: bool,
+	topology: int,
+	reaches_state_data: bool,
+	consumed: bool,
+	_test_parameters := COMMAND_CASES,
 ) -> void:
 	var machine: StateMachine = auto_free(StateMachine.new())
 	var state: MockState = auto_free(MockState.new())
-	var state_data := MockStateData.new()
-	var condition_node := TransitionCondition.new()
-	var exit_node := TransitionExit.new()
 	var command := MockCommand.new()
 
-	state.state_data = state_data
-	state.add_child(condition_node)
-	condition_node.add_child(exit_node)
+	var state_data := MockStateData.new()
+	if has_state_data:
+		state.state_data = state_data
+	_build_topology(state, topology)
 	machine.state = state
 
 	machine.handle_command(command)
 
 	assert_that(state.handle_command_called).is_true()
 	assert_int(state.handle_command_call_count).is_equal(1)
-	assert_that(state_data.last_command).is_same(command)
+	if has_state_data:
+		if reaches_state_data:
+			assert_that(state_data.last_command).is_same(command)
+		else:
+			assert_that(state_data.last_command).is_null()
+	assert_that(command.is_consumed()).is_equal(consumed)
 
 
-func test_handle_command_stops_when_condition_consumes_it() -> void:
-	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var state_data := MockStateData.new()
-	var condition_node := TransitionCondition.new()
-	var command_condition := MockTransitionOnCommand.new()
-	var command := MockCommand.new()
-
-	condition_node.condition = command_condition
-	state.state_data = state_data
-	state.add_child(condition_node)
-	machine.state = state
-
-	machine.handle_command(command)
-
-	assert_that(command_condition.last_command).is_same(command)
-	assert_that(command.is_consumed()).is_true()
-	assert_that(state_data.last_command).is_null()
-	assert_int(state.handle_command_call_count).is_equal(1)
+func _build_topology(state: MockState, topology: int) -> void:
+	match topology:
+		Topology.NO_CHILDREN:
+			pass
+		Topology.CONDITION:
+			state.add_child(TransitionCondition.new())
+		Topology.CONDITION_WITH_EXIT:
+			var condition := TransitionCondition.new()
+			condition.add_child(TransitionExit.new())
+			state.add_child(condition)
+		Topology.CONSUMING_CONDITION:
+			var condition := TransitionCondition.new()
+			condition.condition = MockTransitionOnCommand.new()
+			state.add_child(condition)

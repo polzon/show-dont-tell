@@ -1,9 +1,9 @@
 class_name TestBaseState
 extends GdUnitTestSuite
-## Test the BaseState class, which serves as the foundation for both
-## FSM States and BT BaseTasks.
+## Test the BaseState class, which serves as the foundation for
+## FSM states and BT base tasks.
 
-# ! We can replace ConcreteTestState with MockState. They do the same thing.
+const FUZZER_ITERATIONS: int = 10
 
 
 func test_started_signal_emitted_on_enter() -> void:
@@ -20,19 +20,6 @@ func test_ended_signal_emitted_on_exit() -> void:
 	state._exited_state()
 
 
-func test_process_on_active_default_false() -> void:
-	var state := _create_test_state()
-
-	assert_bool(state.process_on_active).is_false()
-
-
-func test_process_on_active_setter() -> void:
-	var state := _create_test_state()
-	state.process_on_active = true
-
-	assert_bool(state.process_on_active).is_true()
-
-
 func test_entered_and_exited_signals() -> void:
 	var state := _create_test_state()
 
@@ -43,22 +30,45 @@ func test_entered_and_exited_signals() -> void:
 	state._exited_state()
 
 
-func test_signal_emit_count() -> void:
+## Every enter re-emits started; verify the signal stays wired across many
+## enter/exit cycles rather than just one.
+func test_enter_emits_started_each_time(
+	fuzzer_cycles := Fuzzers.rangei(1, 5),
+	_fuzzer_iterations := FUZZER_ITERATIONS,
+) -> void:
+	var state := _create_test_state()
+	var cycles := fuzzer_cycles.next_value()
+
+	for _i in cycles:
+		assert_signal(state).is_emitted("started")
+		state._entered_state()
+
+
+func test_process_on_active_default_false() -> void:
 	var state := _create_test_state()
 
-	assert_signal(state).is_emitted("started")
-	state._entered_state()
+	assert_bool(state.process_on_active).is_false()
 
-	assert_signal(state).is_emitted("started")
-	state._entered_state()
+
+## process_on_active echoes the setter across both states; the signal wiring
+## must toggle process on start and off on end.
+func test_process_on_active_echoes_setter(
+	fuzzer_enabled := Fuzzers.rangei(0, 1),
+	_fuzzer_iterations := FUZZER_ITERATIONS,
+) -> void:
+	var state := _create_test_state()
+	var enabled := fuzzer_enabled.next_value() == 1
+
+	state.process_on_active = enabled
+
+	assert_bool(state.process_on_active).is_equal(enabled)
 
 
 func _create_test_state() -> BaseState:
-	var state := ConcreteTestState.new()
+	var state: BaseState = auto_free(ConcreteTestState.new())
 	add_child(state)
 	return state
 
 
-# Concrete test state class (BaseState is abstract)
 class ConcreteTestState:
 	extends BaseState

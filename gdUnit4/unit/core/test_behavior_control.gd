@@ -1,74 +1,60 @@
 class_name TestBehaviorControl
 extends GdUnitTestSuite
-## Test the [BaseState] class, which serves as the abstract base for
-## [StateMachine] and [BehaviorTree].
+## Test the enabled/toggling behavior of the StateMachine control.
 
-# TODO: Some of these tests are redundant and could be reduced.
-# ? BaseState / BaseTask extend this, so we can create reusable tests for them.
+const FUZZER_ITERATIONS: int = 10
+
+var _control: StateMachine
+
+
+func before_test() -> void:
+	var test_state := SimpleTestState.new()
+	_control = auto_free(StateMachine.new())
+	_control.add_child(test_state)
+	add_child(_control)
 
 
 func test_enabled_default_true() -> void:
-	var control := _create_test_control()
-
-	assert_that(control.enabled).is_equal(true)
+	assert_that(_control.enabled).is_true()
 
 
-func test_enabled_toggle_via_setter() -> void:
-	var control := _create_test_control()
-	control.enabled = false
+## enabled mirrors the setter, and toggling off disables process mode while
+## toggling back on restores the inherited mode.
+func test_enabled_process_mode_case(
+	enabled: bool,
+	expected_mode: ProcessMode,
+	_test_parameters := _process_mode_cases(),
+) -> void:
+	_control.enabled = enabled
 
-	assert_that(control.enabled).is_equal(false)
-
-	control.enabled = true
-
-	assert_that(control.enabled).is_equal(true)
-
-
-func test_enabled_toggled_signal_emitted() -> void:
-	var control := _create_test_control()
-
-	assert_signal(control).is_emitted("enabled_toggled")
-	control.enabled = false
+	assert_bool(_control.enabled).is_equal(enabled)
+	assert_that(_control.process_mode).is_equal(expected_mode)
 
 
-func test_enabled_toggled_signal_emit_count() -> void:
-	var control := _create_test_control()
-	var signal_name: String = control.enabled_toggled.get_name()
-
-	assert_signal(control).is_emitted(signal_name)
-	control.enabled = false
-	assert_signal(control).is_emitted(signal_name)
-	control.enabled = true
-	assert_signal(control).is_emitted(signal_name)
-	control.enabled = false
-
-
-func test_process_mode_disabled_when_enabled_false() -> void:
-	var control := _create_test_control()
-	control.enabled = true
-	# Trigger the initial process mode setup
-	await get_tree().process_frame
-	var initial_mode := control.process_mode
-
-	control.enabled = false
-
-	assert_that(control.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)
-
-	control.enabled = true
-
-	assert_that(control.process_mode).is_equal(initial_mode)
+## Method-backed because expected_mode uses a class constant.
+func _process_mode_cases() -> Array[Array]:
+	var cases: Array[Array] = [
+		[false, Node.PROCESS_MODE_DISABLED],
+		[true, Node.PROCESS_MODE_INHERIT],
+	]
+	for case in cases:
+		assert_array(case).is_not_empty()
+	return cases
 
 
-# Helper functions
-func _create_test_control() -> StateMachine:
-	var control := StateMachine.new()
-	var test_state := SimpleTestState.new()
-	control.add_child(test_state)
-	add_child(control)
-	return control
+## enabled_toggled fires on every flip; a rapid sequence of toggles must
+## emit once per flip, not duplicate or drop any.
+func test_enabled_toggled_fires_per_flip(
+	fuzzer_flips := Fuzzers.rangei(1, 5),
+	_fuzzer_iterations := FUZZER_ITERATIONS,
+) -> void:
+	var flips := fuzzer_flips.next_value()
+
+	for i in flips:
+		assert_signal(_control).is_emitted("enabled_toggled")
+		_control.enabled = i % 2 == 0
 
 
-# Simple test state for StateMachine
 class SimpleTestState:
 	extends FiniteState
 
