@@ -4,38 +4,32 @@ extends TransitionOnCondition
 ## Passes a transition check when an expected [Command] is passed to this.
 
 @export var command_type: GDScript
-@export var command_timeout_ms: float = 500.0
 
 @export_group("Debug")
 @export var enable_debug: bool = false
 
-var last_command: Command
-var last_command_time_ms: float
+var _matched_command: bool = false
 
 
 func handle_command(command: Command) -> bool:
-	if is_instance_of(command, command_type):
-		last_command = command
-		last_command_time_ms = Time.get_ticks_msec()
-		command.consume()
-		if enable_debug:
-			print("TransitionOnCommand: Received %s." % command_type)
-		return true
-	return false
+	if not command or command.is_consumed():
+		return false
+	if not is_instance_of(command, command_type):
+		return false
+	_matched_command = true
+	command.consume()
+	if enable_debug:
+		print("TransitionOnCommand: Received %s." % command_type)
+	return true
 
 
 func _can_transition() -> bool:
-	if last_command != null:
-		if enable_debug:
-			print("TransitionOnCommand: Can transition.")
-		return Time.get_ticks_msec() - last_command_time_ms < command_timeout_ms
-	return false
-
-
-func _on_transition(_state: FiniteState) -> void:
-	last_command = null
+	if not _matched_command:
+		return false
+	_matched_command = false
 	if enable_debug:
-		print("TransitionOnCommand: On transition event.")
+		print("TransitionOnCommand: Can transition.")
+	return true
 
 
 func _configuration_warning() -> PackedStringArray:
