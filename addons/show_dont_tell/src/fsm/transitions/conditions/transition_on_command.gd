@@ -5,6 +5,8 @@ extends TransitionOnCondition
 
 # TODO: Move this _get _set command_list logic to a reusable util.
 
+const COMMAND_PROPERTY_NAME: StringName = "command_type"
+
 @export_group("Debug")
 @export var enable_debug: bool = false
 
@@ -62,7 +64,7 @@ func _get_property_list() -> Array[Dictionary]:
 	var class_names := _collect_command_class_names()
 	return [
 		{
-			"name": "command_type",
+			"name": COMMAND_PROPERTY_NAME,
 			"type": TYPE_STRING_NAME,
 			"hint": PROPERTY_HINT_ENUM,
 			"hint_string": ",".join(class_names),
@@ -72,14 +74,14 @@ func _get_property_list() -> Array[Dictionary]:
 
 
 func _set(property: StringName, value: Variant) -> bool:
-	if property == &"command_type":
+	if property == COMMAND_PROPERTY_NAME:
 		_command_script = _to_command_script(value)
 		return true
 	return false
 
 
 func _get(property: StringName) -> Variant:
-	if property == &"command_type":
+	if property == COMMAND_PROPERTY_NAME:
 		if _command_script:
 			return _command_script.get_global_name()
 		return &""
@@ -92,7 +94,7 @@ func _to_command_script(value: Variant) -> GDScript:
 	if value is GDScript:
 		return value
 	if value is String or value is StringName:
-		var script_name := StringName(str(value))
+		var script_name: StringName = str(value)
 		if script_name.is_empty():
 			return null
 		return _resolve_script_by_name(script_name)
@@ -100,34 +102,12 @@ func _to_command_script(value: Variant) -> GDScript:
 
 
 func _collect_command_class_names() -> PackedStringArray:
-	var global_classes := ProjectSettings.get_global_class_list()
-	var base_map: Dictionary = {}
-	for entry: Dictionary in global_classes:
-		var entry_class := str(entry["class"])
-		var entry_base := str(entry["base"])
-		base_map[entry_class] = entry_base
-	var result: Array[String] = []
-	for key: String in base_map:
-		if key == "Command":
-			continue
-		if _extends_command(key, base_map):
-			result.append(key)
-	result.sort()
-	return PackedStringArray(result)
-
-
-func _extends_command(start_class: String, base_map: Dictionary) -> bool:
-	var current: String = start_class
-	while not current.is_empty():
-		if current == "Command":
-			return true
-		current = str(base_map.get(current, ""))
-	return false
+	return Command.get_global_command_list()
 
 
 func _resolve_script_by_name(script_name: StringName) -> GDScript:
 	var global_classes := ProjectSettings.get_global_class_list()
-	for entry in global_classes:
+	for entry: Dictionary[StringName, StringName] in global_classes:
 		if StringName(str(entry["class"])) == script_name:
 			return load(str(entry["path"])) as GDScript
 	return null
