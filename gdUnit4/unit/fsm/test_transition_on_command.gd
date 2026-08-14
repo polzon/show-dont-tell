@@ -14,7 +14,7 @@ func test_configuration_warning_case(
 	_test_parameters := _warning_cases(),
 ) -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = command_type
+	condition._command_script = command_type
 
 	var warnings := condition._configuration_warning()
 
@@ -44,7 +44,7 @@ func _warning_cases() -> Array[Array]:
 ## A matching command is consumed and reported as a match.
 func test_handle_command_matches_and_consumes() -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = TestCommand
+	condition._command_script = TestCommand
 	var command := TestCommand.new()
 
 	var matched := condition.handle_command(command)
@@ -56,7 +56,7 @@ func test_handle_command_matches_and_consumes() -> void:
 ## A command of the wrong type is ignored and left unconsumed.
 func test_handle_command_ignores_wrong_type() -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = TestCommand
+	condition._command_script = TestCommand
 	var command := OtherCommand.new()
 
 	var matched := condition.handle_command(command)
@@ -69,7 +69,7 @@ func test_handle_command_ignores_wrong_type() -> void:
 ## observe it.
 func test_handle_command_ignores_consumed() -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = TestCommand
+	condition._command_script = TestCommand
 	var command := TestCommand.new()
 	command.consume()
 
@@ -82,7 +82,7 @@ func test_handle_command_ignores_consumed() -> void:
 ## does not re-fire.
 func test_can_transition_true_after_match_then_clears() -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = TestCommand
+	condition._command_script = TestCommand
 	condition.handle_command(TestCommand.new())
 
 	assert_bool(condition.tick_transition()).is_true()
@@ -92,7 +92,7 @@ func test_can_transition_true_after_match_then_clears() -> void:
 ## Without a match the transition never fires.
 func test_can_transition_false_without_match() -> void:
 	var condition := TransitionOnCommand.new()
-	condition.command_type = TestCommand
+	condition._command_script = TestCommand
 
 	assert_bool(condition.tick_transition()).is_false()
 

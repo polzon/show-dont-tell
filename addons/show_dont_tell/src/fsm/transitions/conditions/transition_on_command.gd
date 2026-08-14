@@ -102,12 +102,12 @@ func _to_command_script(value: Variant) -> GDScript:
 
 
 func _collect_command_class_names() -> PackedStringArray:
-	return Command.get_global_command_list()
+	return SdtUtils.get_class_list_of_type(Command)
 
 
 func _resolve_script_by_name(script_name: StringName) -> GDScript:
 	var global_classes := ProjectSettings.get_global_class_list()
 	for entry: Dictionary[StringName, StringName] in global_classes:
-		if StringName(str(entry["class"])) == script_name:
-			return load(str(entry["path"])) as GDScript
+		if entry["class"] == script_name:
+			return load(entry["path"]) as GDScript
 	return null
