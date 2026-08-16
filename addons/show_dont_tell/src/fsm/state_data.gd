@@ -13,6 +13,10 @@ var parent_state: FiniteState
 var state_machine: StateMachine
 
 
+func ready() -> void:
+	pass
+
+
 func handle_command(_command: Command) -> void:
 	pass
 

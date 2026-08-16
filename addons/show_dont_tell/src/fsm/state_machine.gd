@@ -29,23 +29,16 @@ func find_state_of_type(state_type: GDScript) -> FiniteState:
 
 
 func _init() -> void:
-	if Engine.is_editor_hint():
-		return
-
+	super._init()
 	enabled_toggled.connect(_on_enabled_toggled)
-	child_order_changed.connect(_propagate_state_machine)
 
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-
 	_propagate_state_machine()
-	if state:
-		return
 	var first_state := _find_first_finite_state()
 	if first_state:
 		change_state_node(first_state)
+	super._ready()
 
 
 func _process(delta: float) -> void:
@@ -133,11 +126,6 @@ func _set_enabled(is_enabled: bool) -> void:
 
 
 func _propagate_state_machine() -> void:
-	if Engine.is_editor_hint():
-		return
-
 	for child: Node in get_children():
-		if child and child is FiniteState:
-			var finite_state: FiniteState = child
-			finite_state.state_machine = self
-			finite_state.propagate_state_machine()
+		if child is FiniteState:
+			(child as FiniteState).state_machine = self

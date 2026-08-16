@@ -1,6 +1,10 @@
 class_name FiniteState
 extends BaseState
-## Abstract base class for FiniteState nodes.
+## Base finite state node that processes inner [StateData] logic.
+## [br]
+## This class is *not* meant to be extended. Instead, create a [StateData]
+## resource and assign it to the [member state_data] property. This design
+## allows separating the "how" from the "what" of the state behavior.
 
 signal state_started
 signal state_ended
@@ -20,11 +24,13 @@ var state_machine: StateMachine:
 
 
 func _init() -> void:
-	child_order_changed.connect(propagate_state_machine)
+	child_order_changed.connect(_propagate_state_machine)
 
 
 func _ready() -> void:
 	_set_state_data(state_data)
+	if state_data:
+		state_data.ready()
 
 
 ## Propagated from the [StateMachine] while this is the current state.
@@ -43,15 +49,14 @@ func _handle_command(_command: Command) -> void:
 ## Called when this node is made active by the [StateMachine].
 func _on_state_start() -> void:
 	if not state_data:
-		if print_state_changes:
-			push_error("FiniteState: No state data for state: %s" % name)
+		push_warning("FiniteState: No state data for state: %s" % name)
 		state_started.emit()
-		return
 
-	state_data.state_start()
-	if print_state_changes:
-		print("FiniteState: Entering state: %s" % name)
-	state_started.emit()
+	else:
+		state_data.state_start()
+		if print_state_changes:
+			print("FiniteState: Entering state: %s" % name)
+		state_started.emit()
 
 
 ## Called when this node is being exited by the [StateMachine].
@@ -119,10 +124,7 @@ func _tick_transition_condition(condition: TransitionCondition) -> void:
 			condition.after_transition()
 
 
-func propagate_state_machine() -> void:
-	if state_data:
-		state_data.state_machine = state_machine
-
+func _propagate_state_machine() -> void:
 	for child: Node in get_children():
 		if child is FiniteState:
 			(child as FiniteState).state_machine = state_machine
@@ -138,7 +140,7 @@ func _set_state_machine(new_state_machine: StateMachine) -> void:
 	state_machine = new_state_machine
 	if state_data:
 		state_data.state_machine = state_machine
-		propagate_state_machine()
+		_propagate_state_machine()
 
 
 ## Returns the active [FiniteState] the [StateMachine] is processing.
