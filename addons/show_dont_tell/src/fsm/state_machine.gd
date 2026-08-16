@@ -40,23 +40,19 @@ func _ready() -> void:
 		change_state_node(first_state)
 	super._ready()
 
-
-func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		set_process(false)
-		return
+		set_physics_process(false)
 
+
+func _process(delta: float) -> void:
 	if state:
-		state._tick(delta)
+		state.process_tick(delta)
 
 
 func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		set_physics_process(false)
-		return
-
 	if state:
-		state._physics_tick(delta)
+		state.physics_tick(delta)
 
 
 ## Passes the [Command] to the current [FiniteState], as well as sets
