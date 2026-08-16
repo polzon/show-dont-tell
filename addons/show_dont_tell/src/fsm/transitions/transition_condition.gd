@@ -125,20 +125,18 @@ func get_exit_node() -> FiniteState:
 	return null
 
 
-func _get_child_exit_node(node: TransitionCondition) -> FiniteState:
-	var child_condition := node as TransitionCondition
-	# ! tick_transition could introduce side effects.
-	if child_condition.tick_transition():
-		var exit_node := child_condition._get_child_exit_node(node)
-		if print_exit_transition:
-			print(
-				"Transition condition: ",
-				child_condition.name,
-				", exit node: ",
-				exit_node.name if exit_node else &"null"
-			)
-		return exit_node
-	return null
+func _get_child_exit_node(child_condition: TransitionCondition) -> FiniteState:
+	if not child_condition or not child_condition.can_transition():
+		return null
+	var exit_node := child_condition.get_exit_node()
+	if print_exit_transition:
+		print(
+			"Transition condition: ",
+			child_condition.name,
+			", exit node: ",
+			exit_node.name if exit_node else &"null"
+		)
+	return exit_node
 
 
 func _set_condition(new_condition: TransitionOnCondition) -> void:
