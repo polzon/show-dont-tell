@@ -82,6 +82,19 @@ func test_handle_command_called() -> void:
 	assert_bool(_state_with_action.handle_command_called).is_true()
 
 
+func test_transition_calls_after_transition() -> void:
+	var transition: TransitionCondition = mock(TransitionCondition)
+	do_return(true).on(transition).can_transition()
+	do_return(_state_b).on(transition).get_exit_node()
+	_state_a.state_machine = _state_machine
+	_state_machine.enabled = true
+	_state_machine.state = _state_a
+
+	_state_a._tick_transition_condition(transition)
+
+	verify(transition, 1).after_transition()
+
+
 func _create_state(state_type: GDScript, state_name: StringName) -> FiniteState:
 	var new_state: FiniteState = state_type.new()
 	var state: FiniteState = auto_free(new_state)

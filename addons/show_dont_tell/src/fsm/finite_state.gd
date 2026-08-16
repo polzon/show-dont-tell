@@ -107,6 +107,8 @@ func _tick_transition_condition(condition: TransitionCondition) -> void:
 				)
 			)
 		change_state_node(exit_node)
+		if state_machine and state_machine.enabled:
+			condition.after_transition()
 
 
 func propagate_state_machine() -> void:

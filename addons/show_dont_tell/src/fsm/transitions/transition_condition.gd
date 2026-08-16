@@ -50,6 +50,10 @@ func can_transition() -> bool:
 	return _can_children_transition()
 
 
+func after_transition() -> void:
+	pass
+
+
 func _can_children_transition() -> bool:
 	for child: Node in get_children():
 		var child_condition := child as TransitionCondition
