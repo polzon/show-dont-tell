@@ -50,6 +50,37 @@ func can_transition() -> bool:
 	return _can_children_transition()
 
 
+## Runs the per-frame hook for this condition and its children.
+func process_tick(delta: float) -> void:
+	if condition:
+		condition.process_tick(delta)
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.process_tick(delta)
+
+
+## Runs the fixed-step hook for this condition and its children.
+func physics_tick(delta: float) -> void:
+	if condition:
+		condition.physics_tick(delta)
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.physics_tick(delta)
+
+
+## Runs immediately before the state machine changes state.
+func before_transition() -> void:
+	if condition:
+		condition.before_transition()
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.before_transition()
+
+
+## Runs after the state machine changes state.
 func after_transition() -> void:
 	pass
 

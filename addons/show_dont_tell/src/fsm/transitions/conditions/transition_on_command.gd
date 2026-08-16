@@ -28,6 +28,7 @@ func handle_command(command: Command) -> bool:
 	return true
 
 
+## Returns true once after a matching command has been received.
 func _can_transition() -> bool:
 	if not _matched_command:
 		return false
@@ -37,6 +38,7 @@ func _can_transition() -> bool:
 	return true
 
 
+## Returns the editor name for this command condition.
 func _get_friendly_name() -> String:
 	return "CommandIsReceived"
 

@@ -73,13 +73,19 @@ func _on_state_end() -> void:
 func _physics_tick(delta: float) -> void:
 	if state_data:
 		state_data.physics_tick(delta)
+	for child: Node in get_children():
+		if child is TransitionCondition:
+			(child as TransitionCondition).physics_tick(delta)
 
 
 ## Similar to [member _process], but only ticks if it's the current state.
 func _tick(delta: float) -> void:
 	if state_data:
 		state_data.process_tick(delta)
-		_tick_transitions()
+	for child: Node in get_children():
+		if child is TransitionCondition:
+			(child as TransitionCondition).process_tick(delta)
+	_tick_transitions()
 
 
 ## Ticks all child [TransitionCondition] nodes and passes them to
@@ -106,6 +112,8 @@ func _tick_transition_condition(condition: TransitionCondition) -> void:
 					% [name, exit_node.name]
 				)
 			)
+		if state_machine and state_machine.enabled:
+			condition.before_transition()
 		change_state_node(exit_node)
 		if state_machine and state_machine.enabled:
 			condition.after_transition()

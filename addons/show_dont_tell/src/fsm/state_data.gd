@@ -17,10 +17,12 @@ func handle_command(_command: Command) -> void:
 	pass
 
 
+## Runs once per rendered frame while the state is active.
 func process_tick(_delta: float) -> void:
 	pass
 
 
+## Runs once per physics frame while the state is active.
 func physics_tick(_delta: float) -> void:
 	pass
 

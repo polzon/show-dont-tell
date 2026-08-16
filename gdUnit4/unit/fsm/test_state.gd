@@ -92,7 +92,30 @@ func test_transition_calls_after_transition() -> void:
 
 	_state_a._tick_transition_condition(transition)
 
+	verify(transition, 1).before_transition()
 	verify(transition, 1).after_transition()
+
+
+func test_tick_calls_transition_process_hook() -> void:
+	var transition := TransitionCondition.new()
+	var condition := MockTransitionOnCommand.new()
+	transition.condition = condition
+	_state_a.add_child(transition)
+
+	_state_a._tick(DELTA)
+
+	assert_bool(condition.process_tick_called).is_true()
+
+
+func test_physics_tick_calls_transition_physics_hook() -> void:
+	var transition := TransitionCondition.new()
+	var condition := MockTransitionOnCommand.new()
+	transition.condition = condition
+	_state_a.add_child(transition)
+
+	_state_a._physics_tick(DELTA)
+
+	assert_bool(condition.physics_tick_called).is_true()
 
 
 func _create_state(state_type: GDScript, state_name: StringName) -> FiniteState:
