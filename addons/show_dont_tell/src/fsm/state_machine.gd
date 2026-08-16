@@ -127,5 +127,6 @@ func _set_enabled(is_enabled: bool) -> void:
 
 func _propagate_state_machine() -> void:
 	for child: Node in get_children():
-		if child is FiniteState:
-			(child as FiniteState).state_machine = self
+		var child_state := child as FiniteState
+		if child_state:
+			child_state.state_machine = self
