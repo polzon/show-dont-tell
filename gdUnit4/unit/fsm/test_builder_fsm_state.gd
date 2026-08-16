@@ -6,7 +6,7 @@ extends GdUnitTestSuite
 ## references are not constant expressions.
 func _state_data_cases() -> Array[Array]:
 	var cases: Array[Array] = [
-		[MockStateData, true],
+		[TestStateData, true],
 		[null, false],
 		[FiniteState, false],
 	]
@@ -34,7 +34,7 @@ func test_state_creation_case(
 
 
 func test_add_condition_valid() -> void:
-	var builder := GdBuilderFsmState.new_state(MockStateData).if_condition(
+	var builder := GdBuilderFsmState.new_state(TestStateData).if_condition(
 		TransitionOnCommand
 	)
 	var root: FiniteState = auto_free(builder.get_root())
@@ -50,13 +50,13 @@ func test_add_condition_valid() -> void:
 ## A built chain of state, condition and exit produces one node of each type
 ## after an exit is attached to a condition.
 func test_create_condition_exit() -> void:
-	var first_builder := GdBuilderFsmState.new_state(MockStateData)
+	var first_builder := GdBuilderFsmState.new_state(TestStateData)
 	var first_root: FiniteState = auto_free(first_builder.get_root())
 	add_child(first_root)
 
 	var second_builder := (
 		GdBuilderFsmState
-		. new_state(MockStateData)
+		. new_state(TestStateData)
 		. if_condition(TransitionOnCommand)
 		. exit_to(first_root)
 	)
@@ -78,3 +78,7 @@ func _count_by_type(nodes: Array, node_type: GDScript) -> int:
 		. filter(func(v: Variant) -> bool: return is_instance_of(v, node_type))
 		. size()
 	)
+
+
+class TestStateData:
+	extends StateData

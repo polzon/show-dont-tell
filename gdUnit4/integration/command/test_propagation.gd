@@ -29,10 +29,10 @@ func test_handle_command_case(
 	_test_parameters := COMMAND_CASES,
 ) -> void:
 	var machine: StateMachine = auto_free(StateMachine.new())
-	var state: MockState = auto_free(MockState.new())
-	var command := MockCommand.new()
+	var state: TestPropagationState = auto_free(TestPropagationState.new())
+	var command := TestCommand.new()
 
-	var state_data := MockStateData.new()
+	var state_data := TestStateData.new()
 	if has_state_data:
 		state.state_data = state_data
 	_build_topology(state, topology)
@@ -50,7 +50,7 @@ func test_handle_command_case(
 	assert_that(command.is_consumed()).is_equal(consumed)
 
 
-func _build_topology(state: MockState, topology: int) -> void:
+func _build_topology(state: TestPropagationState, topology: int) -> void:
 	match topology:
 		Topology.NO_CHILDREN:
 			pass
@@ -62,5 +62,43 @@ func _build_topology(state: MockState, topology: int) -> void:
 			state.add_child(condition)
 		Topology.CONSUMING_CONDITION:
 			var condition := TransitionCondition.new()
-			condition.condition = MockTransitionOnCommand.new()
+			condition.condition = TestConsumingCondition.new()
 			state.add_child(condition)
+
+
+class TestPropagationState:
+	extends FiniteState
+
+	var handle_command_called: bool = false
+	var handle_command_call_count: int = 0
+
+	func _handle_command(command: Command) -> void:
+		handle_command_called = true
+		handle_command_call_count += 1
+		super._handle_command(command)
+
+
+class TestStateData:
+	extends StateData
+
+	var last_command: Command
+
+	func handle_command(command: Command) -> void:
+		last_command = command
+
+
+class TestCommand:
+	extends Command
+
+
+class TestConsumingCondition:
+	extends TransitionOnCondition
+
+	func handle_command(command: Command) -> bool:
+		if command:
+			command.consume()
+			return true
+		return false
+
+	func _can_transition() -> bool:
+		return false
