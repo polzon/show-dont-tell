@@ -122,6 +122,8 @@ func _set_enabled(is_enabled: bool) -> void:
 
 
 func _propagate_state_machine() -> void:
+	if Engine.is_editor_hint():
+		return
 	for child: Node in get_children():
 		var child_state := child as FiniteState
 		if child_state:

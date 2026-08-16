@@ -43,10 +43,9 @@ func _update_name() -> void:
 
 
 func can_transition() -> bool:
-	if condition and condition.tick_transition():
-		return true
-	if not condition:
-		push_warning("TransitionCondition: No condition assigned for %s" % name)
+	if condition:
+		return condition.tick_transition()
+	push_warning("TransitionCondition: No condition assigned for %s" % name)
 	return _can_children_transition()
 
 
@@ -112,8 +111,9 @@ func _propagate_handle_command(command: Command) -> bool:
 
 func get_exit_node() -> FiniteState:
 	for node: Node in get_children():
-		if node is TransitionExit:
-			return (node as TransitionExit).exit_node
+		var exist := node as TransitionExit
+		if exist and exist.exit_node:
+			return exist.exit_node
 
 		var transition := node as TransitionCondition
 		if transition:
@@ -131,9 +131,9 @@ func _get_child_exit_node(child_condition: TransitionCondition) -> FiniteState:
 	var exit_node := child_condition.get_exit_node()
 	if print_exit_transition:
 		print(
-			"Transition condition: ",
+			"TransitionCondition: ",
 			child_condition.name,
-			", exit node: ",
+			", ExitNode: ",
 			exit_node.name if exit_node else &"null"
 		)
 	return exit_node

@@ -13,8 +13,8 @@ const CAN_TRANSITION_CASES: Array[Array] = [
 	[true, true, false, true],
 	[true, false, true, true],
 	[true, false, false, true],
-	[false, true, false, true],
-	[false, false, true, true],
+	[false, true, false, false],
+	[false, false, true, false],
 	[false, false, false, false],
 ]
 
@@ -37,9 +37,8 @@ func before_test() -> void:
 	_state_second.name = "StateSecond"
 
 
-## A nested condition can transition when the parent or any child passes;
-## a passing parent with no passing child still reports it can transition,
-## which the machine then resolves to no exit.
+## A nested condition can transition only when the parent passes; a failing
+## parent blocks its children entirely, so no child can trigger a transition.
 func test_nested_can_transition(
 	parent_passes: bool,
 	child1_passes: bool,
