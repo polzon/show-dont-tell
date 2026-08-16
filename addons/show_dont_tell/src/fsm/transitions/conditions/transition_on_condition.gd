@@ -1,4 +1,3 @@
-@tool
 @abstract
 @icon("uid://eq0sp4g3s75r")
 class_name TransitionOnCondition
