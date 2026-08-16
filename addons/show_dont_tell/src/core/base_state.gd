@@ -19,7 +19,7 @@ static var debug_get_child_enabled: bool = false
 ## when the state is changed. It will automatically toggle [method _process]
 ## and [method _physics_process] if they are overwritten and enabled
 ## in the node file. By default, both are `false`.
-var process_on_active: bool = _is_any_processing_enabled():
+var process_on_active: bool = false:
 	set = set_process_on_active
 
 
@@ -95,16 +95,6 @@ func _setup_physics_signal(is_enabled: bool) -> void:
 				started.disconnect(set_physics_process.bind(true))
 			if ended.is_connected(set_physics_process.bind(false)):
 				ended.disconnect(set_physics_process.bind(false))
-
-
-## Returns if *either* [method _process] or [method _physics_processing] are
-## overwritten and enabled in the script.
-func _is_any_processing_enabled() -> bool:
-	var processing_enabled := (
-		has_method("_process") or has_method("_physics_process")
-	)
-	set_process_on_active(processing_enabled)
-	return processing_enabled
 
 
 ## For debug purposes. Calls all the search child functions and ensures the

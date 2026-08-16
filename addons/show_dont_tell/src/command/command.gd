@@ -2,6 +2,16 @@
 extends RefCounted
 ## Command pattern for handling advanced input actions.
 
+var consumed: bool = false
+
+
+func consume() -> void:
+	consumed = true
+
+
+func is_consumed() -> bool:
+	return consumed
+
 
 func perform() -> void:
 	pass
@@ -13,3 +23,7 @@ func get_name() -> StringName:
 	if script:
 		return script.get_global_name()
 	return FALLBACK_NAME
+
+
+static func get_global_command_list() -> PackedStringArray:
+	return SdtUtils.get_class_list_of_type(Command)

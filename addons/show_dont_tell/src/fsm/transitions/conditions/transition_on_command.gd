@@ -3,60 +3,67 @@ class_name TransitionOnCommand
 extends TransitionOnCondition
 ## Passes a transition check when an expected [Command] is passed to this.
 
-@export var command_type: StringName
-@export var command_timeout_ms: float = 500.0
+const _COMMAND_PROPERTY: StringName = &"command_script"
 
 @export_group("Debug")
 @export var enable_debug: bool = false
+@export_group("")
 
-var last_command: Command
-var last_command_time_ms: float
+var _command_script: GDScript
+var _matched_command: bool = false
 
 
-func handle_command(command: Command) -> void:
-	if is_instance_of(command, command_type):
-		last_command = command
-		last_command_time_ms = Time.get_ticks_msec()
-		if enable_debug:
-			print("TransitionOnCommand: Received %s." % command_type)
+func handle_command(command: Command) -> bool:
+	if (
+		not command
+		or command.is_consumed()
+		or not _command_script
+		or not is_instance_of(command, _command_script)
+	):
+		return false
+	_matched_command = true
+	command.consume()
+	if enable_debug:
+		print("TransitionOnCommand: Received %s." % _command_script)
+	return true
 
 
 func _can_transition() -> bool:
-	if last_command != null:
-		if enable_debug:
-			print("TransitionOnCommand: Can transition.")
-		return Time.get_ticks_msec() - last_command_time_ms < command_timeout_ms
-	return false
-
-
-func _on_transition(_state: FiniteState) -> void:
-	last_command = null
+	if not _matched_command:
+		return false
+	_matched_command = false
 	if enable_debug:
-		print("TransitionOnCommand: On transition event.")
-
-
-# ! Not currently functional yet.
-func _get_property_list() -> Array[Dictionary]:
-	var properties: Array[Dictionary] = []
-	if command_type != "":
-		properties.append(
-			{
-				"name": "command_type",
-				"type": TYPE_OBJECT,
-				"hint": PROPERTY_HINT_RESOURCE_TYPE,
-				"hint_string": command_type,
-				"usage": PROPERTY_USAGE_EDITOR or PROPERTY_USAGE_READ_ONLY
-			}
-		)
-	return properties
-
-
-func _configuration_warning() -> PackedStringArray:
-	var warnings: PackedStringArray = []
-	if command_type == "":
-		warnings.append("Command type is empty.")
-	return warnings
+		print("TransitionOnCommand: Can transition.")
+	return true
 
 
 func _get_friendly_name() -> String:
-	return "CommandIsRecieved"
+	return "CommandIsReceived"
+
+
+func _get_property_list() -> Array[Dictionary]:
+	var class_names := SdtUtils.get_class_list_of_type(Command)
+	return [
+		{
+			"name": _COMMAND_PROPERTY,
+			"type": TYPE_STRING_NAME,
+			"hint": PROPERTY_HINT_ENUM,
+			"hint_string": ",".join(class_names),
+			"usage": PROPERTY_USAGE_DEFAULT,
+		}
+	]
+
+
+func _set(property: StringName, value: Variant) -> bool:
+	if property == _COMMAND_PROPERTY:
+		_command_script = SdtUtils.variant_to_script(value)
+		return true
+	return false
+
+
+func _get(property: StringName) -> Variant:
+	if property == _COMMAND_PROPERTY:
+		if _command_script:
+			return _command_script.get_global_name()
+		return &""
+	return null

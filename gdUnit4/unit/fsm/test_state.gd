@@ -1,107 +1,108 @@
 class_name TestState
 extends GdUnitTestSuite
-## Test the State class.
+## Test the FiniteState class.
+
+const DELTA := 0.016
+
+const CURRENT_CASES: Array[Array] = [
+	# [state_is_machine_current, expected]
+	[true, true],
+	[false, false],
+]
+
+var _state_machine: StateMachine
+var _state_a: FiniteState
+var _state_b: FiniteState
+var _state_with_tick: TestStateWithTick
+var _state_with_physics: TestStateWithPhysicsTick
+var _state_with_action: TestStateWithHandleCommand
+
+
+func before_test() -> void:
+	_state_machine = auto_free(StateMachine.new())
+	add_child(_state_machine)
+
+	_state_a = _create_state(TestStateA, &"StateA")
+	_state_b = _create_state(TestStateB, &"StateB")
+	_state_with_tick = _create_state(TestStateWithTick, &"StateWithTick")
+	_state_with_physics = _create_state(
+		TestStateWithPhysicsTick, &"StateWithPhysicsTick"
+	)
+	_state_with_action = _create_state(
+		TestStateWithHandleCommand, &"StateWithHandleCommand"
+	)
+
+
+## is_current_state reflects whether the state is the machine's active
+## state, for both the current and a sibling state.
+func test_is_current_state_case(
+	current_is_selected: bool,
+	expected: bool,
+	_test_parameters := CURRENT_CASES,
+) -> void:
+	var state: FiniteState = _state_a if current_is_selected else _state_b
+	_state_machine.state = _state_a
+
+	assert_bool(state.is_current_state()).is_equal(expected)
 
 
 func test_state_machine_getter() -> void:
-	var state_machine := _create_state_machine()
-	var state: FiniteState = state_machine.find_state_of_type(TestStateA)
-	state_machine.state = state
+	_state_machine.state = _state_a
 
-	assert_that(state.state_machine).is_equal(state_machine)
-
-
-func test_is_current_state_true() -> void:
-	var state_machine := _create_state_machine()
-	var state: FiniteState = state_machine.find_state_of_type(TestStateA)
-	state_machine.state = state
-
-	assert_that(state.is_current_state()).is_equal(true)
-
-
-func test_is_current_state_false() -> void:
-	var state_machine := _create_state_machine()
-	var state_a: FiniteState = state_machine.find_state_of_type(TestStateA)
-	var state_b: FiniteState = state_machine.find_state_of_type(TestStateB)
-	state_machine.state = state_a
-
-	assert_that(state_b.is_current_state()).is_equal(false)
+	assert_that(_state_a.state_machine).is_equal(_state_machine)
 
 
 func test_current_state_returns_state() -> void:
-	var state_machine := _create_state_machine()
-	var state_a: FiniteState = state_machine.find_state_of_type(TestStateA)
-	state_machine.state = state_a
+	_state_machine.state = _state_a
 
-	assert_that(state_a.current_state()).is_equal(state_a)
+	assert_that(_state_a.current_state()).is_equal(_state_a)
 
 
 func test_tick_called_when_current() -> void:
-	var state_machine := _create_state_machine()
-	var state: TestStateWithTick = state_machine.find_state_of_type(
-		TestStateWithTick
-	)
-	state_machine.state = state
+	_state_machine.state = _state_with_tick
 
-	state._tick(0.016)
+	_state_with_tick._tick(DELTA)
 
-	assert_that(state.tick_called).is_equal(true)
+	assert_bool(_state_with_tick.tick_called).is_true()
 
 
 func test_physics_tick_called_when_current() -> void:
-	var state_machine := _create_state_machine()
-	var state: TestStateWithPhysicsTick = state_machine.find_state_of_type(
-		TestStateWithPhysicsTick
-	)
-	state_machine.state = state
+	_state_machine.state = _state_with_physics
 
-	state._physics_tick(0.016)
+	_state_with_physics._physics_tick(DELTA)
 
-	assert_that(state.physics_tick_called).is_equal(true)
+	assert_bool(_state_with_physics.physics_tick_called).is_true()
 
 
 func test_handle_command_called() -> void:
-	var state_machine := _create_state_machine()
-	var state: TestStateWithHandleCommand = state_machine.find_state_of_type(
-		TestStateWithHandleCommand
-	)
-	state_machine.state = state
-	var command: TestCommand = TestCommand.new()
+	_state_machine.state = _state_with_action
 
-	state._handle_command(command)
+	_state_with_action._handle_command(TestCommand.new())
 
-	assert_that(state.handle_command_called).is_equal(true)
+	assert_bool(_state_with_action.handle_command_called).is_true()
 
 
-# Helper functions
-func _create_state_machine() -> StateMachine:
-	var sm := StateMachine.new()
-	add_child(sm)
+func test_transition_calls_after_transition() -> void:
+	var transition: TransitionCondition = mock(TransitionCondition)
+	do_return(true).on(transition).can_transition()
+	do_return(_state_b).on(transition).get_exit_node()
+	_state_a.state_machine = _state_machine
+	_state_machine.enabled = true
+	_state_machine.state = _state_a
 
-	var state_a := TestStateA.new()
-	state_a.name = "StateA"
-	sm.add_child(state_a)
+	_state_a._tick_transition_condition(transition)
 
-	var state_b := TestStateB.new()
-	state_b.name = "StateB"
-	sm.add_child(state_b)
-
-	var state_with_tick := TestStateWithTick.new()
-	state_with_tick.name = "StateWithTick"
-	sm.add_child(state_with_tick)
-
-	var state_with_physics := TestStateWithPhysicsTick.new()
-	state_with_physics.name = "StateWithPhysicsTick"
-	sm.add_child(state_with_physics)
-
-	var state_with_action := TestStateWithHandleCommand.new()
-	state_with_action.name = "StateWithHandleCommand"
-	sm.add_child(state_with_action)
-
-	return sm
+	verify(transition, 1).after_transition()
 
 
-# Test state classes
+func _create_state(state_type: GDScript, state_name: StringName) -> FiniteState:
+	var new_state: FiniteState = state_type.new()
+	var state: FiniteState = auto_free(new_state)
+	state.name = state_name
+	_state_machine.add_child(state)
+	return state
+
+
 class TestStateA:
 	extends FiniteState
 
@@ -138,7 +139,4 @@ class TestStateWithHandleCommand:
 
 
 class TestCommand:
-	extends ActorCommand
-
-	func _init() -> void:
-		super._init(null)
+	extends Command

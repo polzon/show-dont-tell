@@ -3,24 +3,25 @@ extends GdUnitTestSuite
 ## Test the BT_ConditionLeaf (evaluates a condition).
 
 
-func test_condition_leaf_created() -> void:
-	var leaf := ConcreteConditionLeaf.new()
-
-	assert_that(leaf).is_not_null()
-
-	leaf.free()
-
-
-func test_condition_leaf_is_leaf_task() -> void:
-	var leaf := ConcreteConditionLeaf.new()
-
-	assert_that(leaf is BT_LeafTask).is_equal(true)
-	assert_that(leaf is BehaviorTask).is_equal(true)
-
-	leaf.free()
+## Method-backed because class references are not constant expressions.
+func _base_type_cases() -> Array[Array]:
+	var cases: Array[Array] = [
+		[BT_LeafTask],
+		[BehaviorTask],
+	]
+	for case in cases:
+		assert_array(case).is_not_empty()
+	return cases
 
 
-# Concrete implementation for testing
+func test_condition_leaf_is_a_task_type(
+	base_type: GDScript, _test_parameters := _base_type_cases()
+) -> void:
+	var leaf: Node = auto_free(ConcreteConditionLeaf.new())
+
+	assert_object(leaf).is_instanceof(base_type)
+
+
 class ConcreteConditionLeaf:
 	extends BT_ConditionLeaf
 

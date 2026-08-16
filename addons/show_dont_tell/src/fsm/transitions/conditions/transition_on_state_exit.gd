@@ -12,7 +12,7 @@ var _requests_exit: bool = false
 
 func _ready() -> void:
 	assert(_parent_state, "TransitionOnStateExit: No parent FiniteState found.")
-	if not _parent_state:
+	if not _parent_state or Engine.is_editor_hint():
 		return
 
 	_parent_state.state_started.connect(_on_state_entered)
