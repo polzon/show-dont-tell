@@ -104,7 +104,7 @@ func _propagate_handle_command(command: Command) -> bool:
 	for child in get_children():
 		var child_condition := child as TransitionCondition
 		if child_condition:
-			if child_condition._propagate_handle_command(command):
+			if child_condition.handle_command(command):
 				return true
 	return false
 
