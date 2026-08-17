@@ -129,12 +129,11 @@ func _tick_transition_condition(condition: TransitionCondition) -> void:
 			"FiniteState: ",
 			"Transitioning from %s to %s." % [name, exit_node.name]
 		)
-	if state_machine and state_machine.enabled:
-		condition.before_transition()
-		state_machine.change_state_node(exit_node)
-		condition.after_transition()
-	else:
-		state_machine.change_state_node(exit_node)
+	if not state_machine or not state_machine.enabled:
+		return
+	condition.before_transition()
+	state_machine.change_state_node(exit_node)
+	condition.after_transition()
 
 
 func _propagate_state_machine() -> void:

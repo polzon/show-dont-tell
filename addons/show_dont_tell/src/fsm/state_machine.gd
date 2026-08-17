@@ -20,8 +20,8 @@ var state: FiniteState:
 ## The previous [Command] that was called through [method handle_command].
 var current_action: Command
 
-var _inital_process_mode: ProcessMode
-var _has_set_inital_process_mode: bool = false
+var _initial_process_mode: ProcessMode
+var _has_set_initial_process_mode: bool = false
 
 
 func find_state_of_type(state_type: GDScript) -> FiniteState:
@@ -112,11 +112,11 @@ func change_state_node(state_node: FiniteState) -> void:
 
 func _set_enabled(is_enabled: bool) -> void:
 	enabled = is_enabled
-	if not _has_set_inital_process_mode:
-		_inital_process_mode = process_mode
-		_has_set_inital_process_mode = true
+	if not _has_set_initial_process_mode:
+		_initial_process_mode = process_mode
+		_has_set_initial_process_mode = true
 	process_mode = (
-		_inital_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
+		_initial_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
 	)
 	enabled_toggled.emit()
 
