@@ -2,7 +2,7 @@
 
 _Show Don't Tell_ is a Node-based Godot 4+ plugin written in pure gd-script for modular behavior AI. The best story-telling is done through _showing, not telling_.
 
-Currently supports a basic implementation of [**FSM**](https://www.gdquest.com/tutorial/godot/design-patterns/finite-state-machine/) ([_Finite State Machines_](https://en.wikipedia.org/wiki/Finite-state_machine)), **[Behavior](https://www.behaviortree.dev/docs/learn-the-basics/BT_basics) [Trees](https://www.gamedeveloper.com/programming/behavior-trees-for-ai-how-they-work)**, **Utility AI**, and an early but functional version of [**GOAP**]((https://web.archive.org/web/20230603190318/http://alumni.media.mit.edu/~jorkin/goap.html)) (_Goal-Orrientted Action Planning_)
+Currently supports a basic implementation of [**FSM**](https://www.gdquest.com/tutorial/godot/design-patterns/finite-state-machine/) ([_Finite State Machines_](https://en.wikipedia.org/wiki/Finite-state_machine)), **[Behavior](https://www.behaviortree.dev/docs/learn-the-basics/BT_basics) [Trees](https://www.gamedeveloper.com/programming/behavior-trees-for-ai-how-they-work)**, **Utility AI**, and an early but functional version of [**GOAP**](<(https://web.archive.org/web/20230603190318/http://alumni.media.mit.edu/~jorkin/goap.html)>) (_Goal-Orrientted Action Planning_)
 
 > [!IMPORTANT]
 > The AI referred to in this project is [classical automata behavior](https://en.wikipedia.org/wiki/Automata_theory) AI that is frequently used in games. It's not referring to the current AI hype for things like LLMs (_Large Language Models_).
@@ -28,4 +28,4 @@ If you're looking for a more mature AI solution, I recommend [Beehave](https://g
 
 ## Credits
 
-* Icons are being used from [Beehave](https://github.com/bitbrain/beehave)/[BitBrain](https://github.com/bitbrain). This project credits them to being created by [@lostptr](https://github.com/lostptr).
+- Icons are being used from [Beehave](https://github.com/bitbrain/beehave)/[BitBrain](https://github.com/bitbrain). This project credits them to being created by [@lostptr](https://github.com/lostptr).
