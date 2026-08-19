@@ -20,8 +20,8 @@ var state: FiniteState:
 ## The previous [Command] that was called through [method handle_command].
 var current_action: Command
 
-var _inital_process_mode: ProcessMode
-var _has_set_inital_process_mode: bool = false
+var _initial_process_mode: ProcessMode
+var _has_set_initial_process_mode: bool = false
 
 
 func find_state_of_type(state_type: GDScript) -> FiniteState:
@@ -29,41 +29,30 @@ func find_state_of_type(state_type: GDScript) -> FiniteState:
 
 
 func _init() -> void:
-	if Engine.is_editor_hint():
-		return
-
+	super._init()
 	enabled_toggled.connect(_on_enabled_toggled)
-	child_order_changed.connect(_propagate_state_machine)
 
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-
 	_propagate_state_machine()
-	if state:
-		return
 	var first_state := _find_first_finite_state()
 	if first_state:
 		change_state_node(first_state)
+	super._ready()
+
+	if Engine.is_editor_hint():
+		set_process(false)
+		set_physics_process(false)
 
 
 func _process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		set_process(false)
-		return
-
 	if state:
-		state._tick(delta)
+		state.process_tick(delta)
 
 
 func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		set_physics_process(false)
-		return
-
 	if state:
-		state._physics_tick(delta)
+		state.physics_tick(delta)
 
 
 ## Passes the [Command] to the current [FiniteState], as well as sets
@@ -123,11 +112,11 @@ func change_state_node(state_node: FiniteState) -> void:
 
 func _set_enabled(is_enabled: bool) -> void:
 	enabled = is_enabled
-	if not _has_set_inital_process_mode:
-		_inital_process_mode = process_mode
-		_has_set_inital_process_mode = true
+	if not _has_set_initial_process_mode:
+		_initial_process_mode = process_mode
+		_has_set_initial_process_mode = true
 	process_mode = (
-		_inital_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
+		_initial_process_mode if is_enabled else Node.PROCESS_MODE_DISABLED
 	)
 	enabled_toggled.emit()
 
@@ -135,9 +124,7 @@ func _set_enabled(is_enabled: bool) -> void:
 func _propagate_state_machine() -> void:
 	if Engine.is_editor_hint():
 		return
-
 	for child: Node in get_children():
-		if child and child is FiniteState:
-			var finite_state: FiniteState = child
-			finite_state.state_machine = self
-			finite_state.propagate_state_machine()
+		var child_state := child as FiniteState
+		if child_state:
+			child_state.state_machine = self

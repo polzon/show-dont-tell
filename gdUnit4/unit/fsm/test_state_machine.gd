@@ -129,7 +129,7 @@ class TestStateWithTick:
 
 	var tick_called: bool = false
 
-	func _tick(_delta: float) -> void:
+	func process_tick(_delta: float) -> void:
 		tick_called = true
 
 
@@ -138,7 +138,7 @@ class TestStateWithPhysicsTick:
 
 	var physics_tick_called: bool = false
 
-	func _physics_tick(_delta: float) -> void:
+	func physics_tick(_delta: float) -> void:
 		physics_tick_called = true
 
 

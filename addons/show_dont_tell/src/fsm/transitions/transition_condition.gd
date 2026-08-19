@@ -43,13 +43,43 @@ func _update_name() -> void:
 
 
 func can_transition() -> bool:
-	if condition and condition.tick_transition():
-		return true
-	if not condition:
-		push_warning("TransitionCondition: No condition assigned for %s" % name)
+	if condition:
+		return condition.tick_transition()
+	push_warning("TransitionCondition: No condition assigned for %s" % name)
 	return _can_children_transition()
 
 
+## Runs the per-frame hook for this condition and its children.
+func process_tick(delta: float) -> void:
+	if condition:
+		condition.process_tick(delta)
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.process_tick(delta)
+
+
+## Runs the fixed-step hook for this condition and its children.
+func physics_tick(delta: float) -> void:
+	if condition:
+		condition.physics_tick(delta)
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.physics_tick(delta)
+
+
+## Runs immediately before the state machine changes state.
+func before_transition() -> void:
+	if condition:
+		condition.before_transition()
+	for child: Node in get_children():
+		var child_condition := child as TransitionCondition
+		if child_condition:
+			child_condition.before_transition()
+
+
+## Runs after the state machine changes state.
 func after_transition() -> void:
 	pass
 
@@ -74,15 +104,16 @@ func _propagate_handle_command(command: Command) -> bool:
 	for child in get_children():
 		var child_condition := child as TransitionCondition
 		if child_condition:
-			if child_condition._propagate_handle_command(command):
+			if child_condition.handle_command(command):
 				return true
 	return false
 
 
 func get_exit_node() -> FiniteState:
 	for node: Node in get_children():
-		if node is TransitionExit:
-			return (node as TransitionExit).exit_node
+		var exist := node as TransitionExit
+		if exist and exist.exit_node:
+			return exist.exit_node
 
 		var transition := node as TransitionCondition
 		if transition:
@@ -94,20 +125,18 @@ func get_exit_node() -> FiniteState:
 	return null
 
 
-func _get_child_exit_node(node: TransitionCondition) -> FiniteState:
-	var child_condition := node as TransitionCondition
-	# ! tick_transition could introduce side effects.
-	if child_condition.tick_transition():
-		var exit_node := child_condition._get_child_exit_node(node)
-		if print_exit_transition:
-			print(
-				"Transition condition: ",
-				child_condition.name,
-				", exit node: ",
-				exit_node.name if exit_node else &"null"
-			)
-		return exit_node
-	return null
+func _get_child_exit_node(child_condition: TransitionCondition) -> FiniteState:
+	if not child_condition or not child_condition.can_transition():
+		return null
+	var exit_node := child_condition.get_exit_node()
+	if print_exit_transition:
+		print(
+			"TransitionCondition: ",
+			child_condition.name,
+			", ExitNode: ",
+			exit_node.name if exit_node else &"null"
+		)
+	return exit_node
 
 
 func _set_condition(new_condition: TransitionOnCondition) -> void:

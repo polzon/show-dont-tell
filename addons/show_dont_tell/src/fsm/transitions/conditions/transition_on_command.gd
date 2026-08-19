@@ -16,18 +16,20 @@ var _matched_command: bool = false
 func handle_command(command: Command) -> bool:
 	if (
 		not command
-		or command.is_consumed()
 		or not _command_script
+		or command.is_consumed()
 		or not is_instance_of(command, _command_script)
 	):
 		return false
 	_matched_command = true
 	command.consume()
-	if enable_debug:
-		print("TransitionOnCommand: Received %s." % _command_script)
+	if enable_debug and _command_script:
+		var script_name := _command_script.get_global_name()
+		print("TransitionOnCommand: Received %s." % script_name)
 	return true
 
 
+## Returns true once after a matching command has been received.
 func _can_transition() -> bool:
 	if not _matched_command:
 		return false
@@ -37,6 +39,7 @@ func _can_transition() -> bool:
 	return true
 
 
+## Returns the editor name for this command condition.
 func _get_friendly_name() -> String:
 	return "CommandIsReceived"
 

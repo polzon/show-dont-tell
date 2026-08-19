@@ -1,4 +1,3 @@
-@tool
 @abstract
 @icon("uid://eq0sp4g3s75r")
 class_name TransitionOnCondition
@@ -31,10 +30,42 @@ func register_parent(parent_transition: TransitionCondition) -> void:
 	_parent = parent_transition
 
 
+## Handles a command passed to this condition.
 func handle_command(_command: Command) -> bool:
 	return false
 
 
+## Runs the per-frame hook for this condition.
+func process_tick(delta: float) -> void:
+	_process_tick(delta)
+
+
+## Runs the fixed-step hook for this condition.
+func physics_tick(delta: float) -> void:
+	_physics_tick(delta)
+
+
+## Runs immediately before this condition's transition.
+func before_transition() -> void:
+	_before_transition()
+
+
+## Inner hook for per-frame condition work.
+func _process_tick(_delta: float) -> void:
+	pass
+
+
+## Inner hook for fixed-step condition work.
+func _physics_tick(_delta: float) -> void:
+	pass
+
+
+## Inner hook for work before this condition's transition.
+func _before_transition() -> void:
+	pass
+
+
+## Returns whether this condition can trigger its transition.
 func tick_transition() -> bool:
 	return not _can_transition() if invert_condition else _can_transition()
 
@@ -79,8 +110,3 @@ func _find_parent_finite_state_data() -> StateData:
 ## Optional override for [TransitionCondition] auto-generated friendly name.
 func _get_friendly_name() -> String:
 	return ""
-
-
-## Optional function for TransitionMethod to check any potential issues.
-func _configuration_warning() -> PackedStringArray:
-	return []

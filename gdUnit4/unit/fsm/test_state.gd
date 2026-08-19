@@ -11,8 +11,10 @@ const CURRENT_CASES: Array[Array] = [
 ]
 
 var _state_machine: StateMachine
+
 var _state_a: FiniteState
 var _state_b: FiniteState
+
 var _state_with_tick: TestStateWithTick
 var _state_with_physics: TestStateWithPhysicsTick
 var _state_with_action: TestStateWithHandleCommand
@@ -61,7 +63,7 @@ func test_current_state_returns_state() -> void:
 func test_tick_called_when_current() -> void:
 	_state_machine.state = _state_with_tick
 
-	_state_with_tick._tick(DELTA)
+	_state_with_tick.process_tick(DELTA)
 
 	assert_bool(_state_with_tick.tick_called).is_true()
 
@@ -69,7 +71,7 @@ func test_tick_called_when_current() -> void:
 func test_physics_tick_called_when_current() -> void:
 	_state_machine.state = _state_with_physics
 
-	_state_with_physics._physics_tick(DELTA)
+	_state_with_physics.physics_tick(DELTA)
 
 	assert_bool(_state_with_physics.physics_tick_called).is_true()
 
@@ -92,7 +94,30 @@ func test_transition_calls_after_transition() -> void:
 
 	_state_a._tick_transition_condition(transition)
 
+	verify(transition, 1).before_transition()
 	verify(transition, 1).after_transition()
+
+
+func test_tick_calls_transition_process_hook() -> void:
+	var transition := TransitionCondition.new()
+	var condition := TestTickCondition.new()
+	transition.condition = condition
+	_state_a.add_child(transition)
+
+	_state_a.process_tick(DELTA)
+
+	assert_bool(condition.process_tick_called).is_true()
+
+
+func test_physics_tick_calls_transition_physics_hook() -> void:
+	var transition := TransitionCondition.new()
+	var condition := TestTickCondition.new()
+	transition.condition = condition
+	_state_a.add_child(transition)
+
+	_state_a.physics_tick(DELTA)
+
+	assert_bool(condition.physics_tick_called).is_true()
 
 
 func _create_state(state_type: GDScript, state_name: StringName) -> FiniteState:
@@ -116,7 +141,7 @@ class TestStateWithTick:
 
 	var tick_called: bool = false
 
-	func _tick(_delta: float) -> void:
+	func process_tick(_delta: float) -> void:
 		tick_called = true
 
 
@@ -125,7 +150,7 @@ class TestStateWithPhysicsTick:
 
 	var physics_tick_called: bool = false
 
-	func _physics_tick(_delta: float) -> void:
+	func physics_tick(_delta: float) -> void:
 		physics_tick_called = true
 
 
@@ -140,3 +165,19 @@ class TestStateWithHandleCommand:
 
 class TestCommand:
 	extends Command
+
+
+class TestTickCondition:
+	extends TransitionOnCondition
+
+	var process_tick_called: bool = false
+	var physics_tick_called: bool = false
+
+	func _process_tick(_delta: float) -> void:
+		process_tick_called = true
+
+	func physics_tick(_delta: float) -> void:
+		physics_tick_called = true
+
+	func _can_transition() -> bool:
+		return false
