@@ -2,33 +2,39 @@ extends GdUnitTestSuite
 
 var _sm: StateMachine
 var _solver: IntentSolver
+var _builder: SdtFsmBuilder
 
-var _state_a: TestStateNode
-var _state_b: TestStateNode
-var _state_c: TestStateNode
-var _state_d: TestStateNode
+var _state_a: FiniteState
+var _state_b: FiniteState
+var _state_c: FiniteState
+var _state_d: FiniteState
 
-var _a_to_b: TestCondition
-var _a_to_c: TestCondition
-var _b_to_c: TestCondition
-var _c_to_d: TestCondition
+var _a_to_b: SdtFsmBuilder.ToggleableCondition
+var _a_to_c: SdtFsmBuilder.ToggleableCondition
+var _b_to_c: SdtFsmBuilder.ToggleableCondition
+var _c_to_d: SdtFsmBuilder.ToggleableCondition
 
 
 func before_test() -> void:
-	_sm = auto_free(StateMachine.new())
+	_builder = SdtFsmBuilder.new()
+	_state_a = _builder.add_state(TestStateNode)
+	_state_b = _builder.add_state(TestStateNode)
+	_state_c = _builder.add_state(TestStateNode)
+	_state_d = _builder.add_state(TestStateNode)
+
+	_a_to_b = SdtFsmBuilder.always_pass()
+	_a_to_c = SdtFsmBuilder.always_fail()
+	_b_to_c = SdtFsmBuilder.always_pass()
+	_c_to_d = SdtFsmBuilder.always_fail()
+
+	_builder.add_transition(_state_a, _state_b, _a_to_b)
+	_builder.add_transition(_state_a, _state_c, _a_to_c)
+	_builder.add_transition(_state_b, _state_c, _b_to_c)
+	_builder.add_transition(_state_c, _state_d, _c_to_d)
+
+	_sm = auto_free(_builder.build())
 	_solver = IntentSolver.new()
 	_solver.state_machine = _sm
-
-	_state_a = _add_state("StateA")
-	_state_b = _add_state("StateB")
-	_state_c = _add_state("StateC")
-	_state_d = _add_state("StateD")
-
-	_a_to_b = _add_transition(_state_a, _state_b, true)
-	_a_to_c = _add_transition(_state_a, _state_c, false)
-	_b_to_c = _add_transition(_state_b, _state_c, true)
-	_c_to_d = _add_transition(_state_c, _state_d, false)
-
 	add_child(_sm)
 
 
@@ -60,7 +66,7 @@ func test_menu_is_dynamic() -> void:
 
 ## Cycle-safety prevents infinite loops on circular transitions.
 func test_menu_handles_cycles() -> void:
-	_add_transition(_state_b, _state_a, true)
+	_builder.add_transition(_state_b, _state_a, SdtFsmBuilder.always_pass())
 
 	var intents := _solver.get_available_intents()
 
@@ -147,42 +153,5 @@ func test_advance_abandons_when_replan_fails() -> void:
 	assert_bool(_solver.has_active_plan()).is_false()
 
 
-func _add_state(state_name: String) -> TestStateNode:
-	var state := TestStateNode.new()
-	auto_free(state)
-	state.name = state_name
-	_sm.add_child(state)
-	return state
-
-
-func _add_transition(
-	from: FiniteState, to: FiniteState, can: bool
-) -> TestCondition:
-	var condition := TestCondition.new()
-	auto_free(condition)
-	condition.can = can
-
-	var transition := TransitionCondition.new()
-	auto_free(transition)
-	transition.condition = condition
-
-	var exit := TransitionExit.new()
-	auto_free(exit)
-	exit.exit_node = to
-	transition.add_child(exit)
-	from.add_child(transition)
-
-	return condition
-
-
 class TestStateNode:
 	extends FiniteState
-
-
-class TestCondition:
-	extends TransitionOnCondition
-
-	var can: bool = true
-
-	func _can_transition() -> bool:
-		return can
