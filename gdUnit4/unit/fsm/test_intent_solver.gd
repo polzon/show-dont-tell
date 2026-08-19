@@ -3,10 +3,10 @@ extends GdUnitTestSuite
 var _sm: StateMachine
 var _solver: IntentSolver
 
-var _state_a: TestStateA
-var _state_b: TestStateB
-var _state_c: TestStateC
-var _state_d: TestStateD
+var _state_a: TestStateNode
+var _state_b: TestStateNode
+var _state_c: TestStateNode
+var _state_d: TestStateNode
 
 var _a_to_b: TestCondition
 var _a_to_c: TestCondition
@@ -19,21 +19,10 @@ func before_test() -> void:
 	_solver = IntentSolver.new()
 	_solver.state_machine = _sm
 
-	_state_a = TestStateA.new()
-	_state_a.name = "StateA"
-	_sm.add_child(_state_a)
-
-	_state_b = TestStateB.new()
-	_state_b.name = "StateB"
-	_sm.add_child(_state_b)
-
-	_state_c = TestStateC.new()
-	_state_c.name = "StateC"
-	_sm.add_child(_state_c)
-
-	_state_d = TestStateD.new()
-	_state_d.name = "StateD"
-	_sm.add_child(_state_d)
+	_state_a = _add_state("StateA")
+	_state_b = _add_state("StateB")
+	_state_c = _add_state("StateC")
+	_state_d = _add_state("StateD")
 
 	_a_to_b = _add_transition(_state_a, _state_b, true)
 	_a_to_c = _add_transition(_state_a, _state_c, false)
@@ -158,16 +147,27 @@ func test_advance_abandons_when_replan_fails() -> void:
 	assert_bool(_solver.has_active_plan()).is_false()
 
 
+func _add_state(state_name: String) -> TestStateNode:
+	var state := TestStateNode.new()
+	auto_free(state)
+	state.name = state_name
+	_sm.add_child(state)
+	return state
+
+
 func _add_transition(
 	from: FiniteState, to: FiniteState, can: bool
 ) -> TestCondition:
 	var condition := TestCondition.new()
+	auto_free(condition)
 	condition.can = can
 
 	var transition := TransitionCondition.new()
+	auto_free(transition)
 	transition.condition = condition
 
 	var exit := TransitionExit.new()
+	auto_free(exit)
 	exit.exit_node = to
 	transition.add_child(exit)
 	from.add_child(transition)
@@ -175,19 +175,7 @@ func _add_transition(
 	return condition
 
 
-class TestStateA:
-	extends FiniteState
-
-
-class TestStateB:
-	extends FiniteState
-
-
-class TestStateC:
-	extends FiniteState
-
-
-class TestStateD:
+class TestStateNode:
 	extends FiniteState
 
 
