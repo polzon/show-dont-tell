@@ -110,8 +110,3 @@ func _find_parent_finite_state_data() -> StateData:
 ## Optional override for [TransitionCondition] auto-generated friendly name.
 func _get_friendly_name() -> String:
 	return ""
-
-
-## Optional function for TransitionMethod to check any potential issues.
-func _configuration_warning() -> PackedStringArray:
-	return []
